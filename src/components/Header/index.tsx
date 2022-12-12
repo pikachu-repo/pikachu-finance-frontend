@@ -28,7 +28,7 @@ const Header = () => {
     },
     {
       text: "Docs",
-      link: "https://pikachu.gitbook.io",
+      link: "/demo",
       external: true,
     },
   ];

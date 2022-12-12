@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "pages/Home";
 import Borrow from "pages/Borrow";
 import Header from "components/Header";
+import Demo from "pages/Demo";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/borrow" element={<Borrow />} />
+        <Route path="/demo" element={<Demo />} />
       </Routes>
       <Footer />
     </div>
