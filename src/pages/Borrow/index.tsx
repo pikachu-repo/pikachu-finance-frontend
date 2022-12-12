@@ -2,7 +2,7 @@ import borrow_avatar from "assets/borrow_avatar.png";
 import ether from "assets/ether.svg";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { FiMinus, FiPlus } from "react-icons/fi";
-import { IoWarningOutline } from "react-icons/io5";
+// import { IoWarningOutline } from "react-icons/io5";
 const Borrow = () => {
   return (
     <div className="py-20 px-28">

@@ -1,7 +1,7 @@
-import { NavLink, useSearchParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const LinkWithSearchParams = (props: any) => {
-  const [searchParams] = useSearchParams();
+  // const [searchParams] = useSearchParams();
   return (
     <NavLink
       {...props}
