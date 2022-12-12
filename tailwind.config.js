@@ -7,11 +7,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        Roboto: ['Roboto'],
-        Pacifico: ['Pacifico'],
-        Erica: ['Erica One'], 
-        Luckiest: ['Luckiest Guy'], 
-        Permanent: ["Permanent Marker"],    
+        Chakra: ['Chakra Petch'], 
       },
       animation: {
         shine: "shine 1s",
@@ -25,6 +21,9 @@ module.exports = {
         blue: {
           450: '#0F172A',
         },
+        gray: {
+          1000: '#242424',
+        }
       },
       boxShadow: {
         '4xl': 'rgb(255, 255, 255, 0.5) 0px 0px 10px 10px',
