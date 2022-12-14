@@ -1,31 +1,544 @@
-import { useEffect } from "react";
+import { useState, useRef, useMemo } from "react";
+import cn from "classnames";
+import style from "./Demo.module.css";
 import {
   useNFT1Contract,
   useNFT2Contract,
   usePikachuContract,
 } from "utils/hooks/useContract";
-import { useNetwork } from "wagmi";
+import { useNetwork, useAccount, useSigner } from "wagmi";
+import { Button } from "components/ui";
+import { useERC721Balance } from "utils/hooks/useERC721Balance";
+import Input from "components/ui/Input";
+import { SvgEthereum, SvgWallet } from "assets/images/svg";
+import Switch from "components/ui/Switch";
+import {
+  beautifyAddress,
+  toInteger,
+  toString,
+} from "utils/helpers/string.helpers";
+import { BigNumber, ethers } from "ethers";
+import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
+import {
+  useOwner,
+  usePools,
+  useTotalPools,
+  useLoan,
+} from "utils/hooks/pikachu/usePools";
+import { useAdminSetting } from "utils/hooks/pikachu/useAdminSetting";
+import { SECONDS_PER_DAY } from "utils/constants/number.contants";
+import { TestNFT } from "utils/typechain-types";
+import { INTEREST_TYPE, LOAN_STATUS } from "utils/constants/contact.constants";
 const Demo = () => {
+  const account = useAccount();
+  const signer = useSigner();
   const network = useNetwork();
   const Pikachu = usePikachuContract();
   const NFT1 = useNFT1Contract();
   const NFT2 = useNFT2Contract();
-  useEffect(() => {}, []);
+
+  const nft1Balance = useERC721Balance(NFT1.address, account.address || "");
+  const adminSetting = useAdminSetting();
+  const pools = usePools();
+  const owner = useOwner();
+  const totalPools = useTotalPools();
+
+  const amIOwner = useMemo(() => {
+    if (owner.length && owner === account.address) return true;
+    return false;
+  }, [owner, account.address]);
+
+  // update adminsettings parameters
+  const minDepositAmountRef = useRef<HTMLInputElement>(null);
+  const feeRecipientRef = useRef<HTMLInputElement>(null);
+  const platformFeeRef = useRef<HTMLInputElement>(null);
+  const maxBlockNumberSlippageRef = useRef<HTMLInputElement>(null);
+  const verifiedCollectionsRef = useRef<HTMLTextAreaElement>(null);
+
+  // update signature parameters
+  const nft1FloorPriceRef = useRef<HTMLInputElement>(null);
+
+  // create pool parameters
+  const depositAmountRef = useRef<HTMLInputElement>(null);
+  const ltvRef = useRef<HTMLInputElement>(null);
+  const maxDurationRef = useRef<HTMLInputElement>(null);
+  const maxAmountRef = useRef<HTMLInputElement>(null);
+  const interestStartingRef = useRef<HTMLInputElement>(null);
+  const interestCapRef = useRef<HTMLInputElement>(null);
+  const supportedCollectionsRef = useRef<HTMLTextAreaElement>(null);
+  const [compoundInterest, setCompoundInterest] = useState<boolean>(false);
+
+  // create loan parameters
+  const [currentPoolIndex, setCurrentPoolIndex] = useState(0);
+  const collectionRef = useRef<HTMLSelectElement>(null);
+  const tokenIdRef = useRef<HTMLInputElement>(null);
+  const loanDurationRef = useRef<HTMLInputElement>(null);
+  const borrowAmountRef = useRef<HTMLInputElement>(null);
+  const floorPriceRef = useRef<HTMLInputElement>(null);
+  const blockNumberRef = useRef<HTMLInputElement>(null);
+  const signatureRef = useRef<HTMLTextAreaElement>(null);
+
+  const onCreatePool = async () => {
+    const ltv = toInteger(ltvRef.current?.value);
+    const maxDuration =
+      toInteger(maxDurationRef.current?.value) * SECONDS_PER_DAY;
+    const maxAmount = maxAmountRef.current?.value || "0";
+    const depositAmount = ethers.utils.parseEther(
+      depositAmountRef.current?.value || "0"
+    );
+    const interestStarting =
+      toInteger(interestStartingRef.current?.value) * 100;
+    const interestCap = toInteger(interestCapRef.current?.value) * 100;
+    const collections = toString(supportedCollectionsRef.current?.value)
+      .split("\n")
+      .map((item) => item.trim());
+
+    await Pikachu.createPool(
+      ltv,
+      ethers.utils.parseEther(maxAmount),
+      1,
+      interestStarting,
+      interestCap,
+      maxDuration,
+      compoundInterest,
+      collections,
+      { value: depositAmount }
+    );
+  };
+  const onUpdateAdminSettings = async () => {
+    const adminSettings: IPikachu.AdminSettingStruct = {
+      blockNumberSlippage: toInteger(maxBlockNumberSlippageRef.current?.value),
+      feeTo: feeRecipientRef.current?.value || "",
+      minDepositAmount: ethers.utils.parseEther(
+        toString(minDepositAmountRef.current?.value)
+      ),
+      platformFee: toInteger(platformFeeRef.current?.value) * 100,
+      verifiedCollections: (verifiedCollectionsRef.current?.value || "")
+        .split("\n")
+        .map((item) => item.trim()),
+    };
+    await Pikachu.updateAdminSetting(adminSettings);
+  };
+  const onMintNFT1 = async () => {
+    console.log(await NFT1.provider.getNetwork());
+    // alert(account.address);
+    if (account.address) await NFT1.awardItem(account.address, "");
+  };
+
+  const onApproveERC721 = async (ERC721Contract: TestNFT) => {
+    await ERC721Contract.setApprovalForAll(Pikachu.address, true);
+  };
+  const onGenerateSignature = async (erc721Address: string) => {
+    const floorPrice = ethers.utils.parseEther(
+      toString(nft1FloorPriceRef.current?.value)
+    );
+    const blockNumber = (await signer.data?.provider?.getBlockNumber()) || 0;
+
+    const hash = await Pikachu.getMessageHash(
+      erc721Address,
+      floorPrice,
+      blockNumber
+    );
+
+    const signature = await signer.data?.signMessage(
+      ethers.utils.arrayify(hash)
+    );
+    console.log(signature, blockNumber);
+  };
+  const onMintNFT2 = async () => {
+    console.log(await NFT1.provider.getNetwork());
+    // alert(account.address);
+    if (account.address) await NFT1.awardItem(account.address, "");
+  };
+
+  const onCreateLoan = async () => {
+    const _poolOwner = pools[currentPoolIndex].owner;
+    const _collection = toString(collectionRef.current?.value);
+    const _tokenId = toInteger(tokenIdRef.current?.value);
+    const _duration = toInteger(loanDurationRef.current?.value) * 86400;
+    const _amount = ethers.utils.parseEther(
+      toString(borrowAmountRef.current?.value)
+    );
+    const _signature = toString(signatureRef.current?.value).trim();
+    const _floorPrice = ethers.utils.parseEther(
+      toString(floorPriceRef.current?.value)
+    );
+    const blockNumber = toInteger(blockNumberRef.current?.value);
+    console.log(_duration);
+    await Pikachu.borrow(
+      _poolOwner,
+      _collection,
+      _tokenId,
+      _duration,
+      _amount,
+      _signature,
+      _floorPrice,
+      blockNumber
+    );
+  };
+
+  // manage loans
+  const loan = useLoan(pools[currentPoolIndex]?.owner, account.address || "");
+
   return (
-    <div className="p-8 flex flex-col">
+    <div className={cn(style.root)}>
       <h3 className="text-3xl">
         {network.chain?.name} - {network.chain?.rpcUrls.public} -{" "}
         {network.chain?.id}
       </h3>
-      <div className="flex gap-4 mt-4">
-        <div className="flex-1 p-4 border-emerald-600 border-2">
+      <div className={cn(style.contracts)}>
+        <div className={cn(style.contract)}>
           <span className="text-[14px]">Pikachu: {Pikachu.address}</span>
-        </div>
-        <div className="flex-1 p-4 border-emerald-600 border-2">
+
+          <div className={cn(style.adminSettings)}>
+            <span>Admin Settings</span>
+
+            <div className={cn(style.inputItem)}>
+              <label>Min Deposit Amount:</label>
+              <Input
+                innerRef={minDepositAmountRef}
+                placeholder="30.25"
+                defaultValue={ethers.utils.formatEther(
+                  adminSetting.minDepositAmount
+                )}
+                icon={<SvgEthereum className="w-5 h-5" />}
+              />
+            </div>
+
+            <div className={cn(style.inputItem)}>
+              <label>Fee Recipient:</label>
+              <Input
+                innerRef={feeRecipientRef}
+                placeholder="0x~~"
+                defaultValue={adminSetting.feeTo}
+                icon={<SvgWallet className="w-5 h-5" />}
+              />
+            </div>
+            <div className={cn(style.inputItem)}>
+              <label>Platform Fee:</label>
+              <Input
+                innerRef={platformFeeRef}
+                placeholder="5"
+                defaultValue={adminSetting.platformFee / 100}
+                icon={<span className="font-bold">%</span>}
+              />
+            </div>
+            <div className={cn(style.inputItem)}>
+              <label>Block Slippage:</label>
+              <Input
+                innerRef={maxBlockNumberSlippageRef}
+                placeholder="300"
+                defaultValue={adminSetting.blockNumberSlippage}
+              />
+            </div>
+            <textarea
+              placeholder="Verified NFT Addresses(type line by line)"
+              className="w-full h-24"
+              ref={verifiedCollectionsRef}
+            ></textarea>
+          </div>
+          <Button variant="yellow" sx="w-56" onClick={onUpdateAdminSettings}>
+            Update Admin Settings
+          </Button>
+          <hr />
           <span className="text-[14px]">NFT-1: {NFT1.address}</span>
-        </div>
-        <div className="flex-1 p-4 border-emerald-600 border-2">
+          <div className="flex gap-4">
+            <Button variant="yellow" sx="w-32" onClick={onMintNFT2}>
+              Mint
+            </Button>
+
+            <Button
+              variant="gray"
+              sx="w-40"
+              onClick={() => onApproveERC721(NFT1)}
+            >
+              Approve Pikachu
+            </Button>
+          </div>
+          <span>You have {nft1Balance} items</span>
+
+          {amIOwner && (
+            <div className={cn(style.adminSettings)}>
+              <div className={cn(style.inputItem)}>
+                <label>Floor Price:</label>
+                <Input
+                  innerRef={nft1FloorPriceRef}
+                  placeholder="0.1"
+                  icon={<SvgEthereum className="w-5 h-5" />}
+                />
+              </div>
+              <Button
+                variant="gray"
+                sx="w-48"
+                onClick={() => onGenerateSignature(NFT1.address)}
+              >
+                Gernate Signature
+              </Button>
+            </div>
+          )}
+          <hr />
           <span className="text-[14px]">NFT-2: {NFT2.address}</span>
+          <Button variant="yellow" sx="w-32" onClick={onMintNFT1}>
+            Mint
+          </Button>
+        </div>
+        <div className={cn(style.contract)}>
+          <div className={cn(style.poolConfig)}>
+            <div className={cn(style.inputItem)}>
+              <label>Loan to value (LTV):</label>
+              <Input
+                innerRef={ltvRef}
+                placeholder="40"
+                icon={<span className="font-bold">%</span>}
+              />
+            </div>
+            <div className={cn(style.inputItem)}>
+              <label>Create the pool size:</label>
+              <Input
+                innerRef={depositAmountRef}
+                placeholder="30.25"
+                icon={<SvgEthereum className="w-5 h-5" />}
+              />
+            </div>
+            <div className={cn(style.inputItem)}>
+              <label>Max Duration:</label>
+              <Input
+                innerRef={maxDurationRef}
+                placeholder="7"
+                icon={<span className="font-bold">Days</span>}
+              />
+            </div>
+            <div className={cn(style.inputItem)}>
+              <label>Max amount per loan:</label>
+              <Input
+                innerRef={maxAmountRef}
+                placeholder="0.05"
+                icon={<SvgEthereum className="w-5 h-5" />}
+              />
+            </div>
+            <div className={cn(style.inputItem)}>
+              <label>Interest Starting %:</label>
+              <Input
+                innerRef={interestStartingRef}
+                placeholder="5"
+                icon={<span className="font-bold">%</span>}
+              />
+            </div>
+            <div className={cn(style.inputItem)}>
+              <label>Interest Cap %:</label>
+              <Input
+                innerRef={interestCapRef}
+                placeholder="4"
+                icon={<span className="font-bold">%</span>}
+              />
+            </div>
+            <div className={cn(style.inputItem)}>
+              <label>Compound interest?</label>
+              <Switch
+                toggled={compoundInterest}
+                setToggled={setCompoundInterest}
+              />
+              <button
+                onClick={() => {}}
+                className={`${
+                  true ? "bg-[#FC5ED033]" : "bg-[#A6B2BC4D]"
+                } switch-group`}
+              >
+                <span
+                  className={`${
+                    false
+                      ? "translate-x-[20px] bg-kadido-gr"
+                      : "translate-x-[0px] bg-[#A6B2BC]"
+                  } switch-thumb`}
+                />
+              </button>
+            </div>
+
+            <textarea
+              placeholder="Input Addresses line by line"
+              className="w-full h-24"
+              ref={supportedCollectionsRef}
+            ></textarea>
+            <Button variant="yellow" sx="w-32" onClick={onCreatePool}>
+              Create Pool
+            </Button>
+          </div>
+
+          <div className={cn(style.poolsBox)}>
+            <span>Total Pools: {totalPools}</span>
+            {pools.map((pool, index) => (
+              <div key={index} className={cn(style.pool)}>
+                <span>
+                  Owner: <br />
+                  {pool.owner}
+                </span>
+                <span>Availabe Amount: {pool.loanToValue.toNumber()} %</span>
+                <span>
+                  Loan to value (LTV):{" "}
+                  {ethers.utils.formatEther(pool.availableAmount)}
+                  <SvgEthereum />
+                </span>
+                <span>
+                  Max Loan: {ethers.utils.formatEther(pool.maxAmount)}
+                  <SvgEthereum />
+                </span>
+                <span>
+                  Max Duration: {pool.maxDuration.toNumber() / SECONDS_PER_DAY}{" "}
+                  Days
+                </span>
+                <span>
+                  Interest Type: {INTEREST_TYPE[pool.interestType]} Interest
+                </span>
+                <span>
+                  Starting Rate: {pool.interestStartRate.toNumber() / 100}%
+                </span>
+                <span>
+                  Cap Rate: {pool.interestCapRate.toNumber() / 100}% per Day
+                </span>
+                <span>
+                  Supported Collections: {pool.collections.length}
+                  {pool.collections.map((collection) => (
+                    <>
+                      <br />
+                      {collection}
+                    </>
+                  ))}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className={cn(style.contract)}>
+          <div className={cn(style.loanConfig)}>
+            <span>Create Loan</span>
+
+            <div className={cn(style.inputItem)}>
+              <label>Select Pool:</label>
+              <select
+                className="w-40"
+                onChange={(e) => setCurrentPoolIndex(toInteger(e.target.value))}
+              >
+                {pools.map((pool, index) => (
+                  <option key={index} value={index}>
+                    {beautifyAddress(pool.owner, 6)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className={cn(style.inputItem)}>
+              <label>Select Collection:</label>
+              <select className="w-40" ref={collectionRef}>
+                {pools[currentPoolIndex]?.collections.map(
+                  (collection, index) => (
+                    <option key={index} value={collection}>
+                      {beautifyAddress(collection, 6)}
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
+
+            <div className={cn(style.inputItem)}>
+              <label>Token Id:</label>
+              <Input
+                innerRef={tokenIdRef}
+                placeholder="154"
+                icon={<SvgWallet className="w-5 h-5" />}
+              />
+            </div>
+
+            <div className={cn(style.inputItem)}>
+              <label>Loan Duration:</label>
+              <Input
+                innerRef={loanDurationRef}
+                placeholder="7"
+                icon={<span className="font-bold">Days</span>}
+              />
+            </div>
+            <div className={cn(style.inputItem)}>
+              <label>Borrow Amount:</label>
+              <Input
+                innerRef={borrowAmountRef}
+                placeholder="1.5"
+                icon={<SvgEthereum className="w-5 h-5" />}
+              />
+            </div>
+            <div className={cn(style.inputItem)}>
+              <label>Floor Price:</label>
+              <Input
+                innerRef={floorPriceRef}
+                placeholder="0.1"
+                icon={<SvgEthereum className="w-5 h-5" />}
+              />
+            </div>
+            <div className={cn(style.inputItem)}>
+              <label>Block Number:</label>
+              <Input
+                innerRef={blockNumberRef}
+                placeholder="0.1"
+                icon={<SvgEthereum className="w-5 h-5" />}
+              />
+            </div>
+            <textarea
+              placeholder="Type signature from Server"
+              className="w-full h-24"
+              ref={signatureRef}
+            ></textarea>
+            <Button variant="yellow" sx="w-32" onClick={onCreateLoan}>
+              Create Loan
+            </Button>
+          </div>
+
+          <div className={cn(style.loanConfig)}>
+            <span>Manage Your Loan</span>
+
+            <div className={cn(style.inputItem)}>
+              <label>Select Pool:</label>
+              <select
+                className="w-40"
+                onChange={(e) => setCurrentPoolIndex(toInteger(e.target.value))}
+              >
+                {pools.map((pool, index) => (
+                  <option key={index} value={index}>
+                    {beautifyAddress(pool.owner, 6)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {loan.status !== 0 && (
+              <div className={cn(style.loan)}>
+                <span>
+                  Borrowed Amount: {ethers.utils.formatEther(loan.amount)}
+                  <SvgEthereum />
+                </span>
+
+                <span>
+                  Starting Rate: {toInteger(loan.interestStartRate) / 100}%
+                </span>
+                <span>Cap Rate: {toInteger(loan.interestCapRate) / 100}%</span>
+                <span>
+                  Duration:{" "}
+                  {BigNumber.from(loan.duration)
+                    .div(SECONDS_PER_DAY)
+                    .toNumber()}{" "}
+                  Days
+                </span>
+                <span>
+                  Collection: <br />
+                  {loan.collection}
+                </span>
+                <span>Token Id: {loan.tokenId.toString()}</span>
+                <span>Loan Status: {LOAN_STATUS[loan.status]}</span>
+                <span>Block Number: {toInteger(loan.blockNumber)}</span>
+                <span>
+                  Borrow Date:{" "}
+                  {new Date(toInteger(loan.timestamp) * 1000).toLocaleString()}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

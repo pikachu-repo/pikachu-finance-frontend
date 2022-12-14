@@ -8,13 +8,13 @@ const ConnectButton = () => {
   const account = useAccount();
   return (
     <>
-      {!account.isConnected && (
-        <RainbowConnectButton
-          showBalance={false}
-          accountStatus="address"
-          chainStatus="none"
-        />
-      )}
+      {/* {!account.isConnected && ( */}
+      <RainbowConnectButton
+        // showBalance={false}
+        accountStatus="address"
+        // chainStatus="none"
+      />
+      {/* )} */}
 
       {account.isConnected && (
         <button className={cn(style.root)}>

@@ -11,7 +11,7 @@
     }
   }
   .navlinks {
-    @apply flex ml-auto gap-8;
+    @apply flex ml-auto gap-8 font-bold;
 
     a:hover {
       @apply text-white;

@@ -24,6 +24,7 @@ module.exports = {
         gray: {
           1000: '#242424',
         },
+        "dark-charcoal": "#313131",
         "tangerine-yellow": "#FFCC01",
         "granite-gray": "#666666"
       },

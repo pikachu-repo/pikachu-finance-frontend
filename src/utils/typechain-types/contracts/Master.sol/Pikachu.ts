@@ -148,6 +148,7 @@ export interface PikachuInterface extends utils.Interface {
     "transferOwnership(address)": FunctionFragment;
     "updateAdminSetting((address[],address,uint256,uint32,uint32))": FunctionFragment;
     "updatePool(uint256,uint256,uint8,uint256,uint256,uint256,bool,address[])": FunctionFragment;
+    "verifiedCollections()": FunctionFragment;
     "verify(address,address,uint256,uint256,bytes)": FunctionFragment;
     "withdrawFromPool(uint256)": FunctionFragment;
   };
@@ -178,6 +179,7 @@ export interface PikachuInterface extends utils.Interface {
       | "transferOwnership"
       | "updateAdminSetting"
       | "updatePool"
+      | "verifiedCollections"
       | "verify"
       | "withdrawFromPool"
   ): FunctionFragment;
@@ -318,6 +320,10 @@ export interface PikachuInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "verifiedCollections",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "verify",
     values: [
       PromiseOrValue<string>,
@@ -398,6 +404,10 @@ export interface PikachuInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "updatePool", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "verifiedCollections",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "verify", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "withdrawFromPool",
@@ -681,6 +691,8 @@ export interface Pikachu extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    verifiedCollections(overrides?: CallOverrides): Promise<[string[]]>;
+
     verify(
       _signer: PromiseOrValue<string>,
       _collection: PromiseOrValue<string>,
@@ -872,6 +884,8 @@ export interface Pikachu extends BaseContract {
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  verifiedCollections(overrides?: CallOverrides): Promise<string[]>;
+
   verify(
     _signer: PromiseOrValue<string>,
     _collection: PromiseOrValue<string>,
@@ -1058,6 +1072,8 @@ export interface Pikachu extends BaseContract {
       _collections: PromiseOrValue<string>[],
       overrides?: CallOverrides
     ): Promise<void>;
+
+    verifiedCollections(overrides?: CallOverrides): Promise<string[]>;
 
     verify(
       _signer: PromiseOrValue<string>,
@@ -1269,6 +1285,8 @@ export interface Pikachu extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    verifiedCollections(overrides?: CallOverrides): Promise<BigNumber>;
+
     verify(
       _signer: PromiseOrValue<string>,
       _collection: PromiseOrValue<string>,
@@ -1424,6 +1442,10 @@ export interface Pikachu extends BaseContract {
       _compound: PromiseOrValue<boolean>,
       _collections: PromiseOrValue<string>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    verifiedCollections(
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     verify(

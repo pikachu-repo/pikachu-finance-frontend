@@ -27,3 +27,20 @@ main {
     cursor: pointer;
   }
 }
+
+@layer base {
+  textarea {
+    @apply bg-transparent border border-white rounded-md p-2;
+  }
+
+  select {
+    @apply bg-transparent border border-white rounded-md p-1;
+    option {
+      @apply bg-black;
+    }
+  }
+
+  hr {
+    @apply w-full bg-white;
+  }
+}

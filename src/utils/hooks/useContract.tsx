@@ -1,5 +1,6 @@
 import { Pikachu__factory, TestNFT__factory } from "utils/typechain-types";
-import { useSigner } from "wagmi";
+import { useSigner, useProvider } from "wagmi";
+
 import {
   useNFT1Address,
   useNFT2Address,
@@ -20,6 +21,13 @@ export const usePikachuContract = () => {
   return Pikachu__factory.connect(address, signer);
 };
 
+export const useERC721Contract = (address: string) => {
+  const { data: signer } = useSigner();
+  const provider = useProvider();
+
+  // @ts-ignore
+  return TestNFT__factory.connect(address, signer || provider);
+};
 export const useNFT1Contract = () => {
   const { data: signer } = useSigner();
   const address = useNFT1Address();
