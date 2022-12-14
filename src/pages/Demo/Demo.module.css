@@ -39,3 +39,7 @@
     }
   }
 }
+
+.stressed {
+  @apply font-bold underline underline-offset-4;
+}

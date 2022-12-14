@@ -24,11 +24,16 @@ import {
   usePools,
   useTotalPools,
   useLoan,
+  useRepayingAmount,
 } from "utils/hooks/pikachu/usePools";
 import { useAdminSetting } from "utils/hooks/pikachu/useAdminSetting";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 import { TestNFT } from "utils/typechain-types";
-import { INTEREST_TYPE, LOAN_STATUS } from "utils/constants/contact.constants";
+import {
+  INTEREST_TYPE,
+  LOAN_STATUS,
+  POOL_STATUS,
+} from "utils/constants/contact.constants";
 const Demo = () => {
   const account = useAccount();
   const signer = useSigner();
@@ -63,6 +68,7 @@ const Demo = () => {
   const ltvRef = useRef<HTMLInputElement>(null);
   const maxDurationRef = useRef<HTMLInputElement>(null);
   const maxAmountRef = useRef<HTMLInputElement>(null);
+  const [dynamicInterest, setDynamicInterest] = useState<boolean>(false);
   const interestStartingRef = useRef<HTMLInputElement>(null);
   const interestCapRef = useRef<HTMLInputElement>(null);
   const supportedCollectionsRef = useRef<HTMLTextAreaElement>(null);
@@ -96,7 +102,7 @@ const Demo = () => {
     await Pikachu.createPool(
       ltv,
       ethers.utils.parseEther(maxAmount),
-      1,
+      dynamicInterest ? 1 : 0,
       interestStarting,
       interestCap,
       maxDuration,
@@ -179,6 +185,11 @@ const Demo = () => {
 
   // manage loans
   const loan = useLoan(pools[currentPoolIndex]?.owner, account.address || "");
+  const repayingAmount = useRepayingAmount(loan);
+
+  const onRepayLoan = async () => {
+    await Pikachu.repay(loan.poolOwner, { value: repayingAmount });
+  };
 
   return (
     <div className={cn(style.root)}>
@@ -236,10 +247,11 @@ const Demo = () => {
               className="w-full h-24"
               ref={verifiedCollectionsRef}
             ></textarea>
+
+            <Button variant="yellow" sx="w-56" onClick={onUpdateAdminSettings}>
+              Update Admin Settings
+            </Button>
           </div>
-          <Button variant="yellow" sx="w-56" onClick={onUpdateAdminSettings}>
-            Update Admin Settings
-          </Button>
           <hr />
           <span className="text-[14px]">NFT-1: {NFT1.address}</span>
           <div className="flex gap-4">
@@ -316,6 +328,14 @@ const Demo = () => {
                 icon={<SvgEthereum className="w-5 h-5" />}
               />
             </div>
+
+            <div className={cn(style.inputItem)}>
+              <label>Use dynamic interest?</label>
+              <Switch
+                toggled={dynamicInterest}
+                setToggled={setDynamicInterest}
+              />
+            </div>
             <div className={cn(style.inputItem)}>
               <label>Interest Starting %:</label>
               <Input
@@ -338,20 +358,6 @@ const Demo = () => {
                 toggled={compoundInterest}
                 setToggled={setCompoundInterest}
               />
-              <button
-                onClick={() => {}}
-                className={`${
-                  true ? "bg-[#FC5ED033]" : "bg-[#A6B2BC4D]"
-                } switch-group`}
-              >
-                <span
-                  className={`${
-                    false
-                      ? "translate-x-[20px] bg-kadido-gr"
-                      : "translate-x-[0px] bg-[#A6B2BC]"
-                  } switch-thumb`}
-                />
-              </button>
             </div>
 
             <textarea
@@ -368,13 +374,18 @@ const Demo = () => {
             <span>Total Pools: {totalPools}</span>
             {pools.map((pool, index) => (
               <div key={index} className={cn(style.pool)}>
+                <span className={cn(style.stressed)}>
+                  Pool Status: {POOL_STATUS[pool.status]}
+                </span>
                 <span>
                   Owner: <br />
                   {pool.owner}
                 </span>
-                <span>Availabe Amount: {pool.loanToValue.toNumber()} %</span>
                 <span>
-                  Loan to value (LTV):{" "}
+                  Loan to value (LTV): {pool.loanToValue.toNumber()} %
+                </span>
+                <span>
+                  Availabe Amount:{" "}
                   {ethers.utils.formatEther(pool.availableAmount)}
                   <SvgEthereum />
                 </span>
@@ -509,11 +520,17 @@ const Demo = () => {
 
             {loan.status !== 0 && (
               <div className={cn(style.loan)}>
+                <span className={cn(style.stressed)}>
+                  Loan Status: {LOAN_STATUS[loan.status]}
+                </span>
                 <span>
                   Borrowed Amount: {ethers.utils.formatEther(loan.amount)}
                   <SvgEthereum />
                 </span>
-
+                <span>
+                  Repaying Amount: {ethers.utils.formatEther(repayingAmount)}
+                  <SvgEthereum />
+                </span>
                 <span>
                   Starting Rate: {toInteger(loan.interestStartRate) / 100}%
                 </span>
@@ -530,12 +547,18 @@ const Demo = () => {
                   {loan.collection}
                 </span>
                 <span>Token Id: {loan.tokenId.toString()}</span>
-                <span>Loan Status: {LOAN_STATUS[loan.status]}</span>
+
                 <span>Block Number: {toInteger(loan.blockNumber)}</span>
                 <span>
                   Borrow Date:{" "}
                   {new Date(toInteger(loan.timestamp) * 1000).toLocaleString()}
                 </span>
+
+                {loan.status === 1 && (
+                  <Button variant="gray" sx="w-24" onClick={onRepayLoan}>
+                    Repay
+                  </Button>
+                )}
               </div>
             )}
           </div>

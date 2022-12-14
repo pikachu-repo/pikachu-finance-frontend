@@ -1,10 +1,12 @@
-import { BigNumberish } from "ethers";
+import { BigNumber, BigNumberish } from "ethers";
 import { useCallback, useEffect, useState } from "react";
+import { toInteger } from "utils/helpers/string.helpers";
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 // import { BIG_TEN } from "utils/constants/number.contants";
 import { usePikachuContract } from "../useContract";
 
 type TLoanStruct = {
+  poolOwner: string;
   borrower: string;
   amount: BigNumberish;
   duration: BigNumberish;
@@ -98,6 +100,7 @@ export const usePools = () => {
 export const useLoan = (poolOwner: string, borrower: string) => {
   const Pikachu = usePikachuContract();
   const [loan, setLoan] = useState<TLoanStruct>({
+    poolOwner: "",
     amount: 0,
     blockNumber: 0,
     borrower: "",
@@ -115,7 +118,7 @@ export const useLoan = (poolOwner: string, borrower: string) => {
     if (Pikachu.provider)
       try {
         const _loan = await Pikachu.loans(poolOwner, borrower);
-        setLoan(_loan);
+        setLoan({ ..._loan, poolOwner: poolOwner });
       } catch (error) {
         // setLoan([]);
         console.log(error);
@@ -129,4 +132,40 @@ export const useLoan = (poolOwner: string, borrower: string) => {
   }, [getLoan]);
 
   return loan;
+};
+
+export const useRepayingAmount = (loan: TLoanStruct) => {
+  const Pikachu = usePikachuContract();
+  const [repayingAmount, setRepayingAmount] = useState<BigNumberish>(
+    BigNumber.from("0")
+  );
+
+  const getRepayingAmount = useCallback(async () => {
+    if (Pikachu.provider)
+      try {
+        if (loan.status === 0) {
+          setRepayingAmount(0);
+          return;
+        }
+        const _repayingAmount = await Pikachu.calculateRepayAmount(
+          toInteger(new Date().getTime() / 1000) - toInteger(loan.timestamp),
+          loan.interestType,
+          loan.interestStartRate,
+          loan.interestCapRate,
+          loan.amount
+        );
+        setRepayingAmount(_repayingAmount);
+      } catch (error) {
+        setRepayingAmount(0);
+        console.log(error);
+      }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [Pikachu.provider, loan]);
+
+  useEffect(() => {
+    getRepayingAmount();
+  }, [getRepayingAmount]);
+
+  return repayingAmount;
 };
