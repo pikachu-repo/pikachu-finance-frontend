@@ -8,10 +8,11 @@ export const toString = (value: string | undefined) => {
   return value || "";
 };
 export const toInteger = (
-  value: number | string | undefined | BigNumberish
+  value: number | string | undefined | BigNumberish | boolean
 ) => {
+  if (typeof value === "boolean") return value ? 1 : 0;
   return parseInt(value?.toString() || "0");
 };
-export const toFloat = (value: string | undefined) => {
+export const toFloat = (value: string | undefined | undefined) => {
   return parseFloat(value || "0");
 };

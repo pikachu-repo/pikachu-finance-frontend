@@ -74,6 +74,23 @@ const Demo = () => {
   const supportedCollectionsRef = useRef<HTMLTextAreaElement>(null);
   const [compoundInterest, setCompoundInterest] = useState<boolean>(false);
 
+  // manage pool parameters
+
+  const onWithdrawPool = async (_poolId: number) => {
+    const _withdrawAmount = ethers.utils.parseEther(
+      (document.getElementById(`withdrawAmount_${_poolId}`) as HTMLInputElement)
+        .value
+    );
+    await Pikachu.withdrawFromPool(_poolId, _withdrawAmount);
+  };
+  const onTopupPool = async (_poolId: number) => {
+    const _depositAmount = ethers.utils.parseEther(
+      (document.getElementById(`depositAmount_${_poolId}`) as HTMLInputElement)
+        .value
+    );
+    await Pikachu.depositToPool(_poolId, { value: _depositAmount });
+  };
+
   // create loan parameters
   const [currentPoolIndex, setCurrentPoolIndex] = useState(0);
   const collectionRef = useRef<HTMLSelectElement>(null);
@@ -158,7 +175,6 @@ const Demo = () => {
   };
 
   const onCreateLoan = async () => {
-    const _poolOwner = pools[currentPoolIndex].owner;
     const _collection = toString(collectionRef.current?.value);
     const _tokenId = toInteger(tokenIdRef.current?.value);
     const _duration = toInteger(loanDurationRef.current?.value) * 86400;
@@ -170,9 +186,8 @@ const Demo = () => {
       toString(floorPriceRef.current?.value)
     );
     const blockNumber = toInteger(blockNumberRef.current?.value);
-    console.log(_duration);
     await Pikachu.borrow(
-      _poolOwner,
+      currentPoolIndex,
       _collection,
       _tokenId,
       _duration,
@@ -184,11 +199,11 @@ const Demo = () => {
   };
 
   // manage loans
-  const loan = useLoan(pools[currentPoolIndex]?.owner, account.address || "");
+  const loan = useLoan(currentPoolIndex, account.address || "");
   const repayingAmount = useRepayingAmount(loan);
 
   const onRepayLoan = async () => {
-    await Pikachu.repay(loan.poolOwner, { value: repayingAmount });
+    await Pikachu.repay(currentPoolIndex, { value: repayingAmount });
   };
 
   return (
@@ -372,10 +387,10 @@ const Demo = () => {
 
           <div className={cn(style.poolsBox)}>
             <span>Total Pools: {totalPools}</span>
-            {pools.map((pool, index) => (
-              <div key={index} className={cn(style.pool)}>
+            {pools.map((pool, poolId) => (
+              <div key={poolId} className={cn(style.pool)}>
                 <span className={cn(style.stressed)}>
-                  Pool Status: {POOL_STATUS[pool.status]}
+                  Pool #{poolId} Status: {POOL_STATUS[pool.status]}
                 </span>
                 <span>
                   Owner: <br />
@@ -397,6 +412,7 @@ const Demo = () => {
                   Max Duration: {pool.maxDuration.toNumber() / SECONDS_PER_DAY}{" "}
                   Days
                 </span>
+                <span>Compound Interest: {pool.compound ? "Yes" : "No"}</span>
                 <span>
                   Interest Type: {INTEREST_TYPE[pool.interestType]} Interest
                 </span>
@@ -415,6 +431,39 @@ const Demo = () => {
                     </>
                   ))}
                 </span>
+
+                {pool.owner === account.address && (
+                  <>
+                    <div className={cn(style.inputItem)}>
+                      <Button
+                        variant="gray"
+                        sx="w-32"
+                        onClick={() => onWithdrawPool(poolId)}
+                      >
+                        Withdraw
+                      </Button>
+                      <Input
+                        id={`withdrawAmount_${poolId}`}
+                        placeholder="0.05"
+                        icon={<SvgEthereum className="w-5 h-5" />}
+                      />
+                    </div>
+                    <div className={cn(style.inputItem)}>
+                      <Button
+                        variant="yellow"
+                        sx="w-32"
+                        onClick={() => onTopupPool(poolId)}
+                      >
+                        Deposit
+                      </Button>
+                      <Input
+                        id={`depositAmount_${poolId}`}
+                        placeholder="0.05"
+                        icon={<SvgEthereum className="w-5 h-5" />}
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>

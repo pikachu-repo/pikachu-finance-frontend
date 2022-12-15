@@ -6,7 +6,7 @@ import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 import { usePikachuContract } from "../useContract";
 
 type TLoanStruct = {
-  poolOwner: string;
+  poolIndex: number;
   borrower: string;
   amount: BigNumberish;
   duration: BigNumberish;
@@ -97,10 +97,10 @@ export const usePools = () => {
   return pools;
 };
 
-export const useLoan = (poolOwner: string, borrower: string) => {
+export const useLoan = (poolIndex: number, borrower: string) => {
   const Pikachu = usePikachuContract();
   const [loan, setLoan] = useState<TLoanStruct>({
-    poolOwner: "",
+    poolIndex: 0,
     amount: 0,
     blockNumber: 0,
     borrower: "",
@@ -117,15 +117,15 @@ export const useLoan = (poolOwner: string, borrower: string) => {
   const getLoan = useCallback(async () => {
     if (Pikachu.provider)
       try {
-        const _loan = await Pikachu.loans(poolOwner, borrower);
-        setLoan({ ..._loan, poolOwner: poolOwner });
+        const _loan = await Pikachu.loans(poolIndex, borrower);
+        setLoan({ ..._loan, poolIndex: poolIndex });
       } catch (error) {
         // setLoan([]);
         console.log(error);
       }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Pikachu.provider, poolOwner, borrower]);
+  }, [Pikachu.provider, poolIndex, borrower]);
 
   useEffect(() => {
     getLoan();

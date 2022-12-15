@@ -15,9 +15,9 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "address",
-        name: "poolOwner",
-        type: "address",
+        internalType: "uint256",
+        name: "poolId",
+        type: "uint256",
       },
       {
         indexed: true,
@@ -65,9 +65,9 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "address",
-        name: "poolOwner",
-        type: "address",
+        internalType: "uint256",
+        name: "poolId",
+        type: "uint256",
       },
       {
         indexed: true,
@@ -107,9 +107,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_poolOwner",
-        type: "address",
+        internalType: "uint256",
+        name: "_poolId",
+        type: "uint256",
       },
       {
         internalType: "address",
@@ -155,9 +155,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_poolOwner",
-        type: "address",
+        internalType: "uint256",
+        name: "_poolId",
+        type: "uint256",
       },
     ],
     name: "repay",

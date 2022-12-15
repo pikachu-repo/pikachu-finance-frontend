@@ -24,7 +24,8 @@ main {
   border-radius: 100px;
   border: 1px solid #fff5;
   &:hover {
-    cursor: pointer;
+    pointer: cursor;
+    background-color: #fff5;
   }
 }
 
