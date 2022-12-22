@@ -1,0 +1,51 @@
+.root {
+  .mainBox {
+    @apply rounded-xl bg-[#0D0D0D] text-white p-8;
+    .borrowHead {
+      @apply flex justify-between;
+      .content {
+        @apply flex flex-col;
+        .title {
+          @apply text-3xl font-bold;
+        }
+      }
+      .refreshIcon {
+        @apply text-[#FFCC01] flex flex-row gap-1;
+      }
+    }
+    .borrowBox {
+      @apply flex gap-12;
+    }
+
+    /* .poolConfig,
+    .adminSettings,
+    .poolsBox,
+    .loanConfig {
+      @apply w-full flex flex-col items-start gap-2 p-4 border-2 bg-[#0D0D0D] border-slate-600;
+
+      .pool {
+        @apply flex flex-col w-full p-2 gap-1 bg-[#554609];
+
+        span {
+          @apply flex items-center gap-1;
+        }
+      }
+      .loan {
+        @apply flex flex-col w-full p-2 gap-1 bg-[#554609];
+
+        span {
+          @apply flex items-center gap-1;
+        }
+      }
+      .inputItem {
+        @apply flex items-center gap-4;
+        label {
+          @apply whitespace-nowrap;
+        }
+        & > div {
+          @apply w-60;
+        }
+      }
+    } */
+  }
+}
