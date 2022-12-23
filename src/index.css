@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  overflow-y: scroll;
+}
+
 body {
   font-family: "Chakra Petch", sans-serif;
   color: white;
@@ -11,7 +15,7 @@ body {
 
 main {
   min-height: calc(100vh - 157px);
-  @apply px-16 py-8;
+  @apply px-[7.5rem] py-10;
 }
 
 ::-webkit-scrollbar {
@@ -31,6 +35,15 @@ main {
 }
 
 @layer base {
+  *:disabled {
+    cursor: not-allowed;
+  }
+  h3 {
+    @apply text-[34px] font-bold;
+  }
+  h4 {
+    @apply text-xl font-bold;
+  }
   textarea {
     @apply bg-transparent border border-white rounded-md p-2;
   }
