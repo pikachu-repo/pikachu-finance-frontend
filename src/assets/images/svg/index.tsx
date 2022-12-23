@@ -5,3 +5,6 @@ export { ReactComponent as SvgDiscord } from "./discord.svg";
 export { ReactComponent as SvgTwitter } from "./twitter.svg";
 export { ReactComponent as SvgEthereum } from "./ethereum.svg";
 export { ReactComponent as SvgRefresh } from "./refresh.svg";
+export { ReactComponent as SvgArrowUp } from "./arrowUp.svg";
+export { ReactComponent as SvgArrowRight } from "./arrowRight.svg";
+export { ReactComponent as SvgArrowLeft } from "./arrowLeft.svg";
