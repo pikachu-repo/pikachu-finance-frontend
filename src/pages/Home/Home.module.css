@@ -39,7 +39,7 @@
     background-image: url("assets/images/png/carousel.png");
     background-repeat: no-repeat;
     background-size: 100%;
-    @apply -mx-16;
+    @apply -mx-[7.5rem];
     .title {
       @apply text-center text-4xl py-10 font-bold;
     }
