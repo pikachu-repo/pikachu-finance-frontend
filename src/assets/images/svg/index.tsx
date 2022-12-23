@@ -8,3 +8,7 @@ export { ReactComponent as SvgRefresh } from "./refresh.svg";
 export { ReactComponent as SvgArrowUp } from "./arrowUp.svg";
 export { ReactComponent as SvgArrowRight } from "./arrowRight.svg";
 export { ReactComponent as SvgArrowLeft } from "./arrowLeft.svg";
+export { ReactComponent as SvgLink } from "./link.svg";
+export { ReactComponent as SvgArrowDown } from "./arrowdown.svg";
+export { ReactComponent as SvgCopy } from "./copy.svg";
+export { ReactComponent as SvgTemplateChart } from "./template-chart.svg";

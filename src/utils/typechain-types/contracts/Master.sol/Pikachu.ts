@@ -53,6 +53,7 @@ export declare namespace IPikachu {
 
   export type PoolStruct = {
     owner: PromiseOrValue<string>;
+    paused: PromiseOrValue<boolean>;
     status: PromiseOrValue<BigNumberish>;
     depositedAmount: PromiseOrValue<BigNumberish>;
     borrowedAmount: PromiseOrValue<BigNumberish>;
@@ -73,10 +74,14 @@ export declare namespace IPikachu {
     maxDuration: PromiseOrValue<BigNumberish>;
     compound: PromiseOrValue<boolean>;
     collections: PromiseOrValue<string>[];
+    numberOfLoans: PromiseOrValue<BigNumberish>;
+    numberOfOpenLoans: PromiseOrValue<BigNumberish>;
+    numberOfLiquidations: PromiseOrValue<BigNumberish>;
   };
 
   export type PoolStructOutput = [
     string,
+    boolean,
     number,
     BigNumber,
     BigNumber,
@@ -96,9 +101,13 @@ export declare namespace IPikachu {
     BigNumber,
     BigNumber,
     boolean,
-    string[]
+    string[],
+    BigNumber,
+    BigNumber,
+    BigNumber
   ] & {
     owner: string;
+    paused: boolean;
     status: number;
     depositedAmount: BigNumber;
     borrowedAmount: BigNumber;
@@ -119,6 +128,9 @@ export declare namespace IPikachu {
     maxDuration: BigNumber;
     compound: boolean;
     collections: string[];
+    numberOfLoans: BigNumber;
+    numberOfOpenLoans: BigNumber;
+    numberOfLiquidations: BigNumber;
   };
 }
 
@@ -142,6 +154,7 @@ export interface PikachuInterface extends utils.Interface {
     "recoverSigner(bytes32,bytes)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "repay(uint256)": FunctionFragment;
+    "setPaused(uint256,bool)": FunctionFragment;
     "splitSignature(bytes)": FunctionFragment;
     "sqrt(uint256)": FunctionFragment;
     "totalPools()": FunctionFragment;
@@ -173,6 +186,7 @@ export interface PikachuInterface extends utils.Interface {
       | "recoverSigner"
       | "renounceOwnership"
       | "repay"
+      | "setPaused"
       | "splitSignature"
       | "sqrt"
       | "totalPools"
@@ -287,6 +301,10 @@ export interface PikachuInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "setPaused",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<boolean>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "splitSignature",
     values: [PromiseOrValue<BytesLike>]
   ): string;
@@ -393,6 +411,7 @@ export interface PikachuInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "repay", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setPaused", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "splitSignature",
     data: BytesLike
@@ -663,6 +682,12 @@ export interface Pikachu extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setPaused(
+      _poolId: PromiseOrValue<BigNumberish>,
+      _paused: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     splitSignature(
       sig: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -860,6 +885,12 @@ export interface Pikachu extends BaseContract {
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setPaused(
+    _poolId: PromiseOrValue<BigNumberish>,
+    _paused: PromiseOrValue<boolean>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   splitSignature(
     sig: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
@@ -1052,6 +1083,12 @@ export interface Pikachu extends BaseContract {
 
     repay(
       _poolId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setPaused(
+      _poolId: PromiseOrValue<BigNumberish>,
+      _paused: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1271,6 +1308,12 @@ export interface Pikachu extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setPaused(
+      _poolId: PromiseOrValue<BigNumberish>,
+      _paused: PromiseOrValue<boolean>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     splitSignature(
       sig: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -1431,6 +1474,12 @@ export interface Pikachu extends BaseContract {
 
     repay(
       _poolId: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setPaused(
+      _poolId: PromiseOrValue<BigNumberish>,
+      _paused: PromiseOrValue<boolean>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

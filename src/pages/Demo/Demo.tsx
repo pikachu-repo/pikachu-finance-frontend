@@ -14,6 +14,7 @@ import { SvgEthereum, SvgWallet } from "assets/images/svg";
 import Switch from "components/ui/Switch";
 import {
   beautifyAddress,
+  toFloat,
   toInteger,
   toString,
 } from "utils/helpers/string.helpers";
@@ -109,9 +110,10 @@ const Demo = () => {
     const depositAmount = ethers.utils.parseEther(
       depositAmountRef.current?.value || "0"
     );
-    const interestStarting =
-      toInteger(interestStartingRef.current?.value) * 100;
-    const interestCap = toInteger(interestCapRef.current?.value) * 100;
+    const interestStarting = toInteger(
+      toFloat(interestStartingRef.current?.value) * 100
+    );
+    const interestCap = toInteger(toFloat(interestCapRef.current?.value) * 100);
     const collections = toString(supportedCollectionsRef.current?.value)
       .split("\n")
       .map((item) => item.trim());
@@ -135,7 +137,7 @@ const Demo = () => {
       minDepositAmount: ethers.utils.parseEther(
         toString(minDepositAmountRef.current?.value)
       ),
-      platformFee: toInteger(platformFeeRef.current?.value) * 100,
+      platformFee: toFloat(platformFeeRef.current?.value) * 100,
       verifiedCollections: (verifiedCollectionsRef.current?.value || "")
         .split("\n")
         .map((item) => item.trim()),
@@ -581,9 +583,9 @@ const Demo = () => {
                   <SvgEthereum />
                 </span>
                 <span>
-                  Starting Rate: {toInteger(loan.interestStartRate) / 100}%
+                  Starting Rate: {toFloat(loan.interestStartRate) / 100}%
                 </span>
-                <span>Cap Rate: {toInteger(loan.interestCapRate) / 100}%</span>
+                <span>Cap Rate: {toFloat(loan.interestCapRate) / 100}%</span>
                 <span>
                   Duration:{" "}
                   {BigNumber.from(loan.duration)
