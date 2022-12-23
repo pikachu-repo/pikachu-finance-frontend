@@ -13,6 +13,8 @@ export const toInteger = (
   if (typeof value === "boolean") return value ? 1 : 0;
   return parseInt(value?.toString() || "0");
 };
-export const toFloat = (value: string | undefined | undefined) => {
-  return parseFloat(value || "0");
+export const toFloat = (
+  value: string | undefined | undefined | BigNumberish
+) => {
+  return parseFloat(value?.toString() || "0");
 };
