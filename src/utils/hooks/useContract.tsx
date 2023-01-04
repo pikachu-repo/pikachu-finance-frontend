@@ -16,9 +16,10 @@ import {
 export const usePikachuContract = () => {
   const { data: signer } = useSigner();
   const address = usePikachuAddress();
+  const provider = useProvider();
 
   // @ts-ignore
-  return Pikachu__factory.connect(address, signer);
+  return Pikachu__factory.connect(address, signer || provider);
 };
 
 export const useERC721Contract = (address: string) => {
@@ -31,15 +32,17 @@ export const useERC721Contract = (address: string) => {
 export const useNFT1Contract = () => {
   const { data: signer } = useSigner();
   const address = useNFT1Address();
+  const provider = useProvider();
 
   // @ts-ignore
-  return TestNFT__factory.connect(address, signer);
+  return TestNFT__factory.connect(address, signer || provider);
 };
 
 export const useNFT2Contract = () => {
   const { data: signer } = useSigner();
   const address = useNFT2Address();
+  const provider = useProvider();
 
   // @ts-ignore
-  return TestNFT__factory.connect(address, signer);
+  return TestNFT__factory.connect(address, signer || provider);
 };

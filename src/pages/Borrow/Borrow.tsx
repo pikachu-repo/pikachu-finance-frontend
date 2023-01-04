@@ -92,7 +92,12 @@ const Borrow = () => {
         </div>
 
         {pools.map((pool, index) => (
-          <PoolPanel key={index} pool={pool} poolIndex={index} />
+          <PoolPanel
+            key={index}
+            pool={pool}
+            poolIndex={index}
+            buttonVisible={true}
+          />
         ))}
       </div>
     </div>

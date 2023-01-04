@@ -4,6 +4,7 @@ import Home from "pages/Home";
 import Borrow from "pages/Borrow";
 import Header from "components/Header";
 import Demo from "pages/Demo";
+import Pool from "pages/Pool";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/borrow" element={<Borrow />} />
           <Route path="/demo" element={<Demo />} />
+          <Route path="/pool/:owner/:poolId" element={<Pool />} />
         </Routes>
       </main>
       <Footer />
