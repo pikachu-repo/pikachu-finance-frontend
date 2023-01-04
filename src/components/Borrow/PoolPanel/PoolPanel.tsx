@@ -24,9 +24,10 @@ import LinkWithSearchParams from "components/LinkWithSearchParams";
 interface Props {
   pool: IPikachu.PoolStructOutput;
   poolIndex: number;
+  buttonVisible: boolean;
 }
 
-const PoolPanel = ({ pool, poolIndex }: Props) => {
+const PoolPanel = ({ pool, poolIndex, buttonVisible }: Props) => {
   const [expanded, setExpanded] = useState(false);
   return (
     <div className={cn(style.root)}>
@@ -51,27 +52,31 @@ const PoolPanel = ({ pool, poolIndex }: Props) => {
           / {pool.interestCapRate.toNumber() / 100}%
         </span>
         <span>
-          {pool.status === POOL_READY &&
-          pool.availableAmount.gt(BigNumber.from(0)) ? (
-            <LinkWithSearchParams
-              to={{ pathname: `/pool/${pool.owner}/${poolIndex}` }}
-            >
-              <Button variant="yellow" sx="h-10 w-36">
-                Borrow Now
-              </Button>
-            </LinkWithSearchParams>
-          ) : (
-            <Button variant="gray" sx="h-10 w-36" disabled>
-              Insufficient
-            </Button>
-          )}
-          {pool.status === POOL_DISABLED && (
-            <Button variant="gray" sx="h-10 w-36" disabled>
-              Paused
-            </Button>
+          {buttonVisible && (
+            <>
+              {pool.status === POOL_READY &&
+              pool.availableAmount.gt(BigNumber.from(0)) ? (
+                <LinkWithSearchParams
+                  to={{ pathname: `/pool/${pool.owner}/${poolIndex}` }}
+                >
+                  <Button variant="yellow" sx="h-10 w-36">
+                    Borrow Now
+                  </Button>
+                </LinkWithSearchParams>
+              ) : (
+                <Button variant="gray" sx="h-10 w-36" disabled>
+                  Insufficient
+                </Button>
+              )}
+              {pool.status === POOL_DISABLED && (
+                <Button variant="gray" sx="h-10 w-36" disabled>
+                  Paused
+                </Button>
+              )}
+            </>
           )}
           <Button
-            sx={`h-10 w-10 bg-white/30 hover:bg-white/40 ${
+            sx={`h-10 w-10 bg-white/30 hover:bg-white/40 ml-auto ${
               expanded ? "rotate-180" : ""
             }`}
             onClick={() => setExpanded(!expanded)}

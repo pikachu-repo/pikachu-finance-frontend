@@ -1,0 +1,39 @@
+.root {
+  @apply flex flex-col;
+  .heading {
+    @apply flex items-center font-bold mb-10;
+
+    h3 {
+      @apply mx-8;
+    }
+
+    a {
+      @apply flex items-center text-xl gap-2 text-tangerine-yellow;
+    }
+  }
+
+  .poolPanel {
+    @apply bg-smoky-black rounded-[10px] px-5 pt-6 pb-8;
+
+    .head {
+      @apply font-bold px-5 pb-6 grid;
+      grid-template-columns: 20% 25% 10% 11% 16% 18%;
+
+      span {
+        @apply flex items-center gap-1.5;
+      }
+
+      span:last-child {
+        @apply text-tangerine-yellow justify-end;
+      }
+    }
+  }
+
+  .loanHeading {
+    @apply mt-10 mb-8;
+  }
+
+  .loanPanel {
+    @apply bg-smoky-black rounded-[10px] px-5 pt-6 pb-8;
+  }
+}

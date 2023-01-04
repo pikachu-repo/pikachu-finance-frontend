@@ -169,3 +169,27 @@ export const useRepayingAmount = (loan: TLoanStruct) => {
 
   return repayingAmount;
 };
+
+export const usePoolById = (poolId: number): IPikachu.PoolStructOutput => {
+  const Pikachu = usePikachuContract();
+  const [pool, setPool] = useState<IPikachu.PoolStructOutput>();
+
+  const getPool = useCallback(async () => {
+    if (Pikachu.provider)
+      try {
+        const _pool = await Pikachu.getPoolById(poolId);
+        setPool(_pool);
+      } catch (error) {
+        console.log(error);
+      }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [Pikachu.provider]);
+
+  useEffect(() => {
+    getPool();
+  }, [getPool]);
+
+  //@ts-ignore
+  return pool;
+};
