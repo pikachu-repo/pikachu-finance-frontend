@@ -3,7 +3,7 @@ import cn from "classnames";
 import BackButton from "components/ui/BackButton";
 import { SvgLink, SvgRefresh } from "assets/images/svg";
 import { useParams } from "react-router-dom";
-import { usePoolById } from "utils/hooks/pikachu/usePools";
+import { useLoans, usePoolById } from "utils/hooks/pikachu/usePools";
 import {
   beautifyAddress,
   toInteger,
@@ -11,10 +11,20 @@ import {
 } from "utils/helpers/string.helpers";
 import { PoolPanel } from "components/Borrow";
 import { Button } from "components/ui";
-// import Example from "assets/"
+import LoanPanel from "components/Borrow/LoanPanel";
+import { useMemo } from "react";
+import { useAccount } from "wagmi";
+
 const Pool = () => {
+  const account = useAccount();
   const { poolId } = useParams();
   const pool = usePoolById(toInteger(poolId));
+  const loans = useLoans(toInteger(poolId));
+
+  const myPool = useMemo(() => {
+    return account?.address?.toLowerCase() === pool?.owner?.toLowerCase();
+  }, [account, pool]);
+
   return (
     <div className={cn(style.root)}>
       <div className={cn(style.heading)}>
@@ -30,9 +40,11 @@ const Pool = () => {
           <SvgLink />
         </a>
 
-        <Button variant="yellow" sx="h-10 w-36 ml-auto">
-          Borrow Now
-        </Button>
+        {!myPool && (
+          <Button variant="yellow" sx="h-10 w-36 ml-auto">
+            Borrow Now
+          </Button>
+        )}
       </div>
 
       <div className={cn(style.poolPanel)}>
@@ -64,9 +76,26 @@ const Pool = () => {
       </div>
 
       <h4 className={cn(style.loanHeading)}>
-        All loans of the pool ({pool?.totalLoans.toNumber()})
+        All loans of the pool ({pool?.numberOfLoans.toNumber()})
       </h4>
-      <div className={cn(style.loanPanel)}></div>
+      <div className={cn(style.loanPanel)}>
+        <div className={cn(style.head)}>
+          <span>NFT</span>
+          <span>Borrower</span>
+          <span>Amount + Interest</span>
+          <span>APY</span>
+          <span>Fund Date</span>
+          <span>Status</span>
+          <span>
+            <SvgRefresh />
+            Refresh
+          </span>
+        </div>
+
+        {loans.map((loan, index) => (
+          <LoanPanel key={index} loan={loan} pool={pool} />
+        ))}
+      </div>
     </div>
   );
 };

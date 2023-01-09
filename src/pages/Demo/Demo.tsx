@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import cn from "classnames";
 import style from "./Demo.module.css";
 import {
@@ -426,11 +426,11 @@ const Demo = () => {
                 </span>
                 <span>
                   Supported Collections: {pool.collections.length}
-                  {pool.collections.map((collection) => (
-                    <>
+                  {pool.collections.map((collection, index) => (
+                    <React.Fragment key={index}>
                       <br />
                       {collection}
-                    </>
+                    </React.Fragment>
                   ))}
                 </span>
 
