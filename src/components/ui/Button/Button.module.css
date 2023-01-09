@@ -5,4 +5,8 @@
   &:hover {
     @apply shadow-lg;
   }
+
+  &:disabled {
+    @apply opacity-50;
+  }
 }

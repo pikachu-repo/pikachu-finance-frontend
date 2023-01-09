@@ -4,7 +4,7 @@ import s from "./Input.module.css";
 
 interface MyInputProps {
   sx?: string;
-  icon?: React.ReactElement;
+  icon?: React.ReactElement | string;
   innerRef?: any;
 }
 

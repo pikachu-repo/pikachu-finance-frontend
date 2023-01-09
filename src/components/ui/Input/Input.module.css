@@ -1,9 +1,8 @@
 .root {
   @apply relative;
   .input {
-    @apply rounded-full flex duration-100 font-bold bg-white/20 border border-white outline-none;
+    @apply w-full rounded-full flex duration-100 font-bold bg-white/20 border border-white outline-none;
     @apply pl-5 pr-10 py-2;
-    width: inherit;
   }
 
   .icon {

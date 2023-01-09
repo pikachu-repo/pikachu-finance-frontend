@@ -1,104 +1,95 @@
-import { useMemo } from "react";
 import style from "./Borrow.module.css";
 import cn from "classnames";
-import { SvgLink, SvgRefresh, SvgArrowDown } from "assets/images/svg";
-import { usePools } from "utils/hooks/pikachu/usePools";
-import { ethers } from "ethers";
-import { toFloat } from "utils/helpers/string.helpers";
-import { PoolPanel } from "components/Borrow";
-// import Example from "assets/"
+import { useState } from "react";
+// import { useAccount } from "wagmi";
+import { useParams } from "react-router-dom";
+import { usePoolById } from "utils/hooks/pikachu/usePools";
+import { toInteger } from "utils/helpers/string.helpers";
+import { SvgEthereum, SvgRefresh, SvgWarning } from "assets/images/svg";
+import nftImage from "assets/images/nftImage.png";
+import DurationPicker from "components/ui/DurationPicker";
+import { SECONDS_PER_DAY } from "utils/constants/number.contants";
+import LinkWithSearchParams from "components/LinkWithSearchParams";
+import { Button } from "components/ui";
+
 const Borrow = () => {
-  const pools = usePools();
+  // const account = useAccount();
+  const { poolId } = useParams();
+  const pool = usePoolById(toInteger(poolId));
 
-  const platformStatus = useMemo(
-    () => [
-      {
-        label: "Total Pools:",
-        value: pools.length,
-      },
-      {
-        label: "Total Open Loans:",
-        value: `${pools.reduce(
-          (prev, next) =>
-            toFloat(prev + ethers.utils.formatEther(next.totalLoans)),
-          0
-        )} ETH`,
-      },
-      {
-        label: "Available Liquidity:",
-
-        value: `${pools.reduce(
-          (prev, next) =>
-            toFloat(prev + ethers.utils.formatEther(next.availableAmount)),
-          0
-        )} ETH`,
-      },
-    ],
-    [pools]
-  );
+  const [duration, setDuration] = useState(1);
 
   return (
     <div className={cn(style.root)}>
       <div className={cn(style.heading)}>
         <h3>Borrow</h3>
-        <div className={cn(style.platformStatus)}>
-          {platformStatus.map((status, index) => (
-            <div key={index}>
-              <span className="text-tangerine-yellow">{status.label}</span>
-              <span>{status.value}</span>
-            </div>
-          ))}
+
+        <span>
+          <SvgRefresh />
+          Refresh
+        </span>
+      </div>
+
+      <p>
+        Select the NFT you want to collaterize, loan to value is 40% in this
+        pool.
+      </p>
+
+      <div className={cn(style.collection)}>
+        <img src={nftImage} alt="collection" className={cn(style.nftImg)} />
+        <div className={cn(style.sellections)}>
+          <div>
+            Floor Price:
+            <h4 className="ml-2 mr-1.5">60.5</h4>
+            <SvgEthereum />
+          </div>
+          <div>
+            Borrow Amount (Max 200 ETH):
+            <h3 className="ml-2 mr-1.5 text-[30px]">24.5</h3>
+            <SvgEthereum />
+          </div>
+          <div className={cn(style.duration)}>
+            Select your loan duration (Max{" "}
+            {toInteger(pool?.maxDuration) / SECONDS_PER_DAY} days):
+            <DurationPicker
+              value={duration}
+              onChange={setDuration}
+              min={1}
+              max={toInteger(pool?.maxDuration) / SECONDS_PER_DAY}
+            />
+          </div>
+          <div>
+            Estimated interest:
+            <h4 className="ml-2 mr-1.5">4.5</h4>
+            <SvgEthereum />
+          </div>
         </div>
       </div>
 
-      <div className={cn(style.help)}>
-        Borrow ETH with your NFTs within 5 minutes and get instant NFT Liquidity
-        on Ethereum.
-        <a
-          href="https://github.com/Pikachu-finance"
-          target="_blank"
-          rel="noreferrer"
+      <div className={cn(style.warnings)}>
+        <div>
+          <SvgWarning /> You don't have any NFTs from verified collections.
+        </div>
+        <div>
+          <SvgWarning /> Your balance is 0.0020392 ETH, and at least 0.001 ETH
+          (including transaction fees) is required.
+        </div>
+
+        <LinkWithSearchParams
+          to={{ pathname: "/" }}
+          className="text-tangerine-yellow"
         >
-          How to use PIKACHU.FI
-          <SvgLink />
-        </a>
+          By clicking Borrow you agree with the above terms.
+        </LinkWithSearchParams>
       </div>
 
-      <div className={cn(style.poolList)}>
-        <div className={cn(style.head)}>
-          <h4>Pools ({pools.length})</h4>
-          <span>
-            <span className="text-tangerine-yellow">Available Liquidity</span>
-            / Total
-            <SvgArrowDown />
-          </span>
-          <span>
-            LTV
-            <SvgArrowDown />
-          </span>
-          <span>
-            Duration
-            <SvgArrowDown />
-          </span>
-          <span>
-            <span className="text-tangerine-yellow">Starting</span>
-            / Daily Interest
-            <SvgArrowDown />
-          </span>
-          <span>
-            <SvgRefresh />
-            Refresh
-          </span>
-        </div>
-
-        {pools.map((pool, index) => (
-          <PoolPanel
-            key={index}
-            pool={pool}
-            poolIndex={index}
-            buttonVisible={true}
-          />
-        ))}
+      <div className={cn(style.buttons)}>
+        <Button variant="gray" sx="h-10 w-44">
+          Cancel
+        </Button>
+        <Button variant="yellow" sx="h-10 w-44">
+          Request 30.25 <SvgEthereum className="ml-1.5" />
+        </Button>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 export { ReactComponent as SvgNotification } from "./notification.svg";
 export { ReactComponent as SvgWallet } from "./wallet.svg";
+export { ReactComponent as SvgWarning } from "./warning.svg";
 export { ReactComponent as SvgGithub } from "./github.svg";
 export { ReactComponent as SvgDiscord } from "./discord.svg";
 export { ReactComponent as SvgTwitter } from "./twitter.svg";
@@ -12,3 +13,5 @@ export { ReactComponent as SvgLink } from "./link.svg";
 export { ReactComponent as SvgArrowDown } from "./arrowdown.svg";
 export { ReactComponent as SvgCopy } from "./copy.svg";
 export { ReactComponent as SvgTemplateChart } from "./template-chart.svg";
+export { ReactComponent as SvgMinus } from "./minus.svg";
+export { ReactComponent as SvgPlus } from "./plus.svg";
