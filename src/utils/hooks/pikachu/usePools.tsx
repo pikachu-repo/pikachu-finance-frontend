@@ -3,14 +3,17 @@ import { useCallback, useEffect, useState } from "react";
 import { toInteger } from "utils/helpers/string.helpers";
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 // import { BIG_TEN } from "utils/constants/number.contants";
+import axios from "axios";
 import { usePikachuContract } from "../useContract";
+import { API_URL } from "utils/constants/api.constants";
 
-type TLoanStruct = {
+export type TLoanStruct = {
   poolIndex: number;
   borrower: string;
   amount: BigNumberish;
   duration: BigNumberish;
-  collection: string;
+  collection?: string;
+  collectionContract?: string;
   tokenId: BigNumberish;
   status: number;
   blockNumber: BigNumberish;
@@ -132,6 +135,27 @@ export const useLoan = (poolIndex: number, borrower: string) => {
   }, [getLoan]);
 
   return loan;
+};
+export const useLoans = (poolIndex: number) => {
+  const [loans, setLoans] = useState<TLoanStruct[]>([]);
+
+  const getLoans = useCallback(async () => {
+    try {
+      const _response = await axios.get(`${API_URL}/pools/${poolIndex}/loans`);
+      setLoans(_response.data);
+    } catch (error) {
+      // setLoans([]);
+      console.log(error);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolIndex]);
+
+  useEffect(() => {
+    getLoans();
+  }, [getLoans]);
+
+  return loans;
 };
 
 export const useRepayingAmount = (loan: TLoanStruct) => {

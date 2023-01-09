@@ -34,6 +34,19 @@
   }
 
   .loanPanel {
-    @apply bg-smoky-black rounded-[10px] px-5 pt-6 pb-8;
+    @apply bg-smoky-black rounded-[10px] px-5 pt-6 pb-8 flex flex-col gap-y-2.5;
+
+    .head {
+      @apply font-bold px-5 pb-6 grid;
+      grid-template-columns: 23% 10% 15% 10% 11% 16% 15%;
+
+      span {
+        @apply flex items-center gap-1.5;
+      }
+
+      span:last-child {
+        @apply text-tangerine-yellow justify-end;
+      }
+    }
   }
 }
