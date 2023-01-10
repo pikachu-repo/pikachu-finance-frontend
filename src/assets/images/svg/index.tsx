@@ -15,3 +15,4 @@ export { ReactComponent as SvgCopy } from "./copy.svg";
 export { ReactComponent as SvgTemplateChart } from "./template-chart.svg";
 export { ReactComponent as SvgMinus } from "./minus.svg";
 export { ReactComponent as SvgPlus } from "./plus.svg";
+export { ReactComponent as SvgFind } from "./find.svg";

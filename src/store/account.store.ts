@@ -3,7 +3,7 @@ import produce from "immer";
 import alchemy from "utils/apis/alchemy.api";
 import { toInteger, toString } from "utils/helpers/string.helpers";
 
-interface NFTItem {
+export interface NFTItem {
   contract: string;
   name: string;
   symbol: string;
@@ -23,7 +23,6 @@ export const useAccountStore = create<IAccountState>((set, get) => ({
   nfts: [],
   initializeAccount: async (_address) => {
     let _nfts: NFTItem[] = [];
-    console.log(_address);
     if (_address) {
       const nftsForOwner = await alchemy.nft.getNftsForOwner(_address);
       _nfts = nftsForOwner.ownedNfts.map((nft) => ({

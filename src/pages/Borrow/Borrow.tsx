@@ -11,6 +11,7 @@ import DurationPicker from "components/ui/DurationPicker";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 import LinkWithSearchParams from "components/LinkWithSearchParams";
 import { Button } from "components/ui";
+import NFTSelector from "components/Borrow/NFTSelector";
 
 const Borrow = () => {
   // const account = useAccount();
@@ -38,6 +39,7 @@ const Borrow = () => {
       <div className={cn(style.collection)}>
         <img src={nftImage} alt="collection" className={cn(style.nftImg)} />
         <div className={cn(style.sellections)}>
+          <NFTSelector pool={pool} />
           <div>
             Floor Price:
             <h4 className="ml-2 mr-1.5">60.5</h4>
