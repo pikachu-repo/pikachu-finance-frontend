@@ -1,110 +1,48 @@
 .root {
-  @apply flex flex-col gap-8;
+  @apply flex flex-col rounded-[10px] bg-smoky-black p-10;
 
   .heading {
-    @apply flex justify-between items-center font-bold;
+    @apply flex items-center justify-between font-bold;
+    span {
+      @apply flex items-center text-tangerine-yellow gap-2.5 cursor-pointer;
+    }
+  }
 
-    .platformStatus {
-      @apply rounded-full bg-tangerine-yellow/50 px-8 py-3 text-exs gap-10 flex;
+  .collection {
+    @apply flex py-6 gap-x-20;
 
-      div {
-        @apply gap-[10px] flex;
+    .nftImg {
+      @apply w-[360px];
+      border: 1px solid rgba(245, 245, 245, 0.5);
+      border-radius: 4px;
+
+      @screen 2xl {
+        @apply w-[480px];
+      }
+    }
+
+    .sellections {
+      @apply flex flex-col gap-y-8 justify-center;
+
+      & > div {
+        @apply flex items-center;
+      }
+
+      .duration {
+        @apply gap-x-4;
       }
     }
   }
 
-  .help {
-    @apply flex;
-    a {
-      @apply ml-4 text-tangerine-yellow flex items-center gap-2;
+  .warnings {
+    @apply flex flex-col gap-y-4;
+
+    & > div {
+      @apply flex gap-x-2;
     }
   }
 
-  .poolList {
-    @apply flex flex-col gap-[10px] bg-smoky-black px-5 pb-5 pt-7 rounded-[10px];
-
-    .head {
-      @apply font-bold px-5 pb-6 grid;
-      grid-template-columns: 20% 25% 10% 11% 16% 18%;
-
-      span {
-        @apply flex items-center gap-1.5;
-      }
-
-      span:last-child {
-        @apply text-tangerine-yellow justify-end;
-      }
-    }
-
-    .poolPanel {
-      @apply flex flex-col;
-
-      .poolInfo {
-        @apply px-5 py-6 bg-raisin-black grid;
-        grid-template-columns: 20% 25% 10% 11% 16% 18%;
-
-        span {
-          @apply flex items-center gap-1.5;
-        }
-        span:last-child {
-          @apply justify-between;
-        }
-      }
-      .poolDetails {
-        @apply flex flex-col bg-raisin-black;
-
-        .loanInfo {
-          @apply px-5 py-2 bg-white/10 flex gap-24;
-
-          div {
-            @apply flex items-center gap-2;
-            span:first-child {
-              @apply opacity-50;
-            }
-
-            span:last-child {
-              @apply font-bold flex items-center gap-2;
-            }
-          }
-        }
-
-        .loanDetails {
-          @apply flex pt-6 pb-4 pl-5 pr-9 gap-24;
-
-          .interestInfo {
-            & > div {
-              @apply flex gap-9 pb-6;
-              div {
-                @apply flex gap-2;
-                span:first-child {
-                  @apply opacity-50;
-                }
-                span:last-child {
-                  @apply font-bold;
-                }
-              }
-            }
-          }
-
-          .collectionsInfo {
-            @apply flex flex-col gap-5;
-
-            .collectionsCount {
-              @apply flex gap-2;
-              span:first-child {
-                @apply opacity-50;
-              }
-              span:last-child {
-                @apply font-bold;
-              }
-            }
-
-            .collectionsList {
-              @apply flex flex-wrap gap-4;
-            }
-          }
-        }
-      }
-    }
+  .buttons {
+    @apply flex gap-x-10 pt-6;
   }
 }

@@ -7,7 +7,7 @@
       @apply mx-8;
     }
 
-    a {
+    .link {
       @apply flex items-center text-xl gap-2 text-tangerine-yellow;
     }
   }

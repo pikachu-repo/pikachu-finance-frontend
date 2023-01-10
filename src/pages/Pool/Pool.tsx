@@ -14,6 +14,7 @@ import { Button } from "components/ui";
 import LoanPanel from "components/Borrow/LoanPanel";
 import { useMemo } from "react";
 import { useAccount } from "wagmi";
+import LinkWithSearchParams from "components/LinkWithSearchParams";
 
 const Pool = () => {
   const account = useAccount();
@@ -35,15 +36,18 @@ const Pool = () => {
           href="https://github.com/Pikachu-finance"
           target="_blank"
           rel="noreferrer"
+          className={cn(style.link)}
         >
           Share Link
           <SvgLink />
         </a>
 
         {!myPool && (
-          <Button variant="yellow" sx="h-10 w-36 ml-auto">
-            Borrow Now
-          </Button>
+          <LinkWithSearchParams to={{ pathname: `borrow` }} className="ml-auto">
+            <Button variant="yellow" sx="h-10 w-36">
+              Borrow Now
+            </Button>
+          </LinkWithSearchParams>
         )}
       </div>
 
