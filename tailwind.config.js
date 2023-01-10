@@ -32,7 +32,8 @@ module.exports = {
         "granite-gray": "#666666",
         "smoky-black": "#0D0D0D",
         "raisin-black": "#242424",
-        "plochere": "#D5351E"
+        "plochere": "#D5351E",
+        "pineapple": "#554609"
       },
       boxShadow: {
         '4xl': 'rgb(255, 255, 255, 0.5) 0px 0px 10px 10px',

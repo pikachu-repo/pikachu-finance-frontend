@@ -1,0 +1,95 @@
+.root {
+  @apply flex flex-col bg-raisin-black w-fit relative z-[10];
+  align-items: flex-start !important;
+
+  .emptyWallet {
+    @apply flex items-center pl-6 h-20 w-[460px] rounded-lg border border-tangerine-yellow bg-pineapple z-10;
+  }
+  .selection {
+    @apply flex items-center p-2.5 h-20 w-[460px] rounded-lg border border-tangerine-yellow bg-pineapple z-10 cursor-pointer;
+
+    .nftImg {
+      @apply w-[60px];
+      border: 1px solid rgba(245, 245, 245, 0.5);
+      border-radius: 4px;
+      margin-right: 14px;
+    }
+    .item {
+      @apply flex flex-col gap-y-1.5 justify-center;
+
+      a {
+        @apply flex items-center text-tangerine-yellow;
+
+        svg {
+          @apply ml-2;
+        }
+      }
+    }
+
+    .floorPrice {
+      @apply px-2.5 py-1 ml-auto flex items-center rounded-full bg-tangerine-yellow/30 text-tangerine-yellow font-bold;
+      svg {
+        @apply ml-1.5;
+      }
+    }
+
+    button {
+      @apply bg-white/30 ml-5 hover:bg-white/40;
+    }
+  }
+
+  .collections {
+    @apply w-full flex flex-col rounded-b-lg absolute bg-raisin-black z-0;
+    top: calc(100% - 8px);
+
+    .searchBox {
+      @apply flex flex-col mt-8 px-5 pt-2 pb-3.5;
+      background: rgba(255, 255, 255, 0.15);
+
+      .count {
+        @apply flex items-center;
+        svg {
+          @apply mr-2;
+        }
+      }
+
+      input {
+        @apply mt-2 border-white/50 !important;
+      }
+    }
+
+    .list {
+      @apply pb-4;
+      .row {
+        @apply px-5 pt-4 flex flex-wrap items-center cursor-pointer hover:bg-white/5 duration-75;
+
+        img {
+          @apply w-[60px];
+          border: 1px solid rgba(245, 245, 245, 0.5);
+          border-radius: 4px;
+          margin-right: 14px;
+        }
+
+        a {
+          @apply flex items-center text-tangerine-yellow;
+
+          svg {
+            @apply ml-2;
+          }
+        }
+
+        .floorPrice {
+          @apply px-2.5 py-1 mx-auto flex items-center rounded-full bg-white/30  font-bold;
+          svg {
+            @apply ml-1.5;
+          }
+        }
+        hr {
+          @apply mt-4;
+          opacity: 0.3;
+          border: 1px solid rgba(245, 245, 245, 0.5);
+        }
+      }
+    }
+  }
+}
