@@ -7,18 +7,25 @@ import Demo from "pages/Demo";
 import Pool from "pages/Pool";
 import Pools from "pages/Pools";
 import Borrow from "pages/Borrow";
-import { useAccount } from "wagmi";
+import { useSigner, useAccount } from "wagmi";
 import { useAccountStore } from "store";
-import { toString } from "utils/helpers/string.helpers";
+import { toFloat, toString } from "utils/helpers/string.helpers";
+import { ethers } from "ethers";
 
 function App() {
   const account = useAccount();
+  const signer = useSigner();
 
   const { initializeAccount } = useAccountStore();
 
   useEffect(() => {
-    initializeAccount(toString(account.address).toLowerCase());
-  }, [account.address, initializeAccount]);
+    signer.data?.getBalance().then((balance) => {
+      initializeAccount(
+        toFloat(ethers.utils.formatEther(balance)),
+        toString(account.address).toLowerCase()
+      );
+    });
+  }, [signer.data, account.address, initializeAccount]);
   return (
     <div className="bg-gray-1000">
       <Header />
