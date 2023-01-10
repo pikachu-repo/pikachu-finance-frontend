@@ -1,6 +1,6 @@
 import style from "./Borrow.module.css";
 import cn from "classnames";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 // import { useAccount } from "wagmi";
 import { useParams } from "react-router-dom";
 import { usePoolById } from "utils/hooks/pikachu/usePools";
@@ -12,6 +12,7 @@ import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 import LinkWithSearchParams from "components/LinkWithSearchParams";
 import { Button } from "components/ui";
 import NFTSelector from "components/Borrow/NFTSelector";
+import { useAccountStore } from "store";
 
 const Borrow = () => {
   // const account = useAccount();
@@ -19,6 +20,16 @@ const Borrow = () => {
   const pool = usePoolById(toInteger(poolId));
 
   const [duration, setDuration] = useState(1);
+
+  const { balance, nfts } = useAccountStore();
+
+  const validItems = useMemo(() => {
+    return nfts.filter((nft) =>
+      pool?.collections.find(
+        (contract) => contract.toLowerCase() === nft.contract.toLowerCase()
+      )
+    );
+  }, [pool, nfts]);
 
   return (
     <div className={cn(style.root)}>
@@ -69,12 +80,14 @@ const Borrow = () => {
       </div>
 
       <div className={cn(style.warnings)}>
+        {validItems.length === 0 && (
+          <div>
+            <SvgWarning /> You don't have any NFTs from verified collections.
+          </div>
+        )}
         <div>
-          <SvgWarning /> You don't have any NFTs from verified collections.
-        </div>
-        <div>
-          <SvgWarning /> Your balance is 0.0020392 ETH, and at least 0.001 ETH
-          (including transaction fees) is required.
+          <SvgWarning /> Your balance is {balance.toFixed(5)} ETH, and at least
+          0.001 ETH (including transaction fees) is required.
         </div>
 
         <LinkWithSearchParams
