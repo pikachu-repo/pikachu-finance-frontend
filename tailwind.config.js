@@ -14,10 +14,22 @@ module.exports = {
       },
       animation: {
         shine: "shine 1s",
+        enter: 'enter 0.1s ease-out',
       },
       keyframes: {
         shine: {
           "100%": { left: "25%" },
+        },
+        enter: {
+          "0%": {
+            transform: "scale(0.9)",
+            opacity: 0,
+          },
+
+          "100%": {
+            transform: "scale(1)",
+            opacity: 1,
+          }
         },
       },
       colors: {

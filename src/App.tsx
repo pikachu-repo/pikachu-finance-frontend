@@ -11,6 +11,7 @@ import { useSigner, useAccount } from "wagmi";
 import { useAccountStore } from "store";
 import { toFloat, toString } from "utils/helpers/string.helpers";
 import { ethers } from "ethers";
+import Setting from "pages/Setting";
 
 function App() {
   const account = useAccount();
@@ -32,6 +33,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/setting/*" element={<Setting />} />
           <Route path="/borrow" element={<Pools />} />
           <Route path="/demo" element={<Demo />} />
           <Route path="/pool/:owner/:poolId" element={<Pool />} />

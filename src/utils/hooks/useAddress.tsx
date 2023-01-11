@@ -1,9 +1,15 @@
 import {
+  ADMIN_ADDRESSES,
   NFT_1_ADDRESSES,
   NFT_2_ADDRESSES,
   PIKACHU_ADDRESSES,
 } from "utils/constants/address.constant";
 import { useChainId } from "./useChainId";
+
+export const useAdminAddress = () => {
+  const chainId = useChainId();
+  return ADMIN_ADDRESSES[chainId];
+};
 
 export const usePikachuAddress = () => {
   const chainId = useChainId();

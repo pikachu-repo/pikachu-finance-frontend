@@ -1,7 +1,18 @@
 .root {
-  @apply w-[140px] h-10 rounded-full bg-granite-gray flex items-center justify-center relative text-[14px] font-bold gap-1.5;
+  @apply relative;
+  .button {
+    @apply w-[140px] h-10 rounded-full bg-granite-gray flex items-center justify-center relative text-[14px] font-bold gap-1.5;
 
-  &:hover {
-    @apply text-black;
+    &:hover {
+      @apply opacity-80;
+    }
+  }
+
+  .dropdown {
+    @apply absolute animate-enter mt-2 bg-granite-gray rounded-[20px] flex flex-col gap-y-5 w-44 right-0 py-[18px] shadow-lg;
+
+    & > * {
+      @apply pl-5 cursor-pointer hover:opacity-80;
+    }
   }
 }
