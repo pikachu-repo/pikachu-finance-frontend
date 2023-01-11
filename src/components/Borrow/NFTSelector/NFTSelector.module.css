@@ -39,7 +39,7 @@
   }
 
   .collections {
-    @apply w-full flex flex-col rounded-b-lg absolute bg-raisin-black z-0;
+    @apply w-full flex flex-col rounded-b-lg absolute bg-raisin-black z-0 animate-enter;
     top: calc(100% - 8px);
 
     .searchBox {

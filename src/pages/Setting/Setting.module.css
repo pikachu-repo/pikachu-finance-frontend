@@ -1,0 +1,14 @@
+.root {
+  @apply flex flex-col;
+  .heading {
+    @apply flex items-center font-bold mb-10;
+
+    .link {
+      @apply flex items-center text-xl gap-2 text-tangerine-yellow;
+    }
+  }
+
+  .navtab {
+    @apply text-xl mb-5;
+  }
+}

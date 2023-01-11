@@ -16,6 +16,10 @@ body {
 main {
   min-height: calc(100vh - 157px);
   @apply px-[7.5rem] py-10;
+
+  & > * {
+    @apply animate-enter origin-top;
+  }
 }
 
 ::-webkit-scrollbar {

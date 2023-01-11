@@ -6,7 +6,7 @@ const LinkWithSearchParams = (props: any) => {
     <NavLink
       {...props}
       to={{
-        pathname: props.to.pathname,
+        pathname: props.to?.pathname,
       }}
     >
       {props.children}
