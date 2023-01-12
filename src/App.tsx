@@ -8,16 +8,24 @@ import Pool from "pages/Pool";
 import Pools from "pages/Pools";
 import Borrow from "pages/Borrow";
 import { useSigner, useAccount } from "wagmi";
-import { useAccountStore } from "store";
+import { useAccountStore, useSettingStore } from "store";
 import { toFloat, toString } from "utils/helpers/string.helpers";
 import { ethers } from "ethers";
 import Setting from "pages/Setting";
+import { useAdminSetting } from "utils/hooks/pikachu/useAdminSetting";
 
 function App() {
   const account = useAccount();
   const signer = useSigner();
 
   const { initializeAccount } = useAccountStore();
+  const { initializeSetting } = useSettingStore();
+
+  const adminSetting = useAdminSetting();
+
+  useEffect(() => {
+    initializeSetting(adminSetting);
+  }, [adminSetting, initializeSetting]);
 
   useEffect(() => {
     signer.data?.getBalance().then((balance) => {

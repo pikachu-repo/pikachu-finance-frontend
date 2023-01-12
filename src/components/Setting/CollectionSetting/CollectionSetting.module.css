@@ -1,51 +1,44 @@
 .root {
-  @apply grid px-5 py-3 bg-raisin-black items-center;
-  grid-template-columns: 23% 10% 15% 10% 11% 16% 15%;
+  @apply bg-smoky-black rounded-[10px] p-5 animate-enter;
 
-  .collection {
-    @apply flex items-center;
+  .header {
+    @apply grid items-center py-3 px-5 font-bold;
+    grid-template-columns: 30px 28% 1fr 1fr;
 
-    & > img {
-      width: 60px;
-      margin-right: 14px;
+    & > *:last-child {
+      @apply ml-auto h-10 w-[140px];
     }
+  }
 
-    & > div {
-      @apply flex flex-col gap-y-1.5;
+  .collections {
+    @apply flex flex-col gap-y-2.5 mt-4;
 
-      .collectionName {
-        @apply flex items-center text-tangerine-yellow gap-x-2;
+    .row {
+      @apply grid items-center py-3 px-5 bg-raisin-black;
+      grid-template-columns: 30px 28% 1fr 1fr;
+
+      .avatar {
+        @apply flex items-center gap-x-2.5 font-bold;
+        img {
+          @apply rounded w-[60px] h-[60px];
+          border: 1px solid rgba(245, 245, 245, 0.5);
+        }
+      }
+
+      .address {
+        @apply flex items-center;
+        svg {
+          @apply ml-2;
+        }
+      }
+
+      .actions {
+        @apply flex justify-end items-center gap-x-2;
+
+        button {
+          @apply bg-white/30 hover:bg-white/40 h-10 w-10;
+        }
       }
     }
-  }
-
-  .borrower {
-    @apply flex items-center gap-x-1.5;
-  }
-
-  .interest {
-    @apply flex items-center gap-x-1.5;
-  }
-
-  .status {
-    @apply flex flex-col items-start gap-y-1.5;
-
-    .badge {
-      @apply rounded-full py-1 px-2.5;
-    }
-
-    .badge.error {
-      @apply text-plochere bg-plochere/30;
-    }
-    .badge.warning {
-      @apply text-tangerine-yellow bg-tangerine-yellow/30;
-    }
-
-    .timer {
-      @apply opacity-50;
-    }
-  }
-  .operation {
-    @apply ml-auto;
   }
 }

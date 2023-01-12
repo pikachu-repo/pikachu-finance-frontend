@@ -7,3 +7,4 @@ export { default as NavigationTab } from "./NavigationTab";
 export { default as Switch } from "./Switch";
 export { default as TextCopier } from "./TextCopier";
 export { default as Timer } from "./Timer";
+export { default as AceModal } from "./AceModal";
