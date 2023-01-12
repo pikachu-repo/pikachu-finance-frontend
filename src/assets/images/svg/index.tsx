@@ -16,3 +16,5 @@ export { ReactComponent as SvgTemplateChart } from "./template-chart.svg";
 export { ReactComponent as SvgMinus } from "./minus.svg";
 export { ReactComponent as SvgPlus } from "./plus.svg";
 export { ReactComponent as SvgFind } from "./find.svg";
+export { ReactComponent as SvgEdit } from "./edit.svg";
+export { ReactComponent as SvgTrash } from "./trash.svg";

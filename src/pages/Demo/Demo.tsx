@@ -171,9 +171,9 @@ const Demo = () => {
     console.log(signature, blockNumber);
   };
   const onMintNFT2 = async () => {
-    console.log(await NFT1.provider.getNetwork());
+    console.log(await NFT2.provider.getNetwork());
     // alert(account.address);
-    if (account.address) await NFT1.awardItem(account.address, "");
+    if (account.address) await NFT2.awardItem(account.address, "");
   };
 
   const onCreateLoan = async () => {
@@ -272,7 +272,7 @@ const Demo = () => {
           <hr />
           <span className="text-[14px]">NFT-1: {NFT1.address}</span>
           <div className="flex gap-4">
-            <Button variant="yellow" sx="w-32" onClick={onMintNFT2}>
+            <Button variant="yellow" sx="w-32" onClick={onMintNFT1}>
               Mint
             </Button>
 
@@ -307,7 +307,7 @@ const Demo = () => {
           )}
           <hr />
           <span className="text-[14px]">NFT-2: {NFT2.address}</span>
-          <Button variant="yellow" sx="w-32" onClick={onMintNFT1}>
+          <Button variant="yellow" sx="w-32" onClick={onMintNFT2}>
             Mint
           </Button>
         </div>

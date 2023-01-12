@@ -1,12 +1,12 @@
-import { BigNumber } from "ethers";
+import { BigNumber, BigNumberish } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 // import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 // import { BIG_TEN } from "utils/constants/number.contants";
 import { usePikachuContract } from "../useContract";
 
-type TAdminSettingStruct = {
+export type TAdminSettingStruct = {
   feeTo: string;
-  minDepositAmount: BigNumber;
+  minDepositAmount: BigNumberish;
   platformFee: number;
   blockNumberSlippage: number;
   verifiedCollections: string[];
