@@ -15,6 +15,8 @@ module.exports = {
       animation: {
         shine: "shine 1s",
         enter: 'enter 0.1s ease-out',
+        rotate: 'rotate 2s infinite linear',
+        fadeIn: 'fadeIn 0.1s ease-out',
       },
       keyframes: {
         shine: {
@@ -28,6 +30,24 @@ module.exports = {
 
           "100%": {
             transform: "scale(1)",
+            opacity: 1,
+          }
+        },
+        rotate: {
+          "0%": {
+            transform: "rotate(0deg)",
+          },
+
+          "100%": {
+            transform: "rotate(360deg)",
+          }
+        },
+        fadeIn: {
+          "0%": {
+            opacity: 0,
+          },
+
+          "100%": {
             opacity: 1,
           }
         },

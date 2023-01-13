@@ -3,7 +3,7 @@ import produce from "immer";
 import { TAdminSettingStruct } from "utils/hooks/pikachu/useAdminSetting";
 import axios from "axios";
 import { API_URL } from "utils/constants/api.constants";
-import { ethers } from "ethers";
+import { ContractTransaction, ethers } from "ethers";
 
 interface ISettingState {
   setting: TAdminSettingStruct;
@@ -13,6 +13,33 @@ interface ISettingState {
   };
   replaceCollection: {
     (_old: string, _new: string): Promise<void>;
+  };
+  updateSetting: {
+    (_setting: TAdminSettingStruct): void;
+  };
+
+  txDescription: string;
+  txConfirmationModalVisible: boolean;
+  setTxConfirmationModalVisible: {
+    (_visible: boolean): void;
+  };
+
+  txRejectModalVisible: boolean;
+  setTxRejectModalVisible: {
+    (_visible: boolean): void;
+  };
+
+  txSubmitModalVisible: boolean;
+  setTxSubmitModalVisible: {
+    (_visible: boolean): void;
+  };
+
+  setTxDescription: {
+    (_description: string): void;
+  };
+
+  submitTransaction: {
+    (_txObj: Promise<ContractTransaction>): Promise<any>;
   };
 }
 
@@ -89,5 +116,69 @@ export const useSettingStore = create<ISettingState>((set, get) => ({
         })
       );
     }
+  },
+
+  updateSetting: (_setting) => {
+    set(
+      produce((state: ISettingState) => {
+        state.setting = _setting;
+      })
+    );
+  },
+
+  txDescription: "",
+  txConfirmationModalVisible: false,
+  setTxConfirmationModalVisible: (_visible) => {
+    set(
+      produce((state: ISettingState) => {
+        state.txConfirmationModalVisible = _visible;
+      })
+    );
+  },
+  setTxDescription: (_description) => {
+    set(
+      produce((state: ISettingState) => {
+        state.txDescription = _description;
+      })
+    );
+  },
+
+  txRejectModalVisible: false,
+  setTxRejectModalVisible: (_visible) => {
+    set(
+      produce((state: ISettingState) => {
+        state.txRejectModalVisible = _visible;
+      })
+    );
+  },
+
+  txSubmitModalVisible: false,
+  setTxSubmitModalVisible: (_visible) => {
+    set(
+      produce((state: ISettingState) => {
+        state.txSubmitModalVisible = _visible;
+      })
+    );
+  },
+
+  submitTransaction: async (_txObj) => {
+    _txObj
+      .then((result) => {
+        get().setTxConfirmationModalVisible(false);
+        get().setTxDescription(result.hash);
+        get().setTxSubmitModalVisible(true);
+        console.log(result);
+      })
+      .catch((error) => {
+        get().setTxConfirmationModalVisible(false);
+        get().setTxRejectModalVisible(true);
+        if (error.code === "ACTION_REJECTED")
+          get().setTxDescription("Transaction rejected");
+        else
+          get().setTxDescription(
+            `The transaction cannot succeed due to error: ${error.code}.`
+          );
+        console.log(error.toString(), error.code);
+      });
   },
 }));

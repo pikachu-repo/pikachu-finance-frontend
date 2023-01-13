@@ -13,6 +13,9 @@ import { toFloat, toString } from "utils/helpers/string.helpers";
 import { ethers } from "ethers";
 import Setting from "pages/Setting";
 import { useAdminSetting } from "utils/hooks/pikachu/useAdminSetting";
+import { TxConfirmModal } from "components/Common";
+import TxRejectModal from "components/Common/TxRejectModal";
+import TxSubmitModal from "components/Common/TxSubmitModal";
 
 function App() {
   const account = useAccount();
@@ -37,6 +40,11 @@ function App() {
   }, [signer.data, account.address, initializeAccount]);
   return (
     <div className="bg-gray-1000">
+      <>
+        <TxConfirmModal />
+        <TxRejectModal />
+        <TxSubmitModal />
+      </>
       <Header />
       <main>
         <Routes>

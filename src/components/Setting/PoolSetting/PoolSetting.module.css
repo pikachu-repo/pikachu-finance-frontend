@@ -4,12 +4,12 @@
   .fee,
   .pool {
     border-bottom: 1px solid rgba(245, 245, 245, 0.5);
-    @apply mb-12;
+    @apply mb-8;
   }
   .fee,
   .pool,
   .block {
-    @apply flex flex-col pb-12 gap-y-12;
+    @apply flex flex-col pb-8 gap-y-8;
 
     .label {
       @apply text-xl font-bold;

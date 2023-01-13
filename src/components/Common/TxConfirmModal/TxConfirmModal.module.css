@@ -1,0 +1,23 @@
+.root {
+  @apply flex flex-col w-[430px] h-[310px] bg-raisin-black rounded-[10px];
+
+  .header {
+    @apply flex justify-between mx-6 py-7 items-center text-xl font-bold;
+  }
+
+  .body {
+    @apply my-auto px-6 flex flex-col items-center;
+
+    svg {
+      @apply mb-6 animate-rotate;
+    }
+
+    span {
+      @apply text-center text-tangerine-yellow font-bold;
+    }
+  }
+
+  .footer {
+    @apply flex justify-center  my-6;
+  }
+}

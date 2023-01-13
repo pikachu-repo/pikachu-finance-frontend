@@ -18,3 +18,7 @@ export { ReactComponent as SvgPlus } from "./plus.svg";
 export { ReactComponent as SvgFind } from "./find.svg";
 export { ReactComponent as SvgEdit } from "./edit.svg";
 export { ReactComponent as SvgTrash } from "./trash.svg";
+export { ReactComponent as SvgBlocks } from "./blocks.svg";
+export { ReactComponent as SvgLoaders } from "./loaders.svg";
+export { ReactComponent as SvgError } from "./error.svg";
+export { ReactComponent as SvgSuccess } from "./success.svg";
