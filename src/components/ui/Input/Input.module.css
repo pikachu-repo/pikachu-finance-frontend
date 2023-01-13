@@ -1,7 +1,7 @@
 .root {
   @apply relative;
   .input {
-    @apply w-full rounded-full flex duration-100 font-bold bg-white/20 border border-white outline-none;
+    @apply w-full rounded-full flex duration-100 font-bold bg-white/10 border border-white/50 outline-none;
     @apply pl-5 pr-10 py-2;
   }
 
