@@ -5,21 +5,46 @@ import style from "./CollectionSetting.module.css";
 import cn from "classnames";
 
 import { Button, TextCopier } from "components/ui";
-import CollectionModal from "../CollectionModal";
+import CollectionModal from "../Modals/CollectionModal";
 import ImageERC721 from "assets/images/template-erc721.png";
 import { beautifyAddress } from "utils/helpers/string.helpers";
-import { SvgArrowDown, SvgEdit, SvgTrash } from "assets/images/svg";
+import { SvgEdit, SvgTrash } from "assets/images/svg";
+import CollectionRemoveModal from "../Modals/CollectionRemoveModal";
 
 const CollectionSetting = () => {
   const [collectionModalVisible, setCollectionModalVisible] = useState(false);
+  const [removeModalVisible, setRemoveModalVisible] = useState(false);
 
-  const { collections } = useSettingStore();
+  const [input, setInput] = useState("");
+
+  const {
+    // setting: { verifiedCollections },
+    collections,
+    replaceCollection,
+  } = useSettingStore();
+
+  const updateAddress = async (address: string) => {
+    replaceCollection(input, address).then(() =>
+      setCollectionModalVisible(false)
+    );
+  };
+  const removeAddress = (address: string) => {
+    replaceCollection(address, "").then(() => setRemoveModalVisible(false));
+  };
   return (
     <div className={cn(style.root)}>
       <>
         <CollectionModal
+          input={input}
+          onSave={updateAddress}
           visible={collectionModalVisible}
           setVisible={setCollectionModalVisible}
+        />
+        <CollectionRemoveModal
+          address={input}
+          onConfirm={removeAddress}
+          visible={removeModalVisible}
+          setVisible={setRemoveModalVisible}
         />
       </>
       <div className={cn(style.header)}>
@@ -28,7 +53,10 @@ const CollectionSetting = () => {
         <span>Contract</span>
         <Button
           variant="yellow"
-          onClick={() => setCollectionModalVisible(true)}
+          onClick={() => {
+            setInput("");
+            setCollectionModalVisible(true);
+          }}
         >
           Add Collection
         </Button>
@@ -57,18 +85,28 @@ const CollectionSetting = () => {
             </div>
 
             <div className={cn(style.actions)}>
-              <Button>
+              <Button
+                onClick={() => {
+                  setInput(collection.contract);
+                  setCollectionModalVisible(true);
+                }}
+              >
                 <SvgEdit />
               </Button>
-              <Button>
+              <Button
+                onClick={() => {
+                  setInput(collection.contract);
+                  setRemoveModalVisible(true);
+                }}
+              >
                 <SvgTrash />
               </Button>
-              <Button sx="rotate-180" disabled={index === 0}>
+              {/* <Button sx="rotate-180" disabled={index === 0}>
                 <SvgArrowDown />
               </Button>
               <Button disabled={index + 1 === collections.length}>
                 <SvgArrowDown />
-              </Button>
+              </Button> */}
             </div>
           </div>
         ))}
