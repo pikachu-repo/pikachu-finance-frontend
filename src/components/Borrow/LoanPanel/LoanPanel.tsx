@@ -1,11 +1,15 @@
-import style from "./LoanPanel.module.css";
 import cn from "classnames";
+import style from "./LoanPanel.module.css";
 
-import { TLoanStruct } from "utils/hooks/pikachu/usePools";
+import {
+  TLoanStruct,
+  useCalculateRepayAmount,
+} from "utils/hooks/pikachu/usePools";
 
 import ImageERC721 from "assets/images/template-erc721.png";
 import {
   beautifyAddress,
+  formatEther,
   toFloat,
   toInteger,
 } from "utils/helpers/string.helpers";
@@ -18,14 +22,27 @@ import Timer from "components/ui/Timer";
 import { useAccount } from "wagmi";
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 import { Button } from "components/ui";
+import { useSettingStore } from "store";
+import { usePikachuContract } from "utils/hooks/useContract";
+import { ethers } from "ethers";
+import { refreshPools } from "utils/apis/pikachu.api";
 
 interface Props {
   pool: IPikachu.PoolStructOutput;
   loan: TLoanStruct;
+  poolId: number;
 }
 
-const LoanPanel = ({ pool, loan }: Props) => {
+const LoanPanel = ({ pool, loan, poolId }: Props) => {
   const account = useAccount();
+  const Pikachu = usePikachuContract();
+
+  const {
+    setTxConfirmationModalVisible,
+    setTxDescription,
+    submitTransaction,
+    collections,
+  } = useSettingStore();
 
   const myPool = useMemo(() => {
     return account?.address?.toLowerCase() === pool?.owner?.toLowerCase();
@@ -35,10 +52,40 @@ const LoanPanel = ({ pool, loan }: Props) => {
     return account?.address?.toLowerCase() === loan?.borrower?.toLowerCase();
   }, [account, loan]);
 
+  const collection = useMemo(
+    () =>
+      collections.find(
+        (item) =>
+          item.contract?.toLowerCase() ===
+          loan.collectionContract?.toLowerCase()
+      ),
+    [collections, loan]
+  );
+
+  const repayAmount = useCalculateRepayAmount(
+    toFloat(loan.amount),
+    pool?.interestType,
+    pool?.interestStartRate.toNumber(),
+    pool?.interestCapRate.toNumber(),
+    toInteger(loan.duration)
+  );
+
+  const onPayback = () => {
+    setTxDescription(`Repaying ${repayAmount} ETH...`);
+    setTxConfirmationModalVisible(true);
+
+    submitTransaction(
+      Pikachu.repay(poolId, {
+        value: ethers.utils.parseEther(repayAmount.toString()),
+      }),
+      refreshPools
+    );
+  };
+
   const loanStatus = useMemo(() => {
     const dueDate = toInteger(loan.timestamp) + toInteger(loan.duration) * 1000;
     const paybackButton = (
-      <Button variant="yellow" onClick={() => alert("pay back")} sx="h-10 w-36">
+      <Button variant="yellow" onClick={onPayback} sx="h-10 w-36">
         Pay Back
       </Button>
     );
@@ -94,12 +141,23 @@ const LoanPanel = ({ pool, loan }: Props) => {
           operation: "Closed 5 days ago",
         };
     }
+
+    // eslint-disable-next-line
   }, [loan, myLoan, myPool]);
 
   return (
     <div className={cn(style.root)}>
       <div className={cn(style.collection)}>
-        <img src={ImageERC721} alt="erc721" />
+        <img
+          width={60}
+          height={60}
+          src={collection?.imageUrl}
+          alt="collection"
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null; // prevents looping
+            currentTarget.src = ImageERC721;
+          }}
+        />
         <div>
           <a
             className={cn(style.collectionName)}
@@ -107,10 +165,10 @@ const LoanPanel = ({ pool, loan }: Props) => {
             target="_blank"
             rel="noreferrer"
           >
-            Pudgy Penguins
+            {collection?.name}
             <SvgLink />
           </a>
-          Pudgy Penguin #{toInteger(loan.tokenId)}
+          {collection?.symbol} #{toInteger(loan.tokenId)}
         </div>
       </div>
       <div className={cn(style.borrower)}>
@@ -118,9 +176,18 @@ const LoanPanel = ({ pool, loan }: Props) => {
       </div>
 
       <div className={cn(style.interest)}>
-        {toFloat(loan.amount)} <SvgEthereum />
+        {toFloat(loan.amount)} +{" "}
+        {(repayAmount - formatEther(loan.amount)).toFixed(4)}
+        <SvgEthereum />
       </div>
-      <div>{toFloat(loan.interestStartRate)} %</div>
+      <div>
+        {(
+          ((repayAmount - formatEther(loan.amount)) /
+            formatEther(loan.amount)) *
+          100
+        ).toFixed(2)}{" "}
+        %
+      </div>
       <div>
         {dateDifFromNow(
           new Date(toInteger(loan.timestamp) + toInteger(loan.duration) * 1000)

@@ -8,3 +8,4 @@ export { default as Switch } from "./Switch";
 export { default as TextCopier } from "./TextCopier";
 export { default as Timer } from "./Timer";
 export { default as AceModal } from "./AceModal";
+export { default as Refresh } from "./Refresh";

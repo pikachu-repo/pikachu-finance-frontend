@@ -52,6 +52,7 @@ export declare namespace IPikachu {
   };
 
   export type PoolStruct = {
+    poolId: PromiseOrValue<BigNumberish>;
     owner: PromiseOrValue<string>;
     paused: PromiseOrValue<boolean>;
     status: PromiseOrValue<BigNumberish>;
@@ -80,6 +81,7 @@ export declare namespace IPikachu {
   };
 
   export type PoolStructOutput = [
+    BigNumber,
     string,
     boolean,
     number,
@@ -106,6 +108,7 @@ export declare namespace IPikachu {
     BigNumber,
     BigNumber
   ] & {
+    poolId: BigNumber;
     owner: string;
     paused: boolean;
     status: number;
@@ -442,6 +445,7 @@ export interface PikachuInterface extends utils.Interface {
     "CreatedPool(address,uint256,uint256)": EventFragment;
     "LiquidatedLoan(uint256,address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
+    "RepayedLoan(uint256,address)": EventFragment;
     "UpdatedPool(address,uint256)": EventFragment;
   };
 
@@ -449,6 +453,7 @@ export interface PikachuInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "CreatedPool"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LiquidatedLoan"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RepayedLoan"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UpdatedPool"): EventFragment;
 }
 
@@ -499,6 +504,17 @@ export type OwnershipTransferredEvent = TypedEvent<
 
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
+
+export interface RepayedLoanEventObject {
+  poolId: BigNumber;
+  borrower: string;
+}
+export type RepayedLoanEvent = TypedEvent<
+  [BigNumber, string],
+  RepayedLoanEventObject
+>;
+
+export type RepayedLoanEventFilter = TypedEventFilter<RepayedLoanEvent>;
 
 export interface UpdatedPoolEventObject {
   poolOwner: string;
@@ -1187,6 +1203,15 @@ export interface Pikachu extends BaseContract {
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
+
+    "RepayedLoan(uint256,address)"(
+      poolId?: PromiseOrValue<BigNumberish> | null,
+      borrower?: PromiseOrValue<string> | null
+    ): RepayedLoanEventFilter;
+    RepayedLoan(
+      poolId?: PromiseOrValue<BigNumberish> | null,
+      borrower?: PromiseOrValue<string> | null
+    ): RepayedLoanEventFilter;
 
     "UpdatedPool(address,uint256)"(
       poolOwner?: PromiseOrValue<string> | null,

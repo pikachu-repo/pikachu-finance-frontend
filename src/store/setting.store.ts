@@ -39,7 +39,7 @@ interface ISettingState {
   };
 
   submitTransaction: {
-    (_txObj: Promise<ContractTransaction>): Promise<any>;
+    (_txObj: Promise<ContractTransaction>, _callback?: any): Promise<any>;
   };
 }
 
@@ -161,12 +161,17 @@ export const useSettingStore = create<ISettingState>((set, get) => ({
     );
   },
 
-  submitTransaction: async (_txObj) => {
+  submitTransaction: async (_txObj, _callback) => {
     _txObj
       .then((result) => {
         get().setTxConfirmationModalVisible(false);
         get().setTxDescription(result.hash);
         get().setTxSubmitModalVisible(true);
+
+        result.wait().then(() => {
+          if (_callback) _callback();
+        });
+
         console.log(result);
       })
       .catch((error) => {
@@ -178,7 +183,6 @@ export const useSettingStore = create<ISettingState>((set, get) => ({
           get().setTxDescription(
             `The transaction cannot succeed due to error: ${error.code}.`
           );
-        console.log(error.toString(), error.code);
       });
   },
 }));

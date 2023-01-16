@@ -8,6 +8,7 @@ export interface NFTItem {
   name: string;
   symbol: string;
   tokenId: number;
+  floorPrice?: number;
 }
 
 interface IAccountState {
