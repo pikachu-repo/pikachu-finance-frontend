@@ -26,8 +26,10 @@ export const useERC721Contract = (address: string) => {
   const { data: signer } = useSigner();
   const provider = useProvider();
 
+  const _address = useNFT2Address();
+
   // @ts-ignore
-  return TestNFT__factory.connect(address, signer || provider);
+  return TestNFT__factory.connect(address || _address, signer || provider);
 };
 export const useNFT1Contract = () => {
   const { data: signer } = useSigner();

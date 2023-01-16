@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import cn from "classnames";
 import style from "./NFTSelector.module.css";
 
-import { NFTItem, useAccountStore } from "store";
+import { NFTItem, useAccountStore, useSettingStore } from "store";
 
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 
@@ -19,12 +19,15 @@ import Input from "components/ui/Input";
 
 interface Props {
   pool: IPikachu.PoolStructOutput;
+  currentItem: NFTItem;
+  setCurrentItem: React.Dispatch<React.SetStateAction<NFTItem>>;
 }
 
-const NFTSelector = ({ pool }: Props) => {
+const NFTSelector = ({ pool, currentItem, setCurrentItem }: Props) => {
   const [expanded, setExpanded] = useState(false);
   const [query, setQuery] = useState("");
   const { nfts } = useAccountStore();
+  const { collections } = useSettingStore();
 
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -42,7 +45,7 @@ const NFTSelector = ({ pool }: Props) => {
   const validItems = useMemo(() => {
     return nfts.filter((nft) =>
       pool?.collections.find(
-        (contract) => contract.toLowerCase() === nft.contract.toLowerCase()
+        (contract) => contract.toLowerCase() === nft.contract
       )
     );
   }, [pool, nfts]);
@@ -56,16 +59,15 @@ const NFTSelector = ({ pool }: Props) => {
     );
   }, [validItems, query]);
 
-  const [currentItem, setCurrentItem] = useState<NFTItem>({
-    contract: "",
-    name: "",
-    symbol: "",
-    tokenId: 0,
-  });
-
   useEffect(() => {
-    setCurrentItem(validItems[0]);
-  }, [validItems]);
+    setCurrentItem({
+      ...validItems[0],
+      floorPrice: collections.find(
+        (item) =>
+          item.contract.toLowerCase() === validItems[0]?.contract.toLowerCase()
+      )?.floorPrice,
+    });
+  }, [validItems, collections, setCurrentItem]);
 
   return (
     <div className={cn(style.root)} ref={ref}>
@@ -91,7 +93,7 @@ const NFTSelector = ({ pool }: Props) => {
             </div>
 
             <div className={cn(style.floorPrice)}>
-              60.5 <SvgEthereum />
+              {currentItem?.floorPrice?.toFixed(3)} <SvgEthereum />
             </div>
 
             <Button sx={`h-10 w-10 ${expanded ? "rotate-180" : ""}`}>
@@ -121,7 +123,13 @@ const NFTSelector = ({ pool }: Props) => {
                     className={cn(style.row)}
                     key={index}
                     onClick={() => {
-                      setCurrentItem(queriedItems[index]);
+                      setCurrentItem({
+                        ...queriedItems[index],
+                        floorPrice: collections.find(
+                          (item) =>
+                            item.contract === queriedItems[index]?.contract
+                        )?.floorPrice,
+                      });
                       setExpanded(false);
                     }}
                   >
@@ -145,7 +153,10 @@ const NFTSelector = ({ pool }: Props) => {
                     </div>
 
                     <div className={cn(style.floorPrice)}>
-                      60.5 <SvgEthereum />
+                      {collections
+                        .find((item) => item.contract === nft.contract)
+                        ?.floorPrice.toFixed(3)}{" "}
+                      <SvgEthereum />
                     </div>
 
                     <hr />

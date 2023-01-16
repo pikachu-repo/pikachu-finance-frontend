@@ -61,12 +61,14 @@ export interface IPikachuInterface extends utils.Interface {
     "CreatedLoan(uint256,address,uint256)": EventFragment;
     "CreatedPool(address,uint256,uint256)": EventFragment;
     "LiquidatedLoan(uint256,address,uint256)": EventFragment;
+    "RepayedLoan(uint256,address)": EventFragment;
     "UpdatedPool(address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "CreatedLoan"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "CreatedPool"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LiquidatedLoan"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RepayedLoan"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UpdatedPool"): EventFragment;
 }
 
@@ -105,6 +107,17 @@ export type LiquidatedLoanEvent = TypedEvent<
 >;
 
 export type LiquidatedLoanEventFilter = TypedEventFilter<LiquidatedLoanEvent>;
+
+export interface RepayedLoanEventObject {
+  poolId: BigNumber;
+  borrower: string;
+}
+export type RepayedLoanEvent = TypedEvent<
+  [BigNumber, string],
+  RepayedLoanEventObject
+>;
+
+export type RepayedLoanEventFilter = TypedEventFilter<RepayedLoanEvent>;
 
 export interface UpdatedPoolEventObject {
   poolOwner: string;
@@ -231,6 +244,15 @@ export interface IPikachu extends BaseContract {
       borrower?: PromiseOrValue<string> | null,
       amount?: null
     ): LiquidatedLoanEventFilter;
+
+    "RepayedLoan(uint256,address)"(
+      poolId?: PromiseOrValue<BigNumberish> | null,
+      borrower?: PromiseOrValue<string> | null
+    ): RepayedLoanEventFilter;
+    RepayedLoan(
+      poolId?: PromiseOrValue<BigNumberish> | null,
+      borrower?: PromiseOrValue<string> | null
+    ): RepayedLoanEventFilter;
 
     "UpdatedPool(address,uint256)"(
       poolOwner?: PromiseOrValue<string> | null,

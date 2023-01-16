@@ -1,11 +1,12 @@
 import { BigNumber, BigNumberish } from "ethers";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { toInteger } from "utils/helpers/string.helpers";
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 // import { BIG_TEN } from "utils/constants/number.contants";
 import axios from "axios";
 import { usePikachuContract } from "../useContract";
 import { API_URL } from "utils/constants/api.constants";
+import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 
 export type TLoanStruct = {
   poolIndex: number;
@@ -96,6 +97,29 @@ export const usePools = () => {
   useEffect(() => {
     getPools();
   }, [getPools]);
+
+  return pools;
+};
+export const usePoolByOwner = (owner: string) => {
+  const Pikachu = usePikachuContract();
+  const [pools, setPools] = useState<IPikachu.PoolStructOutput[]>([]);
+
+  const getPools = useCallback(async () => {
+    if (Pikachu.provider)
+      try {
+        const _pools = await Pikachu.getPoolsByOwner(owner);
+        setPools(_pools);
+      } catch (error) {
+        setPools([]);
+        console.log(error);
+      }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [Pikachu.provider]);
+
+  useEffect(() => {
+    getPools();
+  }, [getPools, owner]);
 
   return pools;
 };
@@ -216,4 +240,37 @@ export const usePoolById = (poolId: number): IPikachu.PoolStructOutput => {
 
   //@ts-ignore
   return pool;
+};
+
+export const useCalculateRepayAmount = (
+  _amount: number,
+  _interestType: number,
+  _interestStartRate: number, // basis point
+  _interestCapRate: number, // basis point
+  _durationSecond: number // second
+) => {
+  return useMemo(() => {
+    const durationInDays = toInteger(_durationSecond) / SECONDS_PER_DAY;
+
+    if (_interestType === 0) {
+      return (
+        _amount +
+        (_amount * (_interestStartRate + durationInDays * _interestCapRate)) /
+          10000
+      );
+    } else {
+      return (
+        _amount +
+        (_amount * _interestStartRate) / 10000 +
+        (_amount * Math.sqrt(durationInDays * 10000) * _interestCapRate) /
+          1000000
+      );
+    }
+  }, [
+    _amount,
+    _interestType,
+    _interestStartRate,
+    _interestCapRate,
+    _durationSecond,
+  ]);
 };

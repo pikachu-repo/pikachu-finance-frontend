@@ -1,5 +1,5 @@
 .root {
-  @apply flex flex-col bg-raisin-black w-fit relative z-[10];
+  @apply flex flex-col bg-raisin-black w-fit relative z-[5];
   align-items: flex-start !important;
 
   .emptyWallet {

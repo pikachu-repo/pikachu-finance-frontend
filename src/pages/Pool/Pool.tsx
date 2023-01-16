@@ -87,7 +87,7 @@ const Pool = () => {
           <span>NFT</span>
           <span>Borrower</span>
           <span>Amount + Interest</span>
-          <span>APY</span>
+          <span>Interest</span>
           <span>Fund Date</span>
           <span>Status</span>
           <span>
@@ -97,7 +97,12 @@ const Pool = () => {
         </div>
 
         {loans.map((loan, index) => (
-          <LoanPanel key={index} loan={loan} pool={pool} />
+          <LoanPanel
+            key={index}
+            loan={loan}
+            pool={pool}
+            poolId={toInteger(poolId)}
+          />
         ))}
       </div>
     </div>

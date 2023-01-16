@@ -16,6 +16,7 @@ import { useAdminSetting } from "utils/hooks/pikachu/useAdminSetting";
 import { TxConfirmModal } from "components/Common";
 import TxRejectModal from "components/Common/TxRejectModal";
 import TxSubmitModal from "components/Common/TxSubmitModal";
+import Lend from "pages/Lend";
 
 function App() {
   const account = useAccount();
@@ -51,6 +52,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/setting/*" element={<Setting />} />
           <Route path="/borrow" element={<Pools />} />
+          <Route path="/lend" element={<Lend />} />
           <Route path="/demo" element={<Demo />} />
           <Route path="/pool/:owner/:poolId" element={<Pool />} />
           <Route path="/pool/:owner/:poolId/borrow" element={<Borrow />} />

@@ -17,7 +17,7 @@
       border-radius: 4px;
 
       @screen 2xl {
-        @apply w-[480px];
+        @apply w-[480px] h-[480px];
       }
     }
 
@@ -26,6 +26,10 @@
 
       & > div {
         @apply flex items-center;
+
+        & > div > input {
+          @apply ml-4 w-28;
+        }
       }
 
       .duration {
