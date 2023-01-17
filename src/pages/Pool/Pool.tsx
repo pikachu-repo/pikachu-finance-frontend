@@ -10,16 +10,18 @@ import {
   toString,
 } from "utils/helpers/string.helpers";
 import { PoolPanel } from "components/Borrow";
-import { Button } from "components/ui";
+import { Button, Refresh } from "components/ui";
 import LoanPanel from "components/Borrow/LoanPanel";
 import { useMemo } from "react";
 import { useAccount } from "wagmi";
 import LinkWithSearchParams from "components/LinkWithSearchParams";
+import { refreshPools } from "utils/apis/pikachu.api";
 
 const Pool = () => {
   const account = useAccount();
   const { poolId } = useParams();
   const pool = usePoolById(toInteger(poolId));
+
   const loans = useLoans(toInteger(poolId));
 
   const myPool = useMemo(() => {
@@ -42,13 +44,19 @@ const Pool = () => {
           <SvgLink />
         </a>
 
-        {!myPool && (
-          <LinkWithSearchParams to={{ pathname: `borrow` }} className="ml-auto">
-            <Button variant="yellow" sx="h-10 w-36">
-              Borrow Now
-            </Button>
-          </LinkWithSearchParams>
-        )}
+        {!myPool &&
+          loans.findIndex(
+            (item) => item.borrower === account.address?.toLowerCase()
+          ) === -1 && (
+            <LinkWithSearchParams
+              to={{ pathname: `borrow` }}
+              className="ml-auto"
+            >
+              <Button variant="yellow" sx="h-10 w-36">
+                Borrow Now{" "}
+              </Button>
+            </LinkWithSearchParams>
+          )}
       </div>
 
       <div className={cn(style.poolPanel)}>
@@ -91,19 +99,14 @@ const Pool = () => {
           <span>Fund Date</span>
           <span>Status</span>
           <span>
-            <SvgRefresh />
-            Refresh
+            <Refresh action={refreshPools} />
           </span>
         </div>
 
-        {loans.map((loan, index) => (
-          <LoanPanel
-            key={index}
-            loan={loan}
-            pool={pool}
-            poolId={toInteger(poolId)}
-          />
-        ))}
+        {pool &&
+          loans.map((loan, index) => (
+            <LoanPanel key={index} loan={loan} pool={pool} />
+          ))}
       </div>
     </div>
   );

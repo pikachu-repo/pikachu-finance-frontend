@@ -23,10 +23,9 @@ import LinkWithSearchParams from "components/LinkWithSearchParams";
 
 interface Props {
   pool: IPikachu.PoolStructOutput;
-  poolIndex: number;
 }
 
-const LendPanel = ({ pool, poolIndex }: Props) => {
+const LendPanel = ({ pool }: Props) => {
   const [expanded, setExpanded] = useState(false);
   return (
     <div className={cn(style.root)}>
@@ -56,7 +55,7 @@ const LendPanel = ({ pool, poolIndex }: Props) => {
               {pool.status === POOL_READY &&
               pool.availableAmount.gt(BigNumber.from(0)) ? (
                 <LinkWithSearchParams
-                  to={{ pathname: `/pool/${pool.owner}/${poolIndex}` }}
+                  to={{ pathname: `/pool/${pool.owner}/${pool.poolId}` }}
                 >
                   <Button variant="yellow" sx="h-10 w-36">
                     Borrow Now

@@ -22,10 +22,10 @@ const Header = () => {
       text: "My loans",
       link: "/myloan",
     },
-    {
-      text: "Swap",
-      link: "/swap",
-    },
+    // {
+    //   text: "Swap",
+    //   link: "/swap",
+    // },
     {
       text: "Docs",
       link: "/demo",

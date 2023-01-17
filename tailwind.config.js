@@ -44,7 +44,8 @@ module.exports = {
         },
         fadeIn: {
           "0%": {
-            opacity: 0,
+            scale: 0.8,
+            opacity: 0
           },
 
           "100%": {

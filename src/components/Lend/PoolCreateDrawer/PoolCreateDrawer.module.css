@@ -1,0 +1,56 @@
+.root {
+  @apply flex flex-col rounded-[10px] bg-smoky-black p-10 animate-enter;
+
+  .heading {
+    @apply flex flex-col;
+
+    span {
+      @apply mt-4;
+    }
+  }
+
+  .controls {
+    @apply flex gap-14 mt-7;
+
+    & > div {
+      @apply flex-1 flex flex-col gap-y-7;
+
+      .label {
+        @apply text-tangerine-yellow font-bold;
+      }
+
+      .form {
+        @apply flex items-center gap-x-3.5;
+
+        input {
+          @apply w-[180px];
+        }
+
+        .info {
+          @apply opacity-50;
+        }
+
+        .tooltip {
+          /* @apply text-center; */
+          max-width: 330px;
+        }
+      }
+
+      .chart {
+        @apply w-3/4 h-[190px];
+      }
+    }
+  }
+
+  .footer {
+    @apply flex gap-10 mt-8;
+
+    button {
+      @apply w-[140px] h-10;
+    }
+  }
+}
+
+.chart_tooltip {
+  @apply bg-white px-4 py-2 rounded-lg shadow-lg text-black;
+}

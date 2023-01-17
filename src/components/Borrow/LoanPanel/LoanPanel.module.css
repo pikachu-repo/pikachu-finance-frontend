@@ -50,3 +50,7 @@
     @apply ml-auto;
   }
 }
+
+.tooltip {
+  @apply -left-14;
+}
