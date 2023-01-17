@@ -1,34 +1,67 @@
-import { useState } from "react";
-import { BigNumber, ethers } from "ethers";
+import React, { useState } from "react";
+import { ethers } from "ethers";
 import style from "./LendPanel.module.css";
 import cn from "classnames";
 
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
-import { beautifyAddress, toInteger } from "utils/helpers/string.helpers";
+import {
+  beautifyAddress,
+  formatEther,
+  toFloat,
+  toInteger,
+} from "utils/helpers/string.helpers";
 import {
   SvgArrowDown,
   SvgCopy,
+  SvgEdit,
   SvgEthereum,
-  SvgTemplateChart,
+  SvgMoveDown,
+  SvgMoveUp,
+  SvgPause,
+  SvgResume,
 } from "assets/images/svg";
-import ImageERC721 from "assets/images/template-erc721.png";
-import { SECONDS_PER_DAY } from "utils/constants/number.contants";
-import {
-  INTEREST_TYPE,
-  POOL_DISABLED,
-  POOL_READY,
-} from "utils/constants/contact.constants";
+// import ImageERC721 from "assets/images/template-erc721.png";
+// import { SECONDS_PER_DAY } from "utils/constants/number.contants";
+// import { INTEREST_TYPE } from "utils/constants/contact.constants";
 import { Button } from "components/ui";
-import LinkWithSearchParams from "components/LinkWithSearchParams";
+import { useLoans } from "utils/hooks/pikachu/usePools";
+import { LoanPanel } from "components/Borrow";
+import WithdrawModal from "../WithdrawModal";
+import TopupModal from "../TopupModal";
+import ToggleModal from "../ToggleModal";
+// import LinkWithSearchParams from "components/LinkWithSearchParams";
 
 interface Props {
   pool: IPikachu.PoolStructOutput;
 }
 
 const LendPanel = ({ pool }: Props) => {
+  const loans = useLoans(toInteger(pool.poolId));
   const [expanded, setExpanded] = useState(false);
+
+  const [withdrawVisible, setWithdrawVisible] = useState(false);
+  const [topupVisible, setTopupVisible] = useState(false);
+  const [toggleModal, setToggleModal] = useState(false);
+
   return (
     <div className={cn(style.root)}>
+      <>
+        <WithdrawModal
+          visible={withdrawVisible}
+          setVisible={setWithdrawVisible}
+          pool={pool}
+        />
+        <TopupModal
+          visible={topupVisible}
+          setVisible={setTopupVisible}
+          pool={pool}
+        />
+        <ToggleModal
+          visible={toggleModal}
+          setVisible={setToggleModal}
+          pool={pool}
+        />
+      </>
       <div className={cn(style.poolInfo)}>
         <span>
           {beautifyAddress(pool.owner)}
@@ -41,38 +74,46 @@ const LendPanel = ({ pool }: Props) => {
           / {ethers.utils.formatEther(pool.depositedAmount)}
           <SvgEthereum />
         </span>
-        <span>{pool.loanToValue.toString()}%</span>
-        <span>{pool.maxDuration.toNumber() / SECONDS_PER_DAY} Days</span>
+        <span>{toFloat(pool.loanToValue) / 100}%</span>
         <span>
-          <span className="text-tangerine-yellow">
-            {pool.interestStartRate.toNumber() / 100}
-          </span>
-          / {pool.interestCapRate.toNumber() / 100}%
+          {formatEther(pool.totalInterest)} <SvgEthereum />
+        </span>
+        <span>{pool.numberOfLoans.toNumber()}</span>
+        <span className={cn(style.actions)}>
+          <div className={cn("tooltip-container")}>
+            <span className={cn(style.tooltip, "tooltip top")}>
+              Top up this pool
+            </span>
+            <Button onClick={() => setTopupVisible(true)}>
+              <SvgMoveUp />
+            </Button>
+          </div>
+          <div className={cn("tooltip-container")}>
+            <span className={cn(style.tooltip, "tooltip top")}>
+              Withdraw from Pool
+            </span>
+            <Button onClick={() => setWithdrawVisible(true)}>
+              <SvgMoveDown />
+            </Button>
+          </div>
+          <div className={cn("tooltip-container")}>
+            <span className={cn(style.tooltip, "tooltip top")}>
+              {pool.paused ? "Resume" : "Pause"}
+            </span>
+            <Button onClick={() => setToggleModal(true)}>
+              {pool.paused ? <SvgResume /> : <SvgPause />}
+            </Button>
+          </div>
+          <div className={cn("tooltip-container")}>
+            <span className={cn(style.tooltip, "tooltip top")}>
+              Update configuration
+            </span>
+            <Button>
+              <SvgEdit />
+            </Button>
+          </div>
         </span>
         <span>
-          {
-            <>
-              {pool.status === POOL_READY &&
-              pool.availableAmount.gt(BigNumber.from(0)) ? (
-                <LinkWithSearchParams
-                  to={{ pathname: `/pool/${pool.owner}/${pool.poolId}` }}
-                >
-                  <Button variant="yellow" sx="h-10 w-36">
-                    Borrow Now
-                  </Button>
-                </LinkWithSearchParams>
-              ) : (
-                <Button variant="gray" sx="h-10 w-36" disabled>
-                  Insufficient
-                </Button>
-              )}
-              {pool.status === POOL_DISABLED && (
-                <Button variant="gray" sx="h-10 w-36" disabled>
-                  Paused
-                </Button>
-              )}
-            </>
-          }
           <Button
             sx={`h-10 w-10 bg-white/30 hover:bg-white/40 ml-auto ${
               expanded ? "rotate-180" : ""
@@ -85,61 +126,24 @@ const LendPanel = ({ pool }: Props) => {
       </div>
 
       {expanded && (
-        <div className={cn(style.poolDetails)}>
-          <div className={cn(style.loanInfo)}>
-            <div>
-              <span>Loans made: </span>
-              <span>{toInteger(pool.numberOfLoans)}</span>
-            </div>
-            <div>
-              <span>Open loans: </span>
-              <span>{toInteger(pool.numberOfOpenLoans)}</span>
-            </div>
-            <div>
-              <span>Liquidations: </span>
-              <span>{toInteger(pool.numberOfLiquidations)}</span>
-            </div>
-            <div>
-              <span>Max duration: </span>
-              <span>{pool.maxDuration.toNumber() / SECONDS_PER_DAY} Days</span>
-            </div>
-            <div>
-              <span>Max amount: </span>
-              <span>
-                {ethers.utils.formatEther(pool.maxAmount)}
-                <SvgEthereum />
-              </span>
-            </div>
+        <div className={cn(style.loanlist)}>
+          <div className={cn(style.header)}>
+            <span>NFT</span>
+            <span>Borrower</span>
+            <span>Amount + Interest</span>
+            <span>APY</span>
+            <span>Fund Date</span>
+            <span>Status</span>
+            <span></span>
           </div>
-          <div className={cn(style.loanDetails)}>
-            <div className={cn(style.interestInfo)}>
-              <div>
-                <div>
-                  <span>Interest type:</span>
-                  <span>{INTEREST_TYPE[pool.interestType]}</span>
-                </div>
-                <div>
-                  <span>Interest earned:</span>
-                  <span>
-                    {ethers.utils.formatEther(pool.totalInterest)} ETH
-                  </span>
-                </div>
-              </div>
-              <SvgTemplateChart />
-            </div>
-            <div className={cn(style.collectionsInfo)}>
-              <div className={cn(style.collectionsCount)}>
-                <span>Supported collections:</span>
-                <span>{pool.collections.length}</span>
-              </div>
 
-              <div className={cn(style.collectionsList)}>
-                {pool.collections.map((collection, index) => (
-                  <img key={index} src={ImageERC721} alt="erc721" />
-                ))}
-              </div>
-            </div>
-          </div>
+          {pool &&
+            loans.map((loan, index) => (
+              <React.Fragment key={index}>
+                <LoanPanel loan={loan} pool={pool} />
+                <div className={cn(style.hr)} />
+              </React.Fragment>
+            ))}
         </div>
       )}
     </div>

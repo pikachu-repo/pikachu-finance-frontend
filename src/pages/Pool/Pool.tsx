@@ -1,7 +1,7 @@
 import style from "./Pool.module.css";
 import cn from "classnames";
 import BackButton from "components/ui/BackButton";
-import { SvgLink, SvgRefresh } from "assets/images/svg";
+import { SvgLink } from "assets/images/svg";
 import { useParams } from "react-router-dom";
 import { useLoans, usePoolById } from "utils/hooks/pikachu/usePools";
 import {
@@ -73,8 +73,7 @@ const Pool = () => {
             Interest
           </span>
           <span>
-            <SvgRefresh />
-            Refresh
+            <Refresh action={refreshPools} />
           </span>
         </div>
 

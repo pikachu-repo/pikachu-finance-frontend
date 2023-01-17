@@ -18,6 +18,7 @@ import {
 } from "assets/images/svg";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
+import LinkWithSearchParams from "components/LinkWithSearchParams";
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -25,7 +26,6 @@ const Home = () => {
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     initial: 0,
     slideChanged(slider) {
-      console.log("instanceRef", instanceRef.current);
       setCurrentSlide(slider.track.details.rel);
     },
     created() {
@@ -54,12 +54,16 @@ const Home = () => {
             and non-fungible tokens(NFTs)
           </div>
           <div className={cn(style.buttonBar)}>
-            <Button variant="yellow" sx="w-32 h-12">
-              Borrow
-            </Button>
-            <Button variant="yellow" sx="w-32 h-12">
-              Lend
-            </Button>
+            <LinkWithSearchParams to={{ pathname: "/borrow" }}>
+              <Button variant="yellow" sx="w-32 h-12">
+                Borrow
+              </Button>
+            </LinkWithSearchParams>
+            <LinkWithSearchParams to={{ pathname: "/lend" }}>
+              <Button variant="yellow" sx="w-32 h-12">
+                Lend
+              </Button>
+            </LinkWithSearchParams>
             <button>Docs</button>
           </div>
         </div>
