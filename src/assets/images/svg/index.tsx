@@ -22,3 +22,7 @@ export { ReactComponent as SvgBlocks } from "./blocks.svg";
 export { ReactComponent as SvgLoaders } from "./loaders.svg";
 export { ReactComponent as SvgError } from "./error.svg";
 export { ReactComponent as SvgSuccess } from "./success.svg";
+export { ReactComponent as SvgMoveDown } from "./move-down.svg";
+export { ReactComponent as SvgMoveUp } from "./move-up.svg";
+export { ReactComponent as SvgPause } from "./pause.svg";
+export { ReactComponent as SvgResume } from "./resume.svg";

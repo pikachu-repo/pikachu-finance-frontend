@@ -6,6 +6,11 @@ import { API_URL } from "utils/constants/api.constants";
 import { ContractTransaction, ethers } from "ethers";
 
 interface ISettingState {
+  refreshedAt: Date;
+  setRefreshedAt: {
+    (_refreshedAt: Date): void;
+  };
+
   setting: TAdminSettingStruct;
   collections: ICollection[];
   initializeSetting: {
@@ -57,6 +62,15 @@ interface ICollection {
 }
 
 export const useSettingStore = create<ISettingState>((set, get) => ({
+  refreshedAt: new Date(),
+  setRefreshedAt: (_refreshedAt) => {
+    set(
+      produce((state: ISettingState) => {
+        state.refreshedAt = _refreshedAt;
+      })
+    );
+  },
+
   setting: {
     blockNumberSlippage: 0,
     feeTo: "",
@@ -172,7 +186,7 @@ export const useSettingStore = create<ISettingState>((set, get) => ({
           if (_callback) _callback();
         });
 
-        console.log(result);
+        // console.log(result);
       })
       .catch((error) => {
         get().setTxConfirmationModalVisible(false);

@@ -187,7 +187,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
         ).toFixed(2)}{" "}
         %
       </div>
-      <div className={cn("tooltip-container")}>
+      <div className={cn(style.dueto, "tooltip-container")}>
         <span className={cn(style.tooltip, "tooltip top")}>
           {loanStatus.due?.toLocaleString()}
         </span>

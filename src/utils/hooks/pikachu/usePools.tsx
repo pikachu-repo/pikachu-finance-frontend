@@ -7,6 +7,7 @@ import axios from "axios";
 import { usePikachuContract } from "../useContract";
 import { API_URL } from "utils/constants/api.constants";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
+import { useSettingStore } from "store";
 
 export type TLoanStruct = {
   poolIndex: number;
@@ -47,6 +48,7 @@ export const useOwner = () => {
   return owner;
 };
 export const useTotalPools = () => {
+  const { refreshedAt } = useSettingStore();
   const Pikachu = usePikachuContract();
   const [totalPools, setTotalPools] = useState(0);
 
@@ -64,12 +66,13 @@ export const useTotalPools = () => {
 
   useEffect(() => {
     getTotalPools();
-  }, [getTotalPools]);
+  }, [getTotalPools, refreshedAt]);
 
   return totalPools;
 };
 
 export const usePools = () => {
+  const { refreshedAt } = useSettingStore();
   const Pikachu = usePikachuContract();
   const [pools, setPools] = useState<IPikachu.PoolStructOutput[]>([]);
 
@@ -96,11 +99,12 @@ export const usePools = () => {
 
   useEffect(() => {
     getPools();
-  }, [getPools]);
+  }, [getPools, refreshedAt]);
 
   return pools;
 };
 export const usePoolByOwner = (owner: string) => {
+  const { refreshedAt } = useSettingStore();
   const Pikachu = usePikachuContract();
   const [pools, setPools] = useState<IPikachu.PoolStructOutput[]>([]);
 
@@ -119,12 +123,13 @@ export const usePoolByOwner = (owner: string) => {
 
   useEffect(() => {
     getPools();
-  }, [getPools, owner]);
+  }, [getPools, owner, refreshedAt]);
 
   return pools;
 };
 
 export const useLoan = (poolIndex: number, borrower: string) => {
+  const { refreshedAt } = useSettingStore();
   const Pikachu = usePikachuContract();
   const [loan, setLoan] = useState<TLoanStruct>({
     poolIndex: 0,
@@ -156,11 +161,12 @@ export const useLoan = (poolIndex: number, borrower: string) => {
 
   useEffect(() => {
     getLoan();
-  }, [getLoan]);
+  }, [getLoan, refreshedAt]);
 
   return loan;
 };
 export const useLoans = (poolIndex: number) => {
+  const { refreshedAt } = useSettingStore();
   const [loans, setLoans] = useState<TLoanStruct[]>([]);
 
   const getLoans = useCallback(async () => {
@@ -177,7 +183,7 @@ export const useLoans = (poolIndex: number) => {
 
   useEffect(() => {
     getLoans();
-  }, [getLoans]);
+  }, [getLoans, refreshedAt]);
 
   return loans;
 };
@@ -219,6 +225,7 @@ export const useRepayingAmount = (loan: TLoanStruct) => {
 };
 
 export const usePoolById = (poolId: number): IPikachu.PoolStructOutput => {
+  const { refreshedAt } = useSettingStore();
   const Pikachu = usePikachuContract();
   const [pool, setPool] = useState<IPikachu.PoolStructOutput>();
 
@@ -236,7 +243,7 @@ export const usePoolById = (poolId: number): IPikachu.PoolStructOutput => {
 
   useEffect(() => {
     getPool();
-  }, [getPool]);
+  }, [getPool, refreshedAt]);
 
   //@ts-ignore
   return pool;

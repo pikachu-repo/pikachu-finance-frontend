@@ -107,7 +107,7 @@ main {
       @apply px-2 py-1 w-max bg-white rounded-md text-black z-[10];
     }
     .tooltip.top {
-      @apply top-0 -translate-y-[calc(100%+10px)];
+      @apply top-0 -translate-y-[calc(100%+10px)] -translate-x-1/2 left-1/2;
       &::before {
         content: "";
         width: 0;

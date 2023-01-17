@@ -28,6 +28,10 @@
     @apply flex items-center gap-x-1.5;
   }
 
+  .dueto {
+    @apply w-fit;
+  }
+
   .status {
     @apply flex flex-col items-start gap-y-1.5;
 
@@ -49,8 +53,4 @@
   .operation {
     @apply ml-auto;
   }
-}
-
-.tooltip {
-  @apply -left-14;
 }

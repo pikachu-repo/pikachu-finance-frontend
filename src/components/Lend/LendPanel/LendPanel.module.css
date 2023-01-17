@@ -3,23 +3,33 @@
 
   .poolInfo {
     @apply px-5 py-6 bg-raisin-black grid;
-    grid-template-columns: 20% 25% 10% 11% 16% 18%;
+    grid-template-columns: 13% 20% 15% 10% 12% 20% 10%;
 
-    span {
-      @apply flex items-center gap-1.5;
+    & > span {
+      @apply flex items-center;
+      & > svg {
+        @apply ml-1.5;
+      }
     }
-    span:last-child {
-      @apply justify-between;
+    & > span:last-child {
+      @apply justify-end;
+    }
+
+    .actions {
+      @apply flex gap-2.5;
+      button {
+        @apply w-10 h-10 hover:bg-white/40;
+      }
     }
   }
-  .poolDetails {
-    @apply flex flex-col bg-raisin-black duration-150;
+  .loanlist {
+    @apply flex flex-col bg-raisin-black duration-150 animate-enter;
 
-    .loanInfo {
-      @apply px-5 py-2 bg-white/10 flex gap-24;
+    .header {
+      @apply px-5 py-2.5 bg-white/10 grid;
+      grid-template-columns: 23% 10% 15% 10% 11% 16% 15%;
 
       div {
-        @apply flex items-center gap-2;
         span:first-child {
           @apply opacity-50;
         }
@@ -30,41 +40,8 @@
       }
     }
 
-    .loanDetails {
-      @apply flex pt-6 pb-4 pl-5 pr-9 gap-24;
-
-      .interestInfo {
-        & > div {
-          @apply flex gap-9 pb-6;
-          div {
-            @apply flex gap-2;
-            span:first-child {
-              @apply opacity-50;
-            }
-            span:last-child {
-              @apply font-bold;
-            }
-          }
-        }
-      }
-
-      .collectionsInfo {
-        @apply flex flex-col gap-5;
-
-        .collectionsCount {
-          @apply flex gap-2;
-          span:first-child {
-            @apply opacity-50;
-          }
-          span:last-child {
-            @apply font-bold;
-          }
-        }
-
-        .collectionsList {
-          @apply flex flex-wrap gap-4;
-        }
-      }
+    .hr {
+      @apply mx-6 bg-white/40 h-[1px];
     }
   }
 }

@@ -67,6 +67,11 @@ const Lend = () => {
             {pools.map((pool, index) => (
               <LendPanel pool={pool} key={index} />
             ))}
+            {pools.length === 0 && (
+              <div className={cn(style.empty)}>
+                You don’t have any pool. Create one to see it displayed here.
+              </div>
+            )}
           </div>
         </>
       )}
