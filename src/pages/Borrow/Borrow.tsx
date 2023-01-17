@@ -161,7 +161,7 @@ const Borrow = () => {
             Borrow Amount (Max{" "}
             {(
               (toFloat(currentItem.floorPrice) * toInteger(pool?.loanToValue)) /
-              100
+              10000
             ).toFixed(3)}{" "}
             ETH):
             <Input

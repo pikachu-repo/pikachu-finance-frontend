@@ -30,10 +30,9 @@ import { refreshPools } from "utils/apis/pikachu.api";
 interface Props {
   pool: IPikachu.PoolStructOutput;
   loan: TLoanStruct;
-  poolId: number;
 }
 
-const LoanPanel = ({ pool, loan, poolId }: Props) => {
+const LoanPanel = ({ pool, loan }: Props) => {
   const account = useAccount();
   const Pikachu = usePikachuContract();
 
@@ -71,11 +70,11 @@ const LoanPanel = ({ pool, loan, poolId }: Props) => {
   );
 
   const onPayback = () => {
-    setTxDescription(`Repaying ${repayAmount} ETH...`);
+    setTxDescription(`Repaying ${repayAmount.toFixed(4)} ETH...`);
     setTxConfirmationModalVisible(true);
 
     submitTransaction(
-      Pikachu.repay(poolId, {
+      Pikachu.repay(pool.poolId, {
         value: ethers.utils.parseEther(repayAmount.toString()),
       }),
       refreshPools
@@ -188,11 +187,15 @@ const LoanPanel = ({ pool, loan, poolId }: Props) => {
         ).toFixed(2)}{" "}
         %
       </div>
-      <div>
+      <div className={cn("tooltip-container")}>
+        <span className={cn(style.tooltip, "tooltip top")}>
+          {loanStatus.due?.toLocaleString()}
+        </span>
         {dateDifFromNow(
           new Date(toInteger(loan.timestamp) + toInteger(loan.duration) * 1000)
         )}
       </div>
+
       <div className={cn(style.status)}>
         <div className={loanStatus.class}>{loanStatus.text}</div>
         {loanStatus.timer && (
