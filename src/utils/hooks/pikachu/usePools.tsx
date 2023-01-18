@@ -3,11 +3,10 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 import { toInteger } from "utils/helpers/string.helpers";
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 // import { BIG_TEN } from "utils/constants/number.contants";
-import axios from "axios";
 import { usePikachuContract } from "../useContract";
-import { API_URL } from "utils/constants/api.constants";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 import { useSettingStore } from "store";
+import { getLoansByBorrower, getLoansByPoolId } from "utils/apis/pikachu.api";
 
 export type TLoanStruct = {
   poolIndex: number;
@@ -171,8 +170,8 @@ export const useLoans = (poolIndex: number) => {
 
   const getLoans = useCallback(async () => {
     try {
-      const _response = await axios.get(`${API_URL}/pools/${poolIndex}/loans`);
-      setLoans(_response.data);
+      const _response = await getLoansByPoolId(poolIndex);
+      setLoans(_response);
     } catch (error) {
       // setLoans([]);
       console.log(error);
@@ -180,6 +179,30 @@ export const useLoans = (poolIndex: number) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolIndex]);
+
+  useEffect(() => {
+    getLoans();
+  }, [getLoans, refreshedAt]);
+
+  return loans;
+};
+
+export const useLoansByBorrower = (address: string) => {
+  const { refreshedAt } = useSettingStore();
+
+  const [loans, setLoans] = useState<TLoanStruct[]>([]);
+
+  const getLoans = useCallback(async () => {
+    try {
+      const _response = await getLoansByBorrower(address);
+      setLoans(_response);
+    } catch (error) {
+      // setLoans([]);
+      console.log(error);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address]);
 
   useEffect(() => {
     getLoans();

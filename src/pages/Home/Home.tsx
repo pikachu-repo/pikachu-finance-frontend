@@ -1,11 +1,3 @@
-import Land from "assets/images/png/land.png";
-import slide1 from "assets/images/png/slide1.png";
-import slide2 from "assets/images/png/slide2.png";
-import slide3 from "assets/images/png/slide3.png";
-import slide4 from "assets/images/png/slide4.png";
-import slide5 from "assets/images/png/slide5.png";
-import slide6 from "assets/images/png/slide6.png";
-import slide7 from "assets/images/png/slide7.png";
 import { Button } from "components/ui";
 import { useState } from "react";
 import style from "./Home.module.css";
@@ -19,6 +11,19 @@ import {
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import LinkWithSearchParams from "components/LinkWithSearchParams";
+
+import Land from "assets/images/png/land.png";
+import slide1 from "assets/images/png/slide1.png";
+import slide2 from "assets/images/png/slide2.png";
+import slide3 from "assets/images/png/slide3.png";
+import slide4 from "assets/images/png/slide4.png";
+import slide5 from "assets/images/png/slide5.png";
+import slide6 from "assets/images/png/slide6.png";
+import slide7 from "assets/images/png/slide7.png";
+
+import collectionWebp from "assets/images/webp/4841863.webp";
+import liquidityWebp from "assets/images/webp/4121252.webp";
+import loanWebp from "assets/images/webp/4112596.webp";
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -72,26 +77,43 @@ const Home = () => {
 
       <div className={cn(style.state)}>
         <div>
-          <div>Current Open Loans</div>
+          <div>Verified Collections</div>
           <div>
             <div className={cn(style.value)}>30</div>
-            <SvgArrowUp className="w-5 h-7" />
+            <SvgArrowUp className="h-8 w-8" />
           </div>
+          <img
+            src={collectionWebp}
+            className={cn(style.img)}
+            alt="verified collections"
+          />
         </div>
         <div>
-          <div>Liquidity on PIKACHU</div>
+          <div>Current Open Loans</div>
           <div>
             <div className={cn(style.value)}>1,280</div>
-            <SvgArrowUp className="w-5 h-7" />
+            <SvgArrowUp className="h-8 w-8" />
           </div>
+          <img
+            src={loanWebp}
+            className={cn(style.img)}
+            alt="Current Open Loans"
+          />
         </div>
         <div>
-          <div>Verified Collecction</div>
+          <div>Total Liquidity on PIKACHU</div>
           <div>
-            <div className={cn(style.value)}>3527.50</div>
-            <SvgEthereum className="w-5 h-5" />
-            <SvgArrowUp className="w-5 h-7" />
+            <div className={cn(style.value)}>
+              3,527
+              <SvgEthereum className="w-6 h-6" />
+            </div>
+            <SvgArrowUp className="h-8 w-8" />
           </div>
+          <img
+            src={liquidityWebp}
+            className={cn(style.img)}
+            alt="Total Liquidity on PIKACHU"
+          />
         </div>
       </div>
 

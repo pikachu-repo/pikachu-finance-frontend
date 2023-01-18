@@ -17,15 +17,18 @@ import { TxConfirmModal } from "components/Common";
 import TxRejectModal from "components/Common/TxRejectModal";
 import TxSubmitModal from "components/Common/TxSubmitModal";
 import Lend from "pages/Lend";
+import Loan from "pages/Loan";
+import { useLoansByBorrower } from "utils/hooks/pikachu/usePools";
 
 function App() {
   const account = useAccount();
   const signer = useSigner();
 
   const { initializeAccount } = useAccountStore();
-  const { initializeSetting } = useSettingStore();
+  const { initializeSetting, refreshedAt } = useSettingStore();
 
   const adminSetting = useAdminSetting();
+  const myLoans = useLoansByBorrower(account?.address || "");
 
   useEffect(() => {
     initializeSetting(adminSetting);
@@ -35,10 +38,11 @@ function App() {
     signer.data?.getBalance().then((balance) => {
       initializeAccount(
         toFloat(ethers.utils.formatEther(balance)),
-        toString(account.address).toLowerCase()
+        toString(account.address).toLowerCase(),
+        myLoans
       );
     });
-  }, [signer.data, account.address, initializeAccount]);
+  }, [signer.data, account.address, initializeAccount, refreshedAt, myLoans]);
   return (
     <div className="bg-gray-1000">
       <>
@@ -53,6 +57,7 @@ function App() {
           <Route path="/setting/*" element={<Setting />} />
           <Route path="/borrow" element={<Pools />} />
           <Route path="/lend" element={<Lend />} />
+          <Route path="/loan/*" element={<Loan />} />
           <Route path="/demo" element={<Demo />} />
           <Route path="/pool/:owner/:poolId" element={<Pool />} />
           <Route path="/pool/:owner/:poolId/borrow" element={<Borrow />} />
