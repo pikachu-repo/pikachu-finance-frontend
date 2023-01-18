@@ -20,7 +20,7 @@ const Header = () => {
     },
     {
       text: "My loans",
-      link: "/myloan",
+      link: "/loan",
     },
     // {
     //   text: "Swap",
