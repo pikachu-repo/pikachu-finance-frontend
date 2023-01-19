@@ -18,6 +18,14 @@ export const refreshPools = async () => {
   await axios.get(`${API_URL}/pools/update`);
 };
 
+export const getLoansByPoolIdAndBorrower = async (
+  poolId: number,
+  borrower: string
+): Promise<TLoanStruct> => {
+  const _response = await axios.get(`${API_URL}/loans/pool/${poolId}`);
+  return _response.data;
+};
+
 export const getLoansByPoolId = async (
   poolId: number
 ): Promise<TLoanStruct[]> => {

@@ -15,18 +15,22 @@ const PlatformStatus = () => {
       },
       {
         label: "Total Open Loans:",
-        value: `${pools.reduce(
-          (prev, next) => toFloat(prev + formatEther(next.totalLoans)),
-          0
-        )} ETH`,
+        value: `${pools
+          .reduce(
+            (prev, next) => toFloat(prev + formatEther(next.totalLoans)),
+            0
+          )
+          .toFixed(3)} ETH`,
       },
       {
         label: "Available Liquidity:",
 
-        value: `${pools.reduce(
-          (prev, next) => toFloat(prev + formatEther(next.availableAmount)),
-          0
-        )} ETH`,
+        value: `${pools
+          .reduce(
+            (prev, next) => toFloat(prev + formatEther(next.availableAmount)),
+            0
+          )
+          .toFixed(3)} ETH`,
       },
     ],
     [pools]

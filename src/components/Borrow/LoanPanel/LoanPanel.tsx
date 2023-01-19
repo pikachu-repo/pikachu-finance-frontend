@@ -28,7 +28,7 @@ import { ethers } from "ethers";
 import { refreshPools } from "utils/apis/pikachu.api";
 
 interface Props {
-  pool: IPikachu.PoolStructOutput;
+  pool?: IPikachu.PoolStructOutput;
   loan: TLoanStruct;
 }
 
@@ -63,10 +63,10 @@ const LoanPanel = ({ pool, loan }: Props) => {
 
   const repayAmount = useCalculateRepayAmount(
     toFloat(loan.amount),
-    pool?.interestType,
-    pool?.interestStartRate.toNumber(),
-    pool?.interestCapRate.toNumber(),
-    toInteger(loan.duration)
+    loan?.interestType,
+    toInteger(loan?.interestStartRate),
+    toInteger(loan?.interestCapRate),
+    (toInteger(new Date().getTime()) - toInteger(loan.timestamp)) / 1000
   );
 
   const onPayback = () => {
@@ -74,9 +74,21 @@ const LoanPanel = ({ pool, loan }: Props) => {
     setTxConfirmationModalVisible(true);
 
     submitTransaction(
-      Pikachu.repay(pool.poolId, {
+      Pikachu.repay(loan.poolIndex, {
         value: ethers.utils.parseEther(repayAmount.toString()),
       }),
+      refreshPools
+    );
+  };
+
+  const onLiquidate = () => {
+    setTxDescription(
+      `Claiming ${collection?.symbol} #${toInteger(loan.tokenId)}...`
+    );
+    setTxConfirmationModalVisible(true);
+
+    submitTransaction(
+      Pikachu.liquidate(loan.poolIndex, loan.borrower),
       refreshPools
     );
   };
@@ -89,11 +101,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
       </Button>
     );
     const claimNFTButton = (
-      <Button
-        variant="yellow"
-        onClick={() => alert("claimNFTButton")}
-        sx="h-10 w-36"
-      >
+      <Button variant="yellow" onClick={onLiquidate} sx="h-10 w-36">
         Claim NFT
       </Button>
     );
@@ -103,15 +111,15 @@ const LoanPanel = ({ pool, loan }: Props) => {
           return {
             text: "Liquidation",
             class: cn(style.error, style.badge),
-            operation: myPool ? claimNFTButton : paybackButton,
+            operation: myPool ? claimNFTButton : myLoan && paybackButton,
           };
         } else if (new Date(dueDate) <= new Date()) {
           return {
             text: "Grace Period",
             class: cn(style.error, style.badge),
             timer: true,
-            due: new Date(dueDate + SECONDS_PER_DAY * 1000),
             operation: myLoan ? paybackButton : "",
+            due: new Date(dueDate + SECONDS_PER_DAY * 1000),
           };
         }
         return {
@@ -125,13 +133,13 @@ const LoanPanel = ({ pool, loan }: Props) => {
         return {
           text: "Loan Funded",
           class: cn(style.error, style.badge),
-          operation: "Closed 5 days ago",
+          operation: `Closed ${dateDifFromNow(loan.repaidAt)}`,
         };
       case 3:
         return {
           text: "Liquidated",
           class: cn(style.error, style.badge),
-          operation: "Closed 5 days ago",
+          operation: `Closed ${dateDifFromNow(loan.repaidAt)}`,
         };
       default:
         return {
@@ -142,7 +150,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
     }
 
     // eslint-disable-next-line
-  }, [loan, myLoan, myPool]);
+  }, [loan, myLoan, myPool, collection]);
 
   return (
     <div className={cn(style.root)}>
@@ -189,7 +197,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
       </div>
       <div className={cn(style.dueto, "tooltip-container")}>
         <span className={cn(style.tooltip, "tooltip top")}>
-          {loanStatus.due?.toLocaleString()}
+          {new Date(toInteger(loan.timestamp)).toLocaleString()}
         </span>
         {dateDifFromNow(
           new Date(toInteger(loan.timestamp) + toInteger(loan.duration) * 1000)
