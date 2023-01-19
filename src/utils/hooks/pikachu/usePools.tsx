@@ -6,7 +6,11 @@ import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 import { usePikachuContract } from "../useContract";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 import { useSettingStore } from "store";
-import { getLoansByBorrower, getLoansByPoolId } from "utils/apis/pikachu.api";
+import {
+  getLoansByBorrower,
+  getLoansByPoolId,
+  getLoansByPoolIdAndBorrower,
+} from "utils/apis/pikachu.api";
 
 export type TLoanStruct = {
   poolIndex: number;
@@ -22,6 +26,7 @@ export type TLoanStruct = {
   interestType: number;
   interestStartRate: BigNumberish;
   interestCapRate: BigNumberish;
+  repaidAt: string | Date;
 };
 
 export const useOwner = () => {
@@ -143,13 +148,14 @@ export const useLoan = (poolIndex: number, borrower: string) => {
     status: 0,
     timestamp: 0,
     tokenId: 0,
+    repaidAt: new Date(0),
   });
 
   const getLoan = useCallback(async () => {
     if (Pikachu.provider)
       try {
-        const _loan = await Pikachu.loans(poolIndex, borrower);
-        setLoan({ ..._loan, poolIndex: poolIndex });
+        const _loan = await getLoansByPoolIdAndBorrower(poolIndex, borrower);
+        setLoan(_loan);
       } catch (error) {
         // setLoan([]);
         console.log(error);
@@ -193,6 +199,10 @@ export const useLoansByBorrower = (address: string) => {
   const [loans, setLoans] = useState<TLoanStruct[]>([]);
 
   const getLoans = useCallback(async () => {
+    if (!address) {
+      setLoans([]);
+      return;
+    }
     try {
       const _response = await getLoansByBorrower(address);
       setLoans(_response);

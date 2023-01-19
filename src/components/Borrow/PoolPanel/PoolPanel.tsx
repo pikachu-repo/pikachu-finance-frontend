@@ -6,6 +6,7 @@ import cn from "classnames";
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 import {
   beautifyAddress,
+  formatEther,
   toFloat,
   toInteger,
 } from "utils/helpers/string.helpers";
@@ -76,9 +77,9 @@ const PoolPanel = ({ pool, poolIndex, buttonVisible }: Props) => {
         </span>
         <span>
           <span className="text-tangerine-yellow">
-            {ethers.utils.formatEther(pool.availableAmount)}
+            {formatEther(pool.availableAmount).toFixed(3)}
           </span>
-          / {ethers.utils.formatEther(pool.depositedAmount)}
+          / {formatEther(pool.depositedAmount).toFixed(3)}
           <SvgEthereum />
         </span>
         <span>{toFloat(pool.loanToValue) / 100}%</span>

@@ -40,7 +40,7 @@ const Loan = () => {
             <div className={cn(style.info)}>
               <h3>
                 {loans
-                  .filter((item) => item.status === 1 || item.status === 2)
+                  .filter((item) => item.status === 1)
                   .reduce((prev, next) => prev + formatEther(next.amount), 0)}
               </h3>
               <SvgEthereum />
