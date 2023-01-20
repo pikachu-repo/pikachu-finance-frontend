@@ -3,14 +3,11 @@ import cn from "classnames";
 import { refreshPools } from "utils/apis/pikachu.api";
 import { Refresh } from "components/ui";
 import { LoanPanel } from "components/Borrow";
-import { useLoansByBorrower } from "utils/hooks/pikachu/usePools";
 import { useAccountStore } from "store";
 
 const OpenLoans = () => {
-  const { address } = useAccountStore();
-  const openLoans = useLoansByBorrower(address).filter(
-    (item) => item.status === 1
-  );
+  const { loans } = useAccountStore();
+  const openLoans = loans.filter((item) => item.status === 1);
 
   return (
     <div className={cn(style.root)}>

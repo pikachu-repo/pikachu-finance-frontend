@@ -64,8 +64,8 @@ const LoanPanel = ({ pool, loan }: Props) => {
   const repayAmount = useCalculateRepayAmount(
     toFloat(loan.amount),
     loan?.interestType,
-    toInteger(loan?.interestStartRate),
-    toInteger(loan?.interestCapRate),
+    toFloat(loan?.interestStartRate) * 100,
+    toFloat(loan?.interestCapRate) * 100,
     (toInteger(new Date().getTime()) - toInteger(loan.timestamp)) / 1000
   );
 
@@ -74,7 +74,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
     setTxConfirmationModalVisible(true);
 
     submitTransaction(
-      Pikachu.repay(loan.poolIndex, {
+      Pikachu.repay(loan.poolId, {
         value: ethers.utils.parseEther(repayAmount.toString()),
       }),
       refreshPools
@@ -88,7 +88,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
     setTxConfirmationModalVisible(true);
 
     submitTransaction(
-      Pikachu.liquidate(loan.poolIndex, loan.borrower),
+      Pikachu.liquidate(loan.poolId, loan.borrower),
       refreshPools
     );
   };
@@ -133,13 +133,13 @@ const LoanPanel = ({ pool, loan }: Props) => {
         return {
           text: "Loan Funded",
           class: cn(style.error, style.badge),
-          operation: `Closed ${dateDifFromNow(loan.repaidAt)}`,
+          operation: `Closed ${dateDifFromNow(new Date(loan.repaidAt))}`,
         };
       case 3:
         return {
           text: "Liquidated",
           class: cn(style.error, style.badge),
-          operation: `Closed ${dateDifFromNow(loan.repaidAt)}`,
+          operation: `Closed ${dateDifFromNow(new Date(loan.repaidAt))}`,
         };
       default:
         return {
@@ -172,7 +172,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
             target="_blank"
             rel="noreferrer"
           >
-            {collection?.name}
+            <span>{collection?.name}</span>
             <SvgLink />
           </a>
           {collection?.symbol} #{toInteger(loan.tokenId)}

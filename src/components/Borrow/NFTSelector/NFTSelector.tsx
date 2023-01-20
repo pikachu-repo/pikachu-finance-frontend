@@ -84,7 +84,7 @@ const NFTSelector = ({ pool, currentItem, setCurrentItem }: Props) => {
             <img src={nftImage} alt="collection" className={cn(style.nftImg)} />
             <div className={cn(style.item)}>
               <a href={`https://opensea.io`} target="_blank" rel="noreferrer">
-                {currentItem?.name}
+                <span>{currentItem?.name}</span>
                 <SvgLink />
               </a>
               <span>

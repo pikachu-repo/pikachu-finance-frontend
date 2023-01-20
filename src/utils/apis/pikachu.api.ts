@@ -22,7 +22,16 @@ export const getLoansByPoolIdAndBorrower = async (
   poolId: number,
   borrower: string
 ): Promise<TLoanStruct> => {
-  const _response = await axios.get(`${API_URL}/loans/pool/${poolId}`);
+  const _response = await axios.get(`${API_URL}/loans/${poolId}/${borrower}`);
+  return _response.data;
+};
+export const getLoanByPoolIdAndBorrower = async (
+  poolId: number,
+  borrower: string
+): Promise<TLoanStruct> => {
+  const _response = await axios.get(
+    `${API_URL}/loans/latest/${poolId}/${borrower}`
+  );
   return _response.data;
 };
 

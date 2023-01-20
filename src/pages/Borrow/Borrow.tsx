@@ -13,12 +13,12 @@ import {
 import { NFTItem, useAccountStore, useSettingStore } from "store";
 
 import { formatEther, toFloat, toInteger } from "utils/helpers/string.helpers";
-import { SvgEthereum, SvgRefresh, SvgWarning } from "assets/images/svg";
+import { SvgEthereum, SvgWarning } from "assets/images/svg";
 import nftImage from "assets/images/nftImage.png";
 import DurationPicker from "components/ui/DurationPicker";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 import LinkWithSearchParams from "components/LinkWithSearchParams";
-import { Button, Input } from "components/ui";
+import { Button, Input, Refresh } from "components/ui";
 import NFTSelector from "components/Borrow/NFTSelector";
 import { useERC721Contract, usePikachuContract } from "utils/hooks/useContract";
 import { getSignature, refreshPools } from "utils/apis/pikachu.api";
@@ -88,7 +88,7 @@ const Borrow = () => {
 
       if (operator !== Pikachu.address && isApprovedForAll === false) {
         setTxDescription(
-          "Need to approve Pikachu to to collateralize your NFT..."
+          "Need to approve Pikachu to collateralize your NFT..."
         );
         const txObj = await nftContract.approve(
           Pikachu.address,
@@ -132,8 +132,7 @@ const Borrow = () => {
         <h3>Borrow</h3>
 
         <span>
-          <SvgRefresh />
-          Refresh
+          <Refresh action={refreshPools} />
         </span>
       </div>
 
