@@ -8,7 +8,7 @@ export const calculateRepayAmount = (
   _interestCapRate: number, // basis point
   _durationSecond: number // second
 ) => {
-  const durationInDays = toInteger(_durationSecond) / SECONDS_PER_DAY;
+  const durationInDays = toInteger(_durationSecond / SECONDS_PER_DAY);
 
   if (_interestType === 0) {
     return (

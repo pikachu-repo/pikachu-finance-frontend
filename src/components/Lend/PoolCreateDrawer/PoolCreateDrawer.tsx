@@ -29,8 +29,12 @@ type IProps = {
 
 const PoolCreateDrawer = ({ setVisible }: IProps) => {
   const { balance } = useAccountStore();
-  const { setTxDescription, setTxConfirmationModalVisible, submitTransaction } =
-    useSettingStore();
+  const {
+    setTxDescription,
+    setTxConfirmationModalVisible,
+    submitTransaction,
+    setTxRejectModalVisible,
+  } = useSettingStore();
 
   const Pikachu = usePikachuContract();
   // create pool parameters
@@ -68,6 +72,11 @@ const PoolCreateDrawer = ({ setVisible }: IProps) => {
 
   const onCreatePool = async () => {
     try {
+      if (termAgreed === false) {
+        setTxDescription("You need to agree the terms...");
+        setTxRejectModalVisible(true);
+        return;
+      }
       setTxDescription("Creating Pool...");
       setTxConfirmationModalVisible(true);
       submitTransaction(

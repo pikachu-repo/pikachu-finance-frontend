@@ -14,18 +14,19 @@ import { SvgEthereum, SvgWallet } from "assets/images/svg";
 import Switch from "components/ui/Switch";
 import {
   beautifyAddress,
+  formatEther,
   toFloat,
   toInteger,
   toString,
 } from "utils/helpers/string.helpers";
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 import {
   useOwner,
   usePools,
   useTotalPools,
-  useLoan,
   useRepayingAmount,
+  useLoanByPoolIdAndBorrower,
 } from "utils/hooks/pikachu/usePools";
 import { useAdminSetting } from "utils/hooks/pikachu/useAdminSetting";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
@@ -93,7 +94,7 @@ const Demo = () => {
   };
 
   // create loan parameters
-  const [currentPoolIndex, setCurrentPoolIndex] = useState(0);
+  const [currentpoolId, setCurrentpoolId] = useState(0);
   const collectionRef = useRef<HTMLSelectElement>(null);
   const tokenIdRef = useRef<HTMLInputElement>(null);
   const loanDurationRef = useRef<HTMLInputElement>(null);
@@ -189,7 +190,7 @@ const Demo = () => {
     );
     const blockNumber = toInteger(blockNumberRef.current?.value);
     await Pikachu.borrow(
-      currentPoolIndex,
+      currentpoolId,
       _collection,
       _tokenId,
       _duration,
@@ -201,11 +202,12 @@ const Demo = () => {
   };
 
   // manage loans
-  const loan = useLoan(currentPoolIndex, account.address || "");
+  const loan = useLoanByPoolIdAndBorrower(currentpoolId, account.address || "");
+
   const repayingAmount = useRepayingAmount(loan);
 
   const onRepayLoan = async () => {
-    await Pikachu.repay(currentPoolIndex, { value: repayingAmount });
+    await Pikachu.repay(currentpoolId, { value: repayingAmount });
   };
 
   return (
@@ -226,9 +228,7 @@ const Demo = () => {
               <Input
                 innerRef={minDepositAmountRef}
                 placeholder="30.25"
-                defaultValue={ethers.utils.formatEther(
-                  adminSetting.minDepositAmount
-                )}
+                defaultValue={formatEther(adminSetting.minDepositAmount)}
                 icon={<SvgEthereum className="w-5 h-5" />}
               />
             </div>
@@ -402,12 +402,11 @@ const Demo = () => {
                   Loan to value (LTV): {pool.loanToValue.toNumber()} %
                 </span>
                 <span>
-                  Availabe Amount:{" "}
-                  {ethers.utils.formatEther(pool.availableAmount)}
+                  Availabe Amount: {formatEther(pool.availableAmount)}
                   <SvgEthereum />
                 </span>
                 <span>
-                  Max Loan: {ethers.utils.formatEther(pool.maxAmount)}
+                  Max Loan: {formatEther(pool.maxAmount)}
                   <SvgEthereum />
                 </span>
                 <span>
@@ -478,7 +477,7 @@ const Demo = () => {
               <label>Select Pool:</label>
               <select
                 className="w-40"
-                onChange={(e) => setCurrentPoolIndex(toInteger(e.target.value))}
+                onChange={(e) => setCurrentpoolId(toInteger(e.target.value))}
               >
                 {pools.map((pool, index) => (
                   <option key={index} value={index}>
@@ -491,13 +490,11 @@ const Demo = () => {
             <div className={cn(style.inputItem)}>
               <label>Select Collection:</label>
               <select className="w-40" ref={collectionRef}>
-                {pools[currentPoolIndex]?.collections.map(
-                  (collection, index) => (
-                    <option key={index} value={collection}>
-                      {beautifyAddress(collection, 6)}
-                    </option>
-                  )
-                )}
+                {pools[currentpoolId]?.collections.map((collection, index) => (
+                  <option key={index} value={collection}>
+                    {beautifyAddress(collection, 6)}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -559,7 +556,7 @@ const Demo = () => {
               <label>Select Pool:</label>
               <select
                 className="w-40"
-                onChange={(e) => setCurrentPoolIndex(toInteger(e.target.value))}
+                onChange={(e) => setCurrentpoolId(toInteger(e.target.value))}
               >
                 {pools.map((pool, index) => (
                   <option key={index} value={index}>
@@ -569,17 +566,17 @@ const Demo = () => {
               </select>
             </div>
 
-            {loan.status !== 0 && (
+            {loan?.status !== 0 && (
               <div className={cn(style.loan)}>
                 <span className={cn(style.stressed)}>
                   Loan Status: {LOAN_STATUS[loan.status]}
                 </span>
                 <span>
-                  Borrowed Amount: {ethers.utils.formatEther(loan.amount)}
+                  Borrowed Amount: {formatEther(loan.amount)}
                   <SvgEthereum />
                 </span>
                 <span>
-                  Repaying Amount: {ethers.utils.formatEther(repayingAmount)}
+                  Repaying Amount: {formatEther(repayingAmount)}
                   <SvgEthereum />
                 </span>
                 <span>
@@ -587,17 +584,14 @@ const Demo = () => {
                 </span>
                 <span>Cap Rate: {toFloat(loan.interestCapRate) / 100}%</span>
                 <span>
-                  Duration:{" "}
-                  {BigNumber.from(loan.duration)
-                    .div(SECONDS_PER_DAY)
-                    .toNumber()}{" "}
+                  Duration: {toInteger(loan.duration) / SECONDS_PER_DAY}
                   Days
                 </span>
                 <span>
                   Collection: <br />
                   {loan.collection}
                 </span>
-                <span>Token Id: {loan.tokenId.toString()}</span>
+                <span>Token Id: {toInteger(loan.tokenId)}</span>
 
                 <span>Block Number: {toInteger(loan.blockNumber)}</span>
                 <span>

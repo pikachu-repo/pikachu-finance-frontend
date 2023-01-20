@@ -127,7 +127,7 @@ const CollectionSelector = ({ options, setOptions }: Props) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {nft.name}
+                    <span>{nft.name}</span>
                     <SvgLink />
                   </a>
                   <span>{nft.totalSupply} items</span>

@@ -59,10 +59,16 @@ const Pools = () => {
           <PoolPanel
             key={index}
             pool={pool}
-            poolIndex={index}
+            poolId={index}
             buttonVisible={true}
           />
         ))}
+
+        {pools.length === 0 && (
+          <div className={cn(style.empty)}>
+            You don’t have any pool. Create one to see it displayed here.
+          </div>
+        )}
       </div>
     </div>
   );

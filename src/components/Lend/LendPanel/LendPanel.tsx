@@ -24,7 +24,7 @@ import {
 // import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 // import { INTEREST_TYPE } from "utils/constants/contact.constants";
 import { Button } from "components/ui";
-import { useLoans } from "utils/hooks/pikachu/usePools";
+import { useLoansByPoolId } from "utils/hooks/pikachu/usePools";
 import { LoanPanel } from "components/Borrow";
 import WithdrawModal from "../WithdrawModal";
 import TopupModal from "../TopupModal";
@@ -36,7 +36,7 @@ interface Props {
 }
 
 const LendPanel = ({ pool }: Props) => {
-  const loans = useLoans(toInteger(pool.poolId));
+  const loans = useLoansByPoolId(toInteger(pool.poolId));
   const [expanded, setExpanded] = useState(false);
 
   const [withdrawVisible, setWithdrawVisible] = useState(false);

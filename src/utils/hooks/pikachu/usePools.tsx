@@ -7,13 +7,14 @@ import { usePikachuContract } from "../useContract";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 import { useSettingStore } from "store";
 import {
+  getLoanByPoolIdAndBorrower,
   getLoansByBorrower,
   getLoansByPoolId,
   getLoansByPoolIdAndBorrower,
 } from "utils/apis/pikachu.api";
 
 export type TLoanStruct = {
-  poolIndex: number;
+  poolId: number;
   borrower: string;
   amount: BigNumberish;
   duration: BigNumberish;
@@ -132,11 +133,14 @@ export const usePoolByOwner = (owner: string) => {
   return pools;
 };
 
-export const useLoan = (poolIndex: number, borrower: string) => {
+export const useLoanByPoolIdAndBorrower = (
+  poolId: number,
+  borrower: string
+) => {
   const { refreshedAt } = useSettingStore();
   const Pikachu = usePikachuContract();
   const [loan, setLoan] = useState<TLoanStruct>({
-    poolIndex: 0,
+    poolId: 0,
     amount: 0,
     blockNumber: 0,
     borrower: "",
@@ -154,15 +158,15 @@ export const useLoan = (poolIndex: number, borrower: string) => {
   const getLoan = useCallback(async () => {
     if (Pikachu.provider)
       try {
-        const _loan = await getLoansByPoolIdAndBorrower(poolIndex, borrower);
+        const _loan = await getLoanByPoolIdAndBorrower(poolId, borrower);
         setLoan(_loan);
       } catch (error) {
         // setLoan([]);
-        console.log(error);
+        // console.log(error);
       }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Pikachu.provider, poolIndex, borrower]);
+  }, [Pikachu.provider, poolId, borrower]);
 
   useEffect(() => {
     getLoan();
@@ -170,13 +174,53 @@ export const useLoan = (poolIndex: number, borrower: string) => {
 
   return loan;
 };
-export const useLoans = (poolIndex: number) => {
+
+export const useLoans = (poolId: number, borrower: string) => {
+  const { refreshedAt } = useSettingStore();
+  const Pikachu = usePikachuContract();
+  const [loan, setLoan] = useState<TLoanStruct>({
+    poolId: 0,
+    amount: 0,
+    blockNumber: 0,
+    borrower: "",
+    collection: "",
+    duration: 0,
+    interestCapRate: 0,
+    interestStartRate: 0,
+    interestType: 0,
+    status: 0,
+    timestamp: 0,
+    tokenId: 0,
+    repaidAt: new Date(0),
+  });
+
+  const getLoan = useCallback(async () => {
+    if (Pikachu.provider)
+      try {
+        const _loan = await getLoansByPoolIdAndBorrower(poolId, borrower);
+        setLoan(_loan);
+      } catch (error) {
+        // setLoan([]);
+        console.log(error);
+      }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [Pikachu.provider, poolId, borrower]);
+
+  useEffect(() => {
+    getLoan();
+  }, [getLoan, refreshedAt]);
+
+  return loan;
+};
+
+export const useLoansByPoolId = (poolId: number) => {
   const { refreshedAt } = useSettingStore();
   const [loans, setLoans] = useState<TLoanStruct[]>([]);
 
   const getLoans = useCallback(async () => {
     try {
-      const _response = await getLoansByPoolId(poolIndex);
+      const _response = await getLoansByPoolId(poolId);
       setLoans(_response);
     } catch (error) {
       // setLoans([]);
@@ -184,7 +228,7 @@ export const useLoans = (poolIndex: number) => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolIndex]);
+  }, [poolId]);
 
   useEffect(() => {
     getLoans();
@@ -290,7 +334,7 @@ export const useCalculateRepayAmount = (
   _durationSecond: number // second
 ) => {
   return useMemo(() => {
-    const durationInDays = toInteger(_durationSecond) / SECONDS_PER_DAY;
+    const durationInDays = toInteger(_durationSecond / SECONDS_PER_DAY);
 
     if (_interestType === 0) {
       return (

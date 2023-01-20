@@ -38,11 +38,11 @@ import {
 
 interface Props {
   pool: IPikachu.PoolStructOutput;
-  poolIndex: number;
+  poolId: number;
   buttonVisible: boolean;
 }
 
-const PoolPanel = ({ pool, poolIndex, buttonVisible }: Props) => {
+const PoolPanel = ({ pool, poolId, buttonVisible }: Props) => {
   const [expanded, setExpanded] = useState(false);
 
   const data = useMemo(() => {
@@ -96,7 +96,7 @@ const PoolPanel = ({ pool, poolIndex, buttonVisible }: Props) => {
               {pool.status === POOL_READY &&
               pool.availableAmount.gt(BigNumber.from(0)) ? (
                 <LinkWithSearchParams
-                  to={{ pathname: `/pool/${pool.owner}/${poolIndex}` }}
+                  to={{ pathname: `/pool/${pool.owner}/${poolId}` }}
                 >
                   <Button variant="yellow" sx="h-10 w-36">
                     Borrow Now
@@ -161,9 +161,7 @@ const PoolPanel = ({ pool, poolIndex, buttonVisible }: Props) => {
                 </div>
                 <div>
                   <span>Interest earned:</span>
-                  <span>
-                    {ethers.utils.formatEther(pool.totalInterest)} ETH
-                  </span>
+                  <span>{formatEther(pool.totalInterest).toFixed(4)} ETH</span>
                 </div>
               </div>
               <div className={cn(style.chart)}>

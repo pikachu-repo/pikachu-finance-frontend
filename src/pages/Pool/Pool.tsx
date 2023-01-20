@@ -3,7 +3,7 @@ import cn from "classnames";
 import BackButton from "components/ui/BackButton";
 import { SvgLink } from "assets/images/svg";
 import { useParams } from "react-router-dom";
-import { useLoans, usePoolById } from "utils/hooks/pikachu/usePools";
+import { useLoansByPoolId, usePoolById } from "utils/hooks/pikachu/usePools";
 import {
   beautifyAddress,
   toInteger,
@@ -22,7 +22,7 @@ const Pool = () => {
   const { poolId } = useParams();
   const pool = usePoolById(toInteger(poolId));
 
-  const loans = useLoans(toInteger(poolId));
+  const loans = useLoansByPoolId(toInteger(poolId));
 
   const myPool = useMemo(() => {
     return account?.address?.toLowerCase() === pool?.owner?.toLowerCase();
@@ -46,14 +46,16 @@ const Pool = () => {
 
         {!myPool &&
           loans.findIndex(
-            (item) => item.borrower === account.address?.toLowerCase()
+            (item) =>
+              item.borrower === account.address?.toLowerCase() &&
+              item.status === 1
           ) === -1 && (
             <LinkWithSearchParams
               to={{ pathname: `borrow` }}
               className="ml-auto"
             >
               <Button variant="yellow" sx="h-10 w-36">
-                Borrow Now{" "}
+                Borrow Now
               </Button>
             </LinkWithSearchParams>
           )}
@@ -80,7 +82,7 @@ const Pool = () => {
         {pool && (
           <PoolPanel
             pool={pool}
-            poolIndex={toInteger(poolId)}
+            poolId={toInteger(poolId)}
             buttonVisible={false}
           />
         )}

@@ -107,4 +107,8 @@
       }
     }
   }
+
+  .empty {
+    @apply py-32 text-center opacity-50;
+  }
 }

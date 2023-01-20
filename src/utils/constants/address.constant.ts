@@ -6,16 +6,16 @@ export const ADMIN_ADDRESSES = {
 };
 
 export const PIKACHU_ADDRESSES = {
-  "1": "0xe06287f9e685b527c1ed1e2be53866c7922dcfe0",
-  "80001": "0xe06287f9e685b527c1ed1e2be53866c7922dcfe0",
+  "1": "0x296de04c643e8ba1e65fc7e7bcf5b52ffce113c9",
+  "80001": "0x296de04c643e8ba1e65fc7e7bcf5b52ffce113c9",
 };
 
 export const NFT_1_ADDRESSES = {
-  "1": "0x0d1c7b5c7633be4d8874339209cfcb71a6a9d159",
-  "80001": "0x0d1c7b5c7633be4d8874339209cfcb71a6a9d159",
+  "1": "0x5497a33fc146acf921ff3bc5091115e46888f712",
+  "80001": "0x5497a33fc146acf921ff3bc5091115e46888f712",
 };
 
 export const NFT_2_ADDRESSES = {
-  "1": "0xd55acf9bfc65f6837c94d02b26456a131e1cbada",
-  "80001": "0xd55acf9bfc65f6837c94d02b26456a131e1cbada",
+  "1": "0x6e98f09647cfe03ce695c1b59e763a6fdd4da31a",
+  "80001": "0x6e98f09647cfe03ce695c1b59e763a6fdd4da31a",
 };
