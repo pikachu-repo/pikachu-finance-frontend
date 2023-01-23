@@ -1,13 +1,15 @@
 import style from "./Pools.module.css";
 import cn from "classnames";
-import { SvgLink, SvgRefresh, SvgArrowDown } from "assets/images/svg";
-import { usePools } from "utils/hooks/pikachu/usePools";
+import { SvgLink, SvgArrowDown } from "assets/images/svg";
 import { PoolPanel } from "components/Borrow";
 import PlatformStatus from "components/Common/PlatformStatus";
+import { useAccountStore, useSettingStore } from "store";
+import { Refresh } from "components/ui";
+import { refreshPools } from "utils/apis/pikachu.api";
 // import Example from "assets/"
 const Pools = () => {
-  const pools = usePools();
-
+  const { pools } = useAccountStore();
+  const { setRefreshedAt } = useSettingStore();
   return (
     <div className={cn(style.root)}>
       <div className={cn(style.heading)}>
@@ -50,8 +52,12 @@ const Pools = () => {
             <SvgArrowDown />
           </span>
           <span>
-            <SvgRefresh />
-            Refresh
+            <Refresh
+              action={async () => {
+                await refreshPools();
+                setRefreshedAt(new Date());
+              }}
+            />
           </span>
         </div>
 

@@ -1,0 +1,33 @@
+.root {
+  @apply grid items-center px-7 mt-6;
+  grid-template-columns: 20% 25% 13% 13% 29%;
+
+  & > div {
+    @apply flex items-center;
+
+    & > svg {
+      @apply ml-1.5;
+    }
+
+    & > a {
+      @apply ml-auto;
+
+      & > button {
+        @apply w-[140px] h-10;
+        & > svg {
+          @apply ml-1.5;
+        }
+      }
+    }
+  }
+
+  & > div:first-child {
+    @apply pl-9;
+  }
+
+  hr {
+    @apply col-span-5 mt-3;
+    opacity: 0.15;
+    border-top: 1px solid rgba(245, 245, 245);
+  }
+}

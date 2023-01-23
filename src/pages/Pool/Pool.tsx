@@ -16,9 +16,11 @@ import { useMemo } from "react";
 import { useAccount } from "wagmi";
 import LinkWithSearchParams from "components/LinkWithSearchParams";
 import { refreshPools } from "utils/apis/pikachu.api";
+import { useSettingStore } from "store";
 
 const Pool = () => {
   const account = useAccount();
+  const { setRefreshedAt } = useSettingStore();
   const { poolId } = useParams();
   const pool = usePoolById(toInteger(poolId));
 
@@ -75,7 +77,12 @@ const Pool = () => {
             Interest
           </span>
           <span>
-            <Refresh action={refreshPools} />
+            <Refresh
+              action={async () => {
+                await refreshPools();
+                setRefreshedAt(new Date());
+              }}
+            />
           </span>
         </div>
 
@@ -100,7 +107,12 @@ const Pool = () => {
           <span>Fund Date</span>
           <span>Status</span>
           <span>
-            <Refresh action={refreshPools} />
+            <Refresh
+              action={async () => {
+                await refreshPools();
+                setRefreshedAt(new Date());
+              }}
+            />
           </span>
         </div>
 

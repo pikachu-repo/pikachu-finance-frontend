@@ -45,6 +45,7 @@ const Demo = () => {
   const NFT2 = useNFT2Contract();
 
   const nft1Balance = useERC721Balance(NFT1.address, account.address || "");
+  const nft2Balance = useERC721Balance(NFT2.address, account.address || "");
   const adminSetting = useAdminSetting();
   const pools = usePools();
   const owner = useOwner();
@@ -310,6 +311,8 @@ const Demo = () => {
           <Button variant="yellow" sx="w-32" onClick={onMintNFT2}>
             Mint
           </Button>
+
+          <span>You have {nft2Balance} items</span>
         </div>
         <div className={cn(style.contract)}>
           <div className={cn(style.poolConfig)}>

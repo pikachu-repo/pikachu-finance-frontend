@@ -10,9 +10,11 @@ import { useAccount } from "wagmi";
 import { toString } from "utils/helpers/string.helpers";
 import { LendPanel, PoolCreateDrawer } from "components/Lend";
 import { useState } from "react";
+import { useSettingStore } from "store";
 
 const Lend = () => {
   const account = useAccount();
+  const { setRefreshedAt } = useSettingStore();
   const pools = usePoolByOwner(toString(account.address));
 
   const [createModalVisible, setCreateModalVisible] = useState(false);
@@ -60,7 +62,12 @@ const Lend = () => {
               <span>Open loans</span>
               <span>Operation</span>
               <span>
-                <Refresh action={refreshPools} />
+                <Refresh
+                  action={async () => {
+                    await refreshPools();
+                    setRefreshedAt(new Date());
+                  }}
+                />
               </span>
             </div>
 

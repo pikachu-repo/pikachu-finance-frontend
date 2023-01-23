@@ -4,8 +4,10 @@ import { TAdminSettingStruct } from "utils/hooks/pikachu/useAdminSetting";
 import axios from "axios";
 import { API_URL } from "utils/constants/api.constants";
 import { ContractTransaction, ethers } from "ethers";
+import { getEtherPrice } from "utils/apis/etherscan.api";
 
 interface ISettingState {
+  etherusd: number;
   refreshedAt: Date;
   setRefreshedAt: {
     (_refreshedAt: Date): void;
@@ -48,7 +50,7 @@ interface ISettingState {
   };
 }
 
-interface ICollection {
+export interface ICollection {
   contract: string;
   name: string;
   symbol: string;
@@ -62,6 +64,8 @@ interface ICollection {
 }
 
 export const useSettingStore = create<ISettingState>((set, get) => ({
+  etherusd: 0,
+
   refreshedAt: new Date(),
   setRefreshedAt: (_refreshedAt) => {
     set(
@@ -82,15 +86,19 @@ export const useSettingStore = create<ISettingState>((set, get) => ({
 
   initializeSetting: async (_setting) => {
     if (_setting.feeTo === "" || get().setting.feeTo === _setting.feeTo) return;
-    const _response = await axios.post(`${API_URL}/pools/collections`, {
-      verifiedCollections: _setting.verifiedCollections.map((item) =>
-        item.toLowerCase()
-      ),
-    });
+    const [_response, _etherusd] = await Promise.all([
+      axios.post(`${API_URL}/pools/collections`, {
+        verifiedCollections: _setting.verifiedCollections.map((item) =>
+          item.toLowerCase()
+        ),
+      }),
+      getEtherPrice(),
+    ]);
     set(
       produce((state: ISettingState) => {
         state.setting = _setting;
         state.collections = _response.data;
+        state.etherusd = _etherusd;
       })
     );
   },

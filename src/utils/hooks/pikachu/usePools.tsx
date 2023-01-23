@@ -7,6 +7,7 @@ import { usePikachuContract } from "../useContract";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 import { useSettingStore } from "store";
 import {
+  getAllLoans,
   getLoanByPoolIdAndBorrower,
   getLoansByBorrower,
   getLoansByPoolId,
@@ -138,7 +139,6 @@ export const useLoanByPoolIdAndBorrower = (
   borrower: string
 ) => {
   const { refreshedAt } = useSettingStore();
-  const Pikachu = usePikachuContract();
   const [loan, setLoan] = useState<TLoanStruct>({
     poolId: 0,
     amount: 0,
@@ -156,17 +156,16 @@ export const useLoanByPoolIdAndBorrower = (
   });
 
   const getLoan = useCallback(async () => {
-    if (Pikachu.provider)
-      try {
-        const _loan = await getLoanByPoolIdAndBorrower(poolId, borrower);
-        setLoan(_loan);
-      } catch (error) {
-        // setLoan([]);
-        // console.log(error);
-      }
+    try {
+      const _loan = await getLoanByPoolIdAndBorrower(poolId, borrower);
+      setLoan(_loan);
+    } catch (error) {
+      // setLoan([]);
+      // console.log(error);
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Pikachu.provider, poolId, borrower]);
+  }, [poolId, borrower]);
 
   useEffect(() => {
     getLoan();
@@ -175,9 +174,30 @@ export const useLoanByPoolIdAndBorrower = (
   return loan;
 };
 
+export const useAllLoans = () => {
+  const { refreshedAt } = useSettingStore();
+  const [loan, setLoan] = useState<TLoanStruct[]>([]);
+
+  const getLoan = useCallback(async () => {
+    try {
+      const _loan = await getAllLoans();
+      setLoan(_loan);
+    } catch (error) {
+      // setLoan([]);
+      console.log(error);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    getLoan();
+  }, [getLoan, refreshedAt]);
+
+  return loan;
+};
 export const useLoans = (poolId: number, borrower: string) => {
   const { refreshedAt } = useSettingStore();
-  const Pikachu = usePikachuContract();
   const [loan, setLoan] = useState<TLoanStruct>({
     poolId: 0,
     amount: 0,
@@ -195,17 +215,16 @@ export const useLoans = (poolId: number, borrower: string) => {
   });
 
   const getLoan = useCallback(async () => {
-    if (Pikachu.provider)
-      try {
-        const _loan = await getLoansByPoolIdAndBorrower(poolId, borrower);
-        setLoan(_loan);
-      } catch (error) {
-        // setLoan([]);
-        console.log(error);
-      }
+    try {
+      const _loan = await getLoansByPoolIdAndBorrower(poolId, borrower);
+      setLoan(_loan);
+    } catch (error) {
+      // setLoan([]);
+      console.log(error);
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Pikachu.provider, poolId, borrower]);
+  }, [poolId, borrower]);
 
   useEffect(() => {
     getLoan();
