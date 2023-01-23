@@ -3,6 +3,7 @@ import produce from "immer";
 import alchemy from "utils/apis/alchemy.api";
 import { toInteger, toString } from "utils/helpers/string.helpers";
 import { TLoanStruct } from "utils/hooks/pikachu/usePools";
+import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 
 export interface NFTItem {
   contract: string;
@@ -17,8 +18,16 @@ interface IAccountState {
   balance: number;
   nfts: NFTItem[];
   loans: TLoanStruct[];
+  pools: IPikachu.PoolStructOutput[];
+  allLoans: TLoanStruct[];
   initializeAccount: {
-    (_balance: number, _address: string, _loans: TLoanStruct[]): Promise<any>;
+    (
+      _balance: number,
+      _address: string,
+      _loans: TLoanStruct[],
+      _pools: IPikachu.PoolStructOutput[],
+      _allLoans: TLoanStruct[]
+    ): Promise<any>;
   };
 }
 
@@ -27,7 +36,9 @@ export const useAccountStore = create<IAccountState>((set, get) => ({
   balance: 0,
   nfts: [],
   loans: [],
-  initializeAccount: async (_balance, _address, _loans) => {
+  pools: [],
+  allLoans: [],
+  initializeAccount: async (_balance, _address, _loans, _pools, _allLoans) => {
     let _nfts: NFTItem[] = [];
     if (_address) {
       const nftsForOwner = await alchemy.nft.getNftsForOwner(_address);
@@ -45,6 +56,8 @@ export const useAccountStore = create<IAccountState>((set, get) => ({
         state.balance = _balance;
         state.nfts = _nfts;
         state.loans = _loans;
+        state.pools = _pools;
+        state.allLoans = _allLoans;
       })
     );
   },

@@ -25,3 +25,14 @@ export const formatEther = (value: BigNumberish | undefined | string) => {
   }
   return toFloat(value);
 };
+
+export const beautifyDecimals = (value: BigNumberish | undefined | string) => {
+  let number;
+  if (typeof value === "object") {
+    number = toFloat(ethers.utils.formatEther(value));
+  } else number = toFloat(value);
+
+  if (number > 60) return toInteger(number);
+  if (number > 1) return toFloat(number.toFixed(2));
+  return toFloat(number.toFixed(3));
+};

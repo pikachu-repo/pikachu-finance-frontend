@@ -12,7 +12,12 @@ import {
 
 import { NFTItem, useAccountStore, useSettingStore } from "store";
 
-import { formatEther, toFloat, toInteger } from "utils/helpers/string.helpers";
+import {
+  beautifyDecimals,
+  formatEther,
+  toFloat,
+  toInteger,
+} from "utils/helpers/string.helpers";
 import { SvgEthereum, SvgWarning } from "assets/images/svg";
 import nftImage from "assets/images/nftImage.png";
 import DurationPicker from "components/ui/DurationPicker";
@@ -31,6 +36,7 @@ const Borrow = () => {
     setTxConfirmationModalVisible,
     setTxRejectModalVisible,
     submitTransaction,
+    setRefreshedAt,
   } = useSettingStore();
 
   const Pikachu = usePikachuContract();
@@ -132,7 +138,12 @@ const Borrow = () => {
         <h3>Borrow</h3>
 
         <span>
-          <Refresh action={refreshPools} />
+          <Refresh
+            action={async () => {
+              await refreshPools();
+              setRefreshedAt(new Date());
+            }}
+          />
         </span>
       </div>
 
@@ -152,16 +163,16 @@ const Borrow = () => {
           <div>
             Floor Price:
             <h4 className="ml-2 mr-1.5">
-              {currentItem.floorPrice?.toFixed(3)}
+              {beautifyDecimals(currentItem.floorPrice)}
             </h4>
             <SvgEthereum />
           </div>
           <div>
             Borrow Amount (Max{" "}
-            {(
+            {beautifyDecimals(
               (toFloat(currentItem.floorPrice) * toInteger(pool?.loanToValue)) /
-              10000
-            ).toFixed(3)}{" "}
+                10000
+            )}{" "}
             ETH):
             <Input
               icon={<SvgEthereum />}
@@ -182,7 +193,7 @@ const Borrow = () => {
           </div>
           <div>
             Estimated interest:
-            <h4 className="ml-2 mr-1.5">{repayAmount.toFixed(3)}</h4>
+            <h4 className="ml-2 mr-1.5">{beautifyDecimals(repayAmount)}</h4>
             <SvgEthereum />
           </div>
         </div>
@@ -197,16 +208,16 @@ const Borrow = () => {
 
         <div>
           <SvgWarning /> The Maximum loanable amount from this pool is{" "}
-          {formatEther(pool?.maxAmount).toFixed(3)} ETH.
+          {beautifyDecimals(pool?.maxAmount)} ETH.
         </div>
 
         <div>
-          <SvgWarning /> Your balance is {balance.toFixed(3)} ETH, and at least
-          0.001 ETH (including transaction fees) is required.
+          <SvgWarning /> Your balance is {beautifyDecimals(balance)} ETH, and at
+          least 0.001 ETH (including transaction fees) is required.
         </div>
         <div>
-          <SvgWarning /> Only {formatEther(pool?.availableAmount).toFixed(3)}{" "}
-          ETH is available in this pool.
+          <SvgWarning /> Only {beautifyDecimals(pool?.availableAmount)} ETH is
+          available in this pool.
         </div>
 
         <LinkWithSearchParams
@@ -222,8 +233,7 @@ const Borrow = () => {
           Cancel
         </Button>
         <Button variant="yellow" sx="h-10 w-48" onClick={onRequest}>
-          Request {toFloat(amount).toFixed(2)}{" "}
-          <SvgEthereum className="ml-1.5" />
+          Request {beautifyDecimals(amount)} <SvgEthereum className="ml-1.5" />
         </Button>
       </div>
     </div>

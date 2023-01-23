@@ -16,6 +16,7 @@ import {
 } from "assets/images/svg";
 import { Button } from "components/ui";
 import Input from "components/ui/Input";
+import { beautifyDecimals } from "utils/helpers/string.helpers";
 
 interface Props {
   pool: IPikachu.PoolStructOutput;
@@ -93,7 +94,7 @@ const NFTSelector = ({ pool, currentItem, setCurrentItem }: Props) => {
             </div>
 
             <div className={cn(style.floorPrice)}>
-              {currentItem?.floorPrice?.toFixed(3)} <SvgEthereum />
+              {beautifyDecimals(currentItem?.floorPrice)} <SvgEthereum />
             </div>
 
             <Button sx={`h-10 w-10 ${expanded ? "rotate-180" : ""}`}>
@@ -153,9 +154,11 @@ const NFTSelector = ({ pool, currentItem, setCurrentItem }: Props) => {
                     </div>
 
                     <div className={cn(style.floorPrice)}>
-                      {collections
-                        .find((item) => item.contract === nft.contract)
-                        ?.floorPrice.toFixed(3)}{" "}
+                      {beautifyDecimals(
+                        collections.find(
+                          (item) => item.contract === nft.contract
+                        )?.floorPrice
+                      )}{" "}
                       <SvgEthereum />
                     </div>
 

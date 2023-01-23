@@ -1,0 +1,29 @@
+.root {
+  @apply flex flex-col gap-8;
+
+  .heading {
+    div {
+      @apply flex justify-between items-center;
+    }
+    p {
+      @apply mt-7;
+    }
+  }
+
+  .collectionList {
+    @apply flex flex-col gap-[10px] bg-smoky-black px-5 pb-5 pt-7 rounded-[10px];
+
+    .head {
+      @apply font-bold px-5 pb-6 grid;
+      grid-template-columns: 30px 26fr 16fr 13fr 14fr 19fr 9fr;
+
+      span {
+        @apply flex items-center gap-1.5;
+      }
+
+      span:last-child {
+        @apply text-tangerine-yellow justify-end;
+      }
+    }
+  }
+}

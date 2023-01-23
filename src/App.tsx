@@ -18,7 +18,12 @@ import TxRejectModal from "components/Common/TxRejectModal";
 import TxSubmitModal from "components/Common/TxSubmitModal";
 import Lend from "pages/Lend";
 import Loan from "pages/Loan";
-import { useLoansByBorrower } from "utils/hooks/pikachu/usePools";
+import {
+  useAllLoans,
+  useLoansByBorrower,
+  usePools,
+} from "utils/hooks/pikachu/usePools";
+import Collections from "pages/Collections";
 
 function App() {
   const account = useAccount();
@@ -29,20 +34,43 @@ function App() {
 
   const adminSetting = useAdminSetting();
   const myLoans = useLoansByBorrower(account?.address || "");
+  const pools = usePools();
+  const allLoans = useAllLoans();
 
   useEffect(() => {
     initializeSetting(adminSetting);
-  }, [adminSetting, initializeSetting]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [adminSetting]);
 
   useEffect(() => {
-    signer.data?.getBalance().then((balance) => {
+    if (signer.data)
+      signer.data?.getBalance().then(async (balance) => {
+        initializeAccount(
+          toFloat(ethers.utils.formatEther(balance)),
+          toString(account.address).toLowerCase(),
+          myLoans,
+          pools,
+          allLoans
+        );
+      });
+    else {
       initializeAccount(
-        toFloat(ethers.utils.formatEther(balance)),
+        0,
         toString(account.address).toLowerCase(),
-        myLoans
+        myLoans,
+        pools,
+        allLoans
       );
-    });
-  }, [signer.data, account.address, initializeAccount, refreshedAt, myLoans]);
+    }
+  }, [
+    signer.data,
+    account.address,
+    initializeAccount,
+    refreshedAt,
+    myLoans,
+    pools,
+    allLoans,
+  ]);
   return (
     <div className="bg-gray-1000">
       <>
@@ -57,6 +85,7 @@ function App() {
           <Route path="/setting/*" element={<Setting />} />
           <Route path="/borrow" element={<Pools />} />
           <Route path="/lend" element={<Lend />} />
+          <Route path="/collections" element={<Collections />} />
           <Route path="/loan/*" element={<Loan />} />
           <Route path="/demo" element={<Demo />} />
           <Route path="/pool/:owner/:poolId" element={<Pool />} />

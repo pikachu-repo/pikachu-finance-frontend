@@ -1,0 +1,58 @@
+.root {
+  @apply flex flex-col;
+
+  .collectionInfo {
+    @apply px-5 py-6 bg-raisin-black grid;
+    grid-template-columns: 30px 26fr 16fr 13fr 14fr 5fr 23fr;
+
+    .nftImg {
+      @apply font-bold;
+      img {
+        @apply w-[60px] h-[60px] mr-3 rounded;
+        border: 1px solid rgba(245, 245, 245, 0.5);
+      }
+
+      span {
+        display: inline-block;
+        max-width: 180px;
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+      }
+    }
+
+    div {
+      @apply flex items-center gap-1.5;
+    }
+
+    div:first-child {
+      @apply justify-center;
+    }
+
+    div:last-child {
+      @apply justify-end;
+
+      & > a > button:first-child {
+        @apply mr-6 h-10 w-36 gap-x-1.5;
+      }
+    }
+  }
+
+  .poolDetails {
+    @apply flex flex-col bg-raisin-black duration-150;
+
+    .header {
+      @apply grid items-center px-7 py-2.5;
+      background: rgba(255, 255, 255, 0.15);
+      grid-template-columns: 20% 25% 13% 13% 29%;
+
+      & > div:first-child {
+        @apply pl-9;
+      }
+    }
+  }
+}
+
+.chart_tooltip {
+  @apply bg-white px-4 py-2 rounded-lg shadow-lg text-black;
+}
