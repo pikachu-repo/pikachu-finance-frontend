@@ -6,7 +6,7 @@ import Header from "components/Header";
 import Demo from "pages/Demo";
 import Pool from "pages/Pool";
 import Pools from "pages/Pools";
-import Borrow from "pages/Borrow";
+// import Borrow from "pages/BorrowDrawer";
 import { useSigner, useAccount } from "wagmi";
 import { useAccountStore, useSettingStore } from "store";
 import { toFloat, toString } from "utils/helpers/string.helpers";
@@ -24,6 +24,7 @@ import {
   usePools,
 } from "utils/hooks/pikachu/usePools";
 import Collections from "pages/Collections";
+import Borrow from "pages/Borrow";
 
 function App() {
   const account = useAccount();
@@ -81,15 +82,16 @@ function App() {
       <Header />
       <main>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Borrow />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/setting/*" element={<Setting />} />
-          <Route path="/borrow" element={<Pools />} />
+          <Route path="/pools" element={<Pools />} />
           <Route path="/lend" element={<Lend />} />
           <Route path="/collections" element={<Collections />} />
           <Route path="/loan/*" element={<Loan />} />
           <Route path="/demo" element={<Demo />} />
           <Route path="/pool/:owner/:poolId" element={<Pool />} />
-          <Route path="/pool/:owner/:poolId/borrow" element={<Borrow />} />
+          {/* <Route path="/pool/:owner/:poolId/borrow" element={<Borrow />} /> */}
         </Routes>
       </main>
       <Footer />

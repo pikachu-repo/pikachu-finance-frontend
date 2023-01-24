@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { ethers } from "ethers";
 import style from "./LendPanel.module.css";
 import cn from "classnames";
 
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 import {
   beautifyAddress,
-  formatEther,
+  beautifyDecimals,
   toFloat,
   toInteger,
 } from "utils/helpers/string.helpers";
@@ -25,7 +24,7 @@ import {
 // import { INTEREST_TYPE } from "utils/constants/contact.constants";
 import { Button } from "components/ui";
 import { useLoansByPoolId } from "utils/hooks/pikachu/usePools";
-import { LoanPanel } from "components/Borrow";
+import { LoanPanel } from "components/Pool";
 import WithdrawModal from "../WithdrawModal";
 import TopupModal from "../TopupModal";
 import ToggleModal from "../ToggleModal";
@@ -69,14 +68,14 @@ const LendPanel = ({ pool }: Props) => {
         </span>
         <span>
           <span className="text-tangerine-yellow">
-            {ethers.utils.formatEther(pool.availableAmount)}
+            {beautifyDecimals(pool.availableAmount)}
           </span>
-          / {ethers.utils.formatEther(pool.depositedAmount)}
+          / {beautifyDecimals(pool.depositedAmount)}
           <SvgEthereum />
         </span>
         <span>{toFloat(pool.loanToValue) / 100}%</span>
         <span>
-          {formatEther(pool.totalInterest)} <SvgEthereum />
+          {beautifyDecimals(pool.totalInterest)} <SvgEthereum />
         </span>
         <span>{pool.numberOfLoans.toNumber()}</span>
         <span className={cn(style.actions)}>

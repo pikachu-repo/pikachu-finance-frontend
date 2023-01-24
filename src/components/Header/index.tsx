@@ -7,8 +7,8 @@ import ConnectButton from "./ConnectButton";
 const Header = () => {
   const pageLinks = [
     {
-      text: "Borrow",
-      link: "/borrow",
+      text: "Pools",
+      link: "/pools",
     },
     {
       text: "Lend",
