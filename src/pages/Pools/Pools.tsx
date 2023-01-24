@@ -1,7 +1,7 @@
 import style from "./Pools.module.css";
 import cn from "classnames";
 import { SvgLink, SvgArrowDown } from "assets/images/svg";
-import { PoolPanel } from "components/Borrow";
+import { PoolPanel } from "components/Pool";
 import PlatformStatus from "components/Common/PlatformStatus";
 import { useAccountStore, useSettingStore } from "store";
 import { Refresh } from "components/ui";
@@ -13,7 +13,7 @@ const Pools = () => {
   return (
     <div className={cn(style.root)}>
       <div className={cn(style.heading)}>
-        <h3>Borrow</h3>
+        <h3>Pools</h3>
         <PlatformStatus />
       </div>
 

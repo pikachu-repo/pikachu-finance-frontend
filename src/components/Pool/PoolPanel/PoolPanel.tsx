@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
-import { BigNumber, ethers } from "ethers";
+import { BigNumber } from "ethers";
 import style from "./PoolPanel.module.css";
 import cn from "classnames";
 
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 import {
   beautifyAddress,
+  beautifyDecimals,
   formatEther,
   toFloat,
   toInteger,
@@ -77,9 +78,9 @@ const PoolPanel = ({ pool, poolId, buttonVisible }: Props) => {
         </span>
         <span>
           <span className="text-tangerine-yellow">
-            {formatEther(pool.availableAmount).toFixed(3)}
+            {beautifyDecimals(pool.availableAmount)}
           </span>
-          / {formatEther(pool.depositedAmount).toFixed(3)}
+          / {beautifyDecimals(pool.depositedAmount)}
           <SvgEthereum />
         </span>
         <span>{toFloat(pool.loanToValue) / 100}%</span>
@@ -147,7 +148,7 @@ const PoolPanel = ({ pool, poolId, buttonVisible }: Props) => {
             <div>
               <span>Max amount: </span>
               <span>
-                {ethers.utils.formatEther(pool.maxAmount)}
+                {formatEther(pool.maxAmount)}
                 <SvgEthereum />
               </span>
             </div>
@@ -161,7 +162,7 @@ const PoolPanel = ({ pool, poolId, buttonVisible }: Props) => {
                 </div>
                 <div>
                   <span>Interest earned:</span>
-                  <span>{formatEther(pool.totalInterest).toFixed(4)} ETH</span>
+                  <span>{beautifyDecimals(pool.totalInterest)} ETH</span>
                 </div>
               </div>
               <div className={cn(style.chart)}>

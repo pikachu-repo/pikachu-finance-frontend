@@ -2,7 +2,7 @@ import style from "./ClosedLoans.module.css";
 import cn from "classnames";
 import { refreshPools } from "utils/apis/pikachu.api";
 import { Refresh } from "components/ui";
-import { LoanPanel } from "components/Borrow";
+import { LoanPanel } from "components/Pool";
 import { useAccountStore } from "store";
 
 const ClosedLoans = () => {

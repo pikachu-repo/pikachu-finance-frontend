@@ -1,7 +1,11 @@
 import style from "./PlatformStatus.module.css";
 import cn from "classnames";
 import { useMemo } from "react";
-import { formatEther, toFloat } from "utils/helpers/string.helpers";
+import {
+  beautifyDecimals,
+  formatEther,
+  toFloat,
+} from "utils/helpers/string.helpers";
 import { useAccountStore, useSettingStore } from "store";
 
 const PlatformStatus = () => {
@@ -21,17 +25,17 @@ const PlatformStatus = () => {
       },
       {
         label: "Total Open Loans:",
-        value: `${pools
-          .reduce(
+        value: `${beautifyDecimals(
+          pools.reduce(
             (prev, next) => toFloat(prev + formatEther(next.totalLoans)),
             0
           )
-          .toFixed(3)} ETH`,
+        )} ETH`,
       },
       {
         label: "Available Liquidity:",
 
-        value: `${availableLiquidity.toFixed(3)} ETH ($${(
+        value: `${beautifyDecimals(availableLiquidity)} ETH ($${(
           etherusd * availableLiquidity
         ).toFixed()})`,
       },

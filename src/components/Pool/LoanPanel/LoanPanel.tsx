@@ -9,6 +9,7 @@ import {
 import ImageERC721 from "assets/images/template-erc721.png";
 import {
   beautifyAddress,
+  beautifyDecimals,
   formatEther,
   toFloat,
   toInteger,
@@ -70,7 +71,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
   );
 
   const onPayback = () => {
-    setTxDescription(`Repaying ${repayAmount.toFixed(4)} ETH...`);
+    setTxDescription(`Repaying ${beautifyDecimals(repayAmount)} ETH...`);
     setTxConfirmationModalVisible(true);
 
     submitTransaction(
@@ -183,8 +184,8 @@ const LoanPanel = ({ pool, loan }: Props) => {
       </div>
 
       <div className={cn(style.interest)}>
-        {toFloat(loan.amount)} +{" "}
-        {(repayAmount - formatEther(loan.amount)).toFixed(4)}
+        {beautifyDecimals(loan.amount)} +{" "}
+        {beautifyDecimals(repayAmount - formatEther(loan.amount))}
         <SvgEthereum />
       </div>
       <div>
