@@ -69,7 +69,7 @@ module.exports = {
         "pineapple": "#554609"
       },
       boxShadow: {
-        '4xl': 'rgb(255, 255, 255, 0.5) 0px 0px 10px 10px',
+        '4xl': 'rgb(255, 255, 255, 0.5) 0px 0px 3px 3px',
       }
     },
   },

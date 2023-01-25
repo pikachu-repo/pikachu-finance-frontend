@@ -40,7 +40,7 @@ const PoolRow = ({ pool, floorPrice }: Props) => {
       <div>
         {toInteger(pool.interestCapRate) / 100}%
         <LinkWithSearchParams
-          to={{ pathname: `/pool/${pool.owner}/${pool.poolId}/borrow` }}
+          to={{ pathname: `/pool/${pool.owner}/${pool.poolId}` }}
         >
           <Button variant="yellow">
             Borrow{" "}

@@ -1,0 +1,26 @@
+.root {
+  @apply grid grid-cols-2 px-4 py-2 bg-raisin-black rounded-[10px] cursor-pointer hover:shadow-lg duration-150 hover:bg-raisin-black/60;
+  @apply animate-enter;
+
+  & > * {
+    @apply flex items-center gap-1.5;
+  }
+
+  .avatar {
+    @apply w-8 h-8 rounded-full bg-white/5;
+  }
+
+  & > *:nth-child(even) {
+    @apply justify-end;
+  }
+
+  & > div > span {
+    @apply opacity-50;
+  }
+
+  .repayment {
+    .value {
+      @apply text-xl font-semibold text-tangerine-yellow;
+    }
+  }
+}

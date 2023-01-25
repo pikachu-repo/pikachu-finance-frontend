@@ -15,6 +15,7 @@ import {
 } from "assets/images/svg";
 import { Button } from "components/ui";
 import Input from "components/ui/Input";
+import { beautifyDecimals } from "utils/helpers/string.helpers";
 
 interface Props {
   options: string[];
@@ -134,9 +135,10 @@ const CollectionSelector = ({ options, setOptions }: Props) => {
                 </div>
 
                 <div className={cn(style.floorPrice)}>
-                  {collections
-                    .find((item) => item.contract === nft.contract)
-                    ?.floorPrice.toFixed(3)}{" "}
+                  {beautifyDecimals(
+                    collections.find((item) => item.contract === nft.contract)
+                      ?.floorPrice
+                  )}{" "}
                   <SvgEthereum />
                 </div>
 

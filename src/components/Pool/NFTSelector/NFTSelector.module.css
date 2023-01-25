@@ -47,7 +47,7 @@
   }
 
   .collections {
-    @apply w-full flex flex-col rounded-b-lg absolute bg-raisin-black z-0 animate-enter;
+    @apply w-full flex flex-col rounded-b-lg absolute bg-raisin-black z-0 animate-enter shadow-2xl drop-shadow-2xl;
     top: calc(100% - 8px);
 
     .searchBox {
@@ -67,7 +67,8 @@
     }
 
     .list {
-      @apply pb-4;
+      @apply pb-4  overflow-y-scroll;
+      max-height: 400px;
       .row {
         @apply px-5 pt-4 flex flex-wrap items-center cursor-pointer hover:bg-white/5 duration-75;
 

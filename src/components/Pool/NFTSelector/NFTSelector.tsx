@@ -19,7 +19,7 @@ import Input from "components/ui/Input";
 import { beautifyDecimals } from "utils/helpers/string.helpers";
 
 interface Props {
-  pool: IPikachu.PoolStructOutput;
+  pool?: IPikachu.PoolStructOutput;
   currentItem: NFTItem;
   setCurrentItem: React.Dispatch<React.SetStateAction<NFTItem>>;
 }
@@ -28,6 +28,7 @@ const NFTSelector = ({ pool, currentItem, setCurrentItem }: Props) => {
   const [expanded, setExpanded] = useState(false);
   const [query, setQuery] = useState("");
   const { nfts } = useAccountStore();
+
   const { collections } = useSettingStore();
 
   const ref = useRef<HTMLDivElement>(null);
@@ -44,12 +45,16 @@ const NFTSelector = ({ pool, currentItem, setCurrentItem }: Props) => {
   }, [ref]);
 
   const validItems = useMemo(() => {
-    return nfts.filter((nft) =>
-      pool?.collections.find(
-        (contract) => contract.toLowerCase() === nft.contract
-      )
-    );
-  }, [pool, nfts]);
+    return pool
+      ? nfts.filter((nft) =>
+          pool?.collections.find(
+            (contract) => contract.toLowerCase() === nft.contract
+          )
+        )
+      : nfts.filter((nft) =>
+          collections.find((collection) => collection.contract === nft.contract)
+        );
+  }, [pool, nfts, collections]);
 
   const queriedItems = useMemo(() => {
     return validItems.filter(
@@ -82,7 +87,11 @@ const NFTSelector = ({ pool, currentItem, setCurrentItem }: Props) => {
             className={cn(style.selection)}
             onClick={() => setExpanded(!expanded)}
           >
-            <img src={nftImage} alt="collection" className={cn(style.nftImg)} />
+            <img
+              src={currentItem.imgUrl || nftImage}
+              alt="collection"
+              className={cn(style.nftImg)}
+            />
             <div className={cn(style.item)}>
               <a href={`https://opensea.io`} target="_blank" rel="noreferrer">
                 <span>{currentItem?.name}</span>
@@ -135,7 +144,7 @@ const NFTSelector = ({ pool, currentItem, setCurrentItem }: Props) => {
                     }}
                   >
                     <img
-                      src={nftImage}
+                      src={nft.imgUrl || nftImage}
                       alt="collection"
                       className={cn(style.nftImg)}
                     />
