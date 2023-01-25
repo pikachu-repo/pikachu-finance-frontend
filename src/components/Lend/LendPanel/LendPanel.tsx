@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import style from "./LendPanel.module.css";
 import cn from "classnames";
 
@@ -6,6 +6,7 @@ import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 import {
   beautifyAddress,
   beautifyDecimals,
+  formatEther,
   toFloat,
   toInteger,
 } from "utils/helpers/string.helpers";
@@ -28,19 +29,28 @@ import { LoanPanel } from "components/Pool";
 import WithdrawModal from "../WithdrawModal";
 import TopupModal from "../TopupModal";
 import ToggleModal from "../ToggleModal";
+import { useAccountStore } from "store";
 // import LinkWithSearchParams from "components/LinkWithSearchParams";
 
 interface Props {
   pool: IPikachu.PoolStructOutput;
+  onEditPool: any;
 }
 
-const LendPanel = ({ pool }: Props) => {
+const LendPanel = ({ pool, onEditPool }: Props) => {
   const loans = useLoansByPoolId(toInteger(pool.poolId));
   const [expanded, setExpanded] = useState(false);
 
   const [withdrawVisible, setWithdrawVisible] = useState(false);
   const [topupVisible, setTopupVisible] = useState(false);
   const [toggleModal, setToggleModal] = useState(false);
+
+  const { allLoans } = useAccountStore();
+  const openLoans = useMemo(() => {
+    return allLoans.filter(
+      (item) => item.poolId === toInteger(pool.poolId) && item.status === 1
+    );
+  }, [allLoans, pool]);
 
   return (
     <div className={cn(style.root)}>
@@ -70,7 +80,14 @@ const LendPanel = ({ pool }: Props) => {
           <span className="text-tangerine-yellow">
             {beautifyDecimals(pool.availableAmount)}
           </span>
-          / {beautifyDecimals(pool.depositedAmount)}
+          /{" "}
+          {beautifyDecimals(
+            formatEther(pool.availableAmount) +
+              openLoans.reduce(
+                (prev, next) => prev + formatEther(next.amount),
+                0
+              )
+          )}
           <SvgEthereum />
         </span>
         <span>{toFloat(pool.loanToValue) / 100}%</span>
@@ -107,7 +124,7 @@ const LendPanel = ({ pool }: Props) => {
             <span className={cn(style.tooltip, "tooltip top")}>
               Update configuration
             </span>
-            <Button>
+            <Button onClick={onEditPool}>
               <SvgEdit />
             </Button>
           </div>

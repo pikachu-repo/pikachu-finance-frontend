@@ -26,3 +26,6 @@ export { ReactComponent as SvgMoveDown } from "./move-down.svg";
 export { ReactComponent as SvgMoveUp } from "./move-up.svg";
 export { ReactComponent as SvgPause } from "./pause.svg";
 export { ReactComponent as SvgResume } from "./resume.svg";
+export { ReactComponent as SvgEthCoin } from "./ethereum2.svg";
+export { ReactComponent as SvgUSDC } from "./usdcoin.svg";
+export { ReactComponent as SvgUSDT } from "./tetherusd.svg";

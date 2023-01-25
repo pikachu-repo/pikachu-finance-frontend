@@ -25,6 +25,7 @@ import {
 } from "utils/hooks/pikachu/usePools";
 import Collections from "pages/Collections";
 import Borrow from "pages/Borrow";
+import { useHoldingNfts } from "utils/hooks/useHoldingNfts";
 
 function App() {
   const account = useAccount();
@@ -37,6 +38,7 @@ function App() {
   const myLoans = useLoansByBorrower(account?.address || "");
   const pools = usePools();
   const allLoans = useAllLoans();
+  const nfts = useHoldingNfts(account?.address || "");
 
   useEffect(() => {
     initializeSetting(adminSetting);
@@ -44,6 +46,7 @@ function App() {
   }, [adminSetting]);
 
   useEffect(() => {
+    // console.log(nfts.length);
     if (signer.data)
       signer.data?.getBalance().then(async (balance) => {
         initializeAccount(
@@ -51,7 +54,8 @@ function App() {
           toString(account.address).toLowerCase(),
           myLoans,
           pools,
-          allLoans
+          allLoans,
+          nfts
         );
       });
     else {
@@ -60,17 +64,20 @@ function App() {
         toString(account.address).toLowerCase(),
         myLoans,
         pools,
-        allLoans
+        allLoans,
+        nfts
       );
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    signer.data,
     account.address,
     initializeAccount,
     refreshedAt,
     myLoans,
     pools,
     allLoans,
+    nfts,
   ]);
   return (
     <div className="bg-gray-1000">

@@ -37,13 +37,16 @@ import {
   YAxis,
 } from "recharts";
 
+import { useAccountStore } from "store";
+
 interface Props {
   pool: IPikachu.PoolStructOutput;
   poolId: number;
   buttonVisible: boolean;
 }
 
-const PoolPanel = ({ pool, poolId, buttonVisible }: Props) => {
+const PoolPanel = ({ pool, buttonVisible }: Props) => {
+  const { allLoans } = useAccountStore();
   const [expanded, setExpanded] = useState(false);
 
   const data = useMemo(() => {
@@ -69,6 +72,12 @@ const PoolPanel = ({ pool, poolId, buttonVisible }: Props) => {
     }));
   }, [pool]);
 
+  const openLoans = useMemo(() => {
+    return allLoans.filter(
+      (item) => item.poolId === toInteger(pool.poolId) && item.status === 1
+    );
+  }, [allLoans, pool]);
+
   return (
     <div className={cn(style.root)}>
       <div className={cn(style.poolInfo)}>
@@ -80,7 +89,14 @@ const PoolPanel = ({ pool, poolId, buttonVisible }: Props) => {
           <span className="text-tangerine-yellow">
             {beautifyDecimals(pool.availableAmount)}
           </span>
-          / {beautifyDecimals(pool.depositedAmount)}
+          /{" "}
+          {beautifyDecimals(
+            formatEther(pool.availableAmount) +
+              openLoans.reduce(
+                (prev, next) => prev + formatEther(next.amount),
+                0
+              )
+          )}
           <SvgEthereum />
         </span>
         <span>{toFloat(pool.loanToValue) / 100}%</span>
@@ -97,7 +113,7 @@ const PoolPanel = ({ pool, poolId, buttonVisible }: Props) => {
               {pool.status === POOL_READY &&
               pool.availableAmount.gt(BigNumber.from(0)) ? (
                 <LinkWithSearchParams
-                  to={{ pathname: `/pool/${pool.owner}/${poolId}` }}
+                  to={{ pathname: `/pool/${pool.owner}/${pool.poolId}` }}
                 >
                   <Button variant="yellow" sx="h-10 w-36">
                     Borrow Now

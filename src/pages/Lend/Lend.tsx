@@ -11,6 +11,8 @@ import { toString } from "utils/helpers/string.helpers";
 import { LendPanel, PoolCreateDrawer } from "components/Lend";
 import { useState } from "react";
 import { useSettingStore } from "store";
+import PoolEditDrawer from "components/Lend/PoolEditDrawer";
+import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 
 const Lend = () => {
   const account = useAccount();
@@ -18,11 +20,16 @@ const Lend = () => {
   const pools = usePoolByOwner(toString(account.address));
 
   const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+
+  const [editPool, setEditPool] = useState<IPikachu.PoolStructOutput>(pools[0]);
 
   return (
     <div className={cn(style.root)}>
       {createModalVisible ? (
         <PoolCreateDrawer setVisible={setCreateModalVisible} />
+      ) : editModalVisible ? (
+        <PoolEditDrawer setVisible={setEditModalVisible} pool={editPool} />
       ) : (
         <>
           <div className={cn(style.heading)}>
@@ -72,7 +79,14 @@ const Lend = () => {
             </div>
 
             {pools.map((pool, index) => (
-              <LendPanel pool={pool} key={index} />
+              <LendPanel
+                pool={pool}
+                key={index}
+                onEditPool={() => {
+                  setEditPool(pool);
+                  setEditModalVisible(true);
+                }}
+              />
             ))}
             {pools.length === 0 && (
               <div className={cn(style.empty)}>

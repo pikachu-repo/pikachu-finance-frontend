@@ -22,7 +22,7 @@ interface Props {
 
 const CollectionPanel = ({ collection, index }: Props) => {
   const { pools, allLoans, nfts } = useAccountStore();
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   const relatedPools = useMemo(() => {
     return pools.filter((pool) =>

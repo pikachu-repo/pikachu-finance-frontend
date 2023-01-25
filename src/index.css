@@ -121,6 +121,21 @@ main {
         transform: translateX(-50%);
       }
     }
+    .tooltip.right {
+      @apply right-0 top-1/2 -translate-y-1/2 translate-x-[calc(100%+15px)];
+      &::before {
+        content: "";
+        width: 0;
+        height: 0;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-right: 8px solid white;
+        left: -7px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
     &:hover {
       .tooltip {
         @apply flex;
