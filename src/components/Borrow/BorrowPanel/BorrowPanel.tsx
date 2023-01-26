@@ -10,10 +10,11 @@ import {
   toFloat,
   // beautifyDecimals,
 } from "utils/helpers/string.helpers";
-import { SvgEthereum } from "assets/images/svg";
+import { SvgArrowUp, SvgEthereum } from "assets/images/svg";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 import { useMemo } from "react";
 import { calculateRepayAmount } from "utils/helpers/contract.helpers";
+import LinkWithSearchParams from "components/LinkWithSearchParams";
 
 type IProps = {
   pool: IPikachu.PoolStructOutput;
@@ -33,7 +34,7 @@ const BorrowPanel = ({ pool, amount, duration }: IProps) => {
   }, [amount, duration, pool]);
   return (
     <div className={cn(style.root)}>
-      <div className={cn(style.left)}>
+      <div>
         <div
           className={cn(style.avatar)}
           dangerouslySetInnerHTML={{
@@ -73,6 +74,13 @@ const BorrowPanel = ({ pool, amount, duration }: IProps) => {
         <div className={cn(style.value)}>{beautifyDecimals(repayAmount)}</div>
         <SvgEthereum />
       </div>
+
+      <LinkWithSearchParams
+        className={cn(style.visit)}
+        to={{ pathname: `/pool/${pool.owner}/${pool.poolId}` }}
+      >
+        <SvgArrowUp className="rotate-90" />
+      </LinkWithSearchParams>
     </div>
   );
 };

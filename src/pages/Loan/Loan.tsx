@@ -9,7 +9,8 @@ import { Button, NavigationTab } from "components/ui";
 import { SvgEthereum } from "assets/images/svg";
 import { ClosedLoans, OpenLoans } from "components/Loan";
 import { useAccountStore } from "store";
-import { formatEther } from "utils/helpers/string.helpers";
+import { formatEther, toInteger } from "utils/helpers/string.helpers";
+import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 
 const LoansPages = () => {
   return (
@@ -54,7 +55,18 @@ const Loan = () => {
             </div>
             <div className={cn(style.addition)}>
               <p>NFT in grace period:</p>
-              <b> 0</b>
+              <b>
+                {
+                  loans.filter(
+                    (item) =>
+                      item.status === 1 &&
+                      new Date(
+                        new Date().getTime() +
+                          1000 * (toInteger(item.duration) + SECONDS_PER_DAY)
+                      ) > new Date()
+                  ).length
+                }
+              </b>
             </div>
           </div>
         </div>

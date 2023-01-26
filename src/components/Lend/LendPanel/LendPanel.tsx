@@ -12,7 +12,6 @@ import {
 } from "utils/helpers/string.helpers";
 import {
   SvgArrowDown,
-  SvgCopy,
   SvgEdit,
   SvgEthereum,
   SvgMoveDown,
@@ -23,13 +22,14 @@ import {
 // import ImageERC721 from "assets/images/template-erc721.png";
 // import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 // import { INTEREST_TYPE } from "utils/constants/contact.constants";
-import { Button } from "components/ui";
+import { Button, TextCopier } from "components/ui";
 import { useLoansByPoolId } from "utils/hooks/pikachu/usePools";
 import { LoanPanel } from "components/Pool";
 import WithdrawModal from "../WithdrawModal";
 import TopupModal from "../TopupModal";
 import ToggleModal from "../ToggleModal";
 import { useAccountStore } from "store";
+import { identicon } from "minidenticons";
 // import LinkWithSearchParams from "components/LinkWithSearchParams";
 
 interface Props {
@@ -73,8 +73,13 @@ const LendPanel = ({ pool, onEditPool }: Props) => {
       </>
       <div className={cn(style.poolInfo)}>
         <span>
-          {beautifyAddress(pool.owner)}
-          <SvgCopy />
+          <div
+            className={cn(style.avatar)}
+            dangerouslySetInnerHTML={{
+              __html: identicon(pool.owner.repeat(3) + pool.poolId),
+            }}
+          />
+          {beautifyAddress(pool.owner)} <TextCopier text={pool.owner} />
         </span>
         <span>
           <span className="text-tangerine-yellow">
@@ -94,7 +99,7 @@ const LendPanel = ({ pool, onEditPool }: Props) => {
         <span>
           {beautifyDecimals(pool.totalInterest)} <SvgEthereum />
         </span>
-        <span>{pool.numberOfLoans.toNumber()}</span>
+        <span>{openLoans.length}</span>
         <span className={cn(style.actions)}>
           <div className={cn("tooltip-container")}>
             <span className={cn(style.tooltip, "tooltip top")}>

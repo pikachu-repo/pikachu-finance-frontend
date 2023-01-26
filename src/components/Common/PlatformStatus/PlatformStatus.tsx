@@ -10,7 +10,7 @@ import { useAccountStore, useSettingStore } from "store";
 
 const PlatformStatus = () => {
   const { etherusd } = useSettingStore();
-  const { pools } = useAccountStore();
+  const { pools, allLoans } = useAccountStore();
 
   const platformStatus = useMemo(() => {
     const availableLiquidity = pools.reduce(
@@ -26,8 +26,9 @@ const PlatformStatus = () => {
       {
         label: "Total Open Loans:",
         value: `${beautifyDecimals(
-          pools.reduce(
-            (prev, next) => toFloat(prev + formatEther(next.totalLoans)),
+          allLoans.reduce(
+            (prev, next) =>
+              toFloat(prev + next.status === 1 ? formatEther(next.amount) : 0),
             0
           )
         )} ETH`,
@@ -40,7 +41,7 @@ const PlatformStatus = () => {
         ).toFixed()})`,
       },
     ];
-  }, [pools, etherusd]);
+  }, [pools, etherusd, allLoans]);
 
   return (
     <div className={cn(style.root)}>

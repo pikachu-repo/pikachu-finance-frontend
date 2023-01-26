@@ -6,8 +6,8 @@ export const ADMIN_ADDRESSES = {
 };
 
 export const PIKACHU_ADDRESSES = {
-  "1": "0x296de04c643e8ba1e65fc7e7bcf5b52ffce113c9",
-  "80001": "0x296de04c643e8ba1e65fc7e7bcf5b52ffce113c9",
+  "1": "0x54D603262Cc62F98D6e62314Cfcd09F6183c1e28",
+  "80001": "0x54D603262Cc62F98D6e62314Cfcd09F6183c1e28",
 };
 
 export const NFT_1_ADDRESSES = {

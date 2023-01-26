@@ -16,6 +16,7 @@ import {
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
 import LinkWithSearchParams from "components/LinkWithSearchParams";
+import { identicon } from "minidenticons";
 
 interface Props {
   pool: IPikachu.PoolStructOutput;
@@ -26,6 +27,12 @@ const PoolRow = ({ pool, floorPrice }: Props) => {
   return (
     <div className={cn(style.root)}>
       <div>
+        <div
+          className={cn(style.avatar)}
+          dangerouslySetInnerHTML={{
+            __html: identicon(pool.owner.repeat(3) + pool.poolId),
+          }}
+        />
         {beautifyAddress(pool.owner)} <TextCopier text={pool.owner} />
       </div>
       <div>

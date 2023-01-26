@@ -7,6 +7,10 @@
 
     span {
       @apply flex items-center gap-1.5;
+
+      .avatar {
+        @apply w-8 h-8 rounded-full bg-white/5 ml-0 mr-1;
+      }
     }
     span:last-child {
       @apply justify-between;
