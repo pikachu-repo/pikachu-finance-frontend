@@ -5,6 +5,10 @@
   & > div {
     @apply flex items-center;
 
+    .avatar {
+      @apply w-8 h-8 rounded-full bg-white/5 ml-0 mr-1;
+    }
+
     & > svg {
       @apply ml-1.5;
     }

@@ -13,7 +13,6 @@ import {
 } from "utils/helpers/string.helpers";
 import {
   SvgArrowDown,
-  SvgCopy,
   SvgEthereum,
   // SvgTemplateChart,
 } from "assets/images/svg";
@@ -24,7 +23,7 @@ import {
   POOL_DISABLED,
   POOL_READY,
 } from "utils/constants/contact.constants";
-import { Button } from "components/ui";
+import { Button, TextCopier } from "components/ui";
 import LinkWithSearchParams from "components/LinkWithSearchParams";
 import { calculateRepayAmount } from "utils/helpers/contract.helpers";
 import {
@@ -38,6 +37,7 @@ import {
 } from "recharts";
 
 import { useAccountStore } from "store";
+import { identicon } from "minidenticons";
 
 interface Props {
   pool: IPikachu.PoolStructOutput;
@@ -82,8 +82,13 @@ const PoolPanel = ({ pool, buttonVisible }: Props) => {
     <div className={cn(style.root)}>
       <div className={cn(style.poolInfo)}>
         <span>
-          {beautifyAddress(pool.owner)}
-          <SvgCopy />
+          <div
+            className={cn(style.avatar)}
+            dangerouslySetInnerHTML={{
+              __html: identicon(pool.owner.repeat(3) + pool.poolId),
+            }}
+          />
+          {beautifyAddress(pool.owner)} <TextCopier text={pool.owner} />
         </span>
         <span>
           <span className="text-tangerine-yellow">
@@ -112,13 +117,19 @@ const PoolPanel = ({ pool, buttonVisible }: Props) => {
             <>
               {pool.status === POOL_READY &&
               pool.availableAmount.gt(BigNumber.from(0)) ? (
-                <LinkWithSearchParams
-                  to={{ pathname: `/pool/${pool.owner}/${pool.poolId}` }}
-                >
-                  <Button variant="yellow" sx="h-10 w-36">
-                    Borrow Now
+                pool.paused ? (
+                  <Button variant="gray" sx="h-10 w-36" disabled>
+                    Paused
                   </Button>
-                </LinkWithSearchParams>
+                ) : (
+                  <LinkWithSearchParams
+                    to={{ pathname: `/pool/${pool.owner}/${pool.poolId}` }}
+                  >
+                    <Button variant="yellow" sx="h-10 w-36">
+                      Borrow Now
+                    </Button>
+                  </LinkWithSearchParams>
+                )
               ) : (
                 <Button variant="gray" sx="h-10 w-36" disabled>
                   Insufficient

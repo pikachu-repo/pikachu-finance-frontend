@@ -159,7 +159,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
         <img
           width={60}
           height={60}
-          src={collection?.imageUrl}
+          src={loan.thumbnail || ImageERC721}
           alt="collection"
           onError={({ currentTarget }) => {
             currentTarget.onerror = null; // prevents looping

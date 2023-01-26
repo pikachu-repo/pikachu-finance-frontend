@@ -29,6 +29,7 @@ export type TLoanStruct = {
   interestStartRate: BigNumberish;
   interestCapRate: BigNumberish;
   repaidAt: string | Date;
+  thumbnail?: string;
 };
 
 export const useOwner = () => {
@@ -291,7 +292,7 @@ export const useRepayingAmount = (loan: TLoanStruct) => {
   );
 
   const getRepayingAmount = useCallback(async () => {
-    if (Pikachu.provider)
+    if (Pikachu.provider && loan)
       try {
         if (loan.status === 0) {
           setRepayingAmount(0);

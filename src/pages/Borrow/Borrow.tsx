@@ -82,6 +82,10 @@ const Borrow = () => {
       return formatEther(pool.availableAmount) >= toFloat(amount);
     });
 
+    // filter paused
+    filteredPool = filteredPool.filter((pool) => {
+      return !pool.paused;
+    });
     // filter duration
     filteredPool = filteredPool.filter((pool) => {
       return pool.maxDuration.toNumber() / SECONDS_PER_DAY >= duration;

@@ -103,7 +103,7 @@ const Borrow = ({ pool, setVisible }: IProps) => {
         await txObj.wait();
       }
 
-      setTxDescription(`Borrowing ${toFloat(amount).toFixed(3)} ETH ...`);
+      setTxDescription(`Borrowing ${beautifyDecimals(amount)} ETH ...`);
       const signedObj = await getSignature(currentItem.contract);
 
       submitTransaction(
