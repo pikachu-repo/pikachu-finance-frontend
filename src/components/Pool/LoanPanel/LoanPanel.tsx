@@ -42,6 +42,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
     setTxDescription,
     submitTransaction,
     collections,
+    setRefreshedAt,
   } = useSettingStore();
 
   const myPool = useMemo(() => {
@@ -67,10 +68,13 @@ const LoanPanel = ({ pool, loan }: Props) => {
     loan?.interestType,
     toFloat(loan?.interestStartRate) * 100,
     toFloat(loan?.interestCapRate) * 100,
-    (toInteger(new Date().getTime()) - toInteger(loan.timestamp)) / 1000
+    toInteger(new Date().getTime() - toInteger(loan.timestamp)) / 1000
   );
 
   const onPayback = () => {
+    console.log(
+      (toInteger(new Date().getTime()) - toInteger(loan.timestamp)) / 1000
+    );
     setTxDescription(`Repaying ${beautifyDecimals(repayAmount)} ETH...`);
     setTxConfirmationModalVisible(true);
 
@@ -78,7 +82,10 @@ const LoanPanel = ({ pool, loan }: Props) => {
       Pikachu.repay(loan.poolId, {
         value: ethers.utils.parseEther(repayAmount.toString()),
       }),
-      refreshPools
+      async () => {
+        await refreshPools();
+        setRefreshedAt(new Date());
+      }
     );
   };
 
@@ -90,7 +97,10 @@ const LoanPanel = ({ pool, loan }: Props) => {
 
     submitTransaction(
       Pikachu.liquidate(loan.poolId, loan.borrower),
-      refreshPools
+      async () => {
+        await refreshPools();
+        setRefreshedAt(new Date());
+      }
     );
   };
 

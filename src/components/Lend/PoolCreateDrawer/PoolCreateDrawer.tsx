@@ -34,6 +34,7 @@ const PoolCreateDrawer = ({ setVisible }: IProps) => {
     setTxConfirmationModalVisible,
     submitTransaction,
     setTxRejectModalVisible,
+    setRefreshedAt,
   } = useSettingStore();
 
   const Pikachu = usePikachuContract();
@@ -91,7 +92,10 @@ const PoolCreateDrawer = ({ setVisible }: IProps) => {
           supportedCollections,
           { value: ethers.utils.parseEther(depositAmount) }
         ),
-        refreshPools
+        async () => {
+          await refreshPools();
+          setRefreshedAt(new Date());
+        }
       );
     } catch (error) {}
   };

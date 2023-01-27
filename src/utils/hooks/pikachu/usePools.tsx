@@ -354,7 +354,7 @@ export const useCalculateRepayAmount = (
   _durationSecond: number // second
 ) => {
   return useMemo(() => {
-    const durationInDays = toInteger(_durationSecond / SECONDS_PER_DAY);
+    const durationInDays = Math.ceil(_durationSecond / SECONDS_PER_DAY);
 
     if (_interestType === 0) {
       return (

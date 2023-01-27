@@ -40,6 +40,7 @@ const PoolEditDrawer = ({ pool, setVisible }: IProps) => {
     setTxConfirmationModalVisible,
     submitTransaction,
     setTxRejectModalVisible,
+    setRefreshedAt,
   } = useSettingStore();
 
   const Pikachu = usePikachuContract();
@@ -109,7 +110,10 @@ const PoolEditDrawer = ({ pool, setVisible }: IProps) => {
           compoundInterest,
           supportedCollections
         ),
-        refreshPools
+        async () => {
+          await refreshPools();
+          setRefreshedAt(new Date());
+        }
       );
     } catch (error) {}
   };
