@@ -117,7 +117,10 @@ const Borrow = ({ pool, setVisible }: IProps) => {
           ethers.utils.parseEther(signedObj.floorPrice.toString()),
           signedObj.blockNumber
         ),
-        refreshPools
+        async () => {
+          await refreshPools();
+          setRefreshedAt(new Date());
+        }
       );
     } catch (error: any) {
       setTxConfirmationModalVisible(false);
