@@ -60,7 +60,26 @@ const CollectionPanel = ({ collection, index }: Props) => {
         <div>{index + 1}</div>
         <div className={cn(style.nftImg)}>
           <img src={ImageERC721} alt="nft" />
-          <span>{collection.name}</span>
+          <div>
+            <span className={cn(style.collectionName)}>{collection.name}</span>
+            <span className="flex md:hidden items-center gap-x-2">
+              <span className={cn(style.label)}>Floor: </span>{" "}
+              {beautifyDecimals(collection.floorPrice)}
+              <SvgEthereum />
+            </span>
+            <span className="flex md:hidden items-center gap-x-2">
+              <span className={cn(style.label)}>Total: </span>{" "}
+              {collection.totalSupply} items
+            </span>
+            <span className="flex md:hidden items-center gap-x-2">
+              <span className={cn(style.label)}>Available: </span>{" "}
+              {relatedPools.length} pools
+            </span>
+            <span className="flex md:hidden items-center gap-x-2">
+              <span className={cn(style.label)}>Used in </span>{" "}
+              {relatedLoans.length} loans
+            </span>
+          </div>
         </div>
         <div>
           {beautifyDecimals(collection.floorPrice)}
@@ -107,6 +126,7 @@ const CollectionPanel = ({ collection, index }: Props) => {
 
       {expanded && bestPool && (
         <div className={cn(style.poolDetails)}>
+          <hr />
           <div className={cn(style.header)}>
             <div>Pool Creator</div>
             <div>

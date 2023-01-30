@@ -7,8 +7,8 @@ import {
   SvgArrowDown,
   SvgEthCoin,
   SvgEthereum,
-  SvgUSDC,
-  SvgUSDT,
+  // SvgUSDC,
+  // SvgUSDT,
 } from "assets/images/svg";
 import { DurationPicker, Input } from "components/ui";
 import {
@@ -163,8 +163,8 @@ const Borrow = () => {
         <div className={cn(style.receive)}>
           <div className={cn(style.coins)}>
             <SvgEthCoin />
-            <SvgUSDC className="grayscale" />
-            <SvgUSDT className="grayscale" />
+            {/* <SvgUSDC className="grayscale" />
+            <SvgUSDT className="grayscale" /> */}
           </div>
 
           <span onClick={onFindMaxLoan}>Max</span>

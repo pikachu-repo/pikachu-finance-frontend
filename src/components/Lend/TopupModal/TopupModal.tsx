@@ -7,7 +7,7 @@ import CloseButton from "components/ui/CloseButton";
 import { useAccountStore, useSettingStore } from "store";
 import { SvgEthereum } from "assets/images/svg";
 import { IPikachu } from "utils/typechain-types/contracts/Master.sol/Pikachu";
-import { formatEther } from "utils/helpers/string.helpers";
+import { beautifyDecimals } from "utils/helpers/string.helpers";
 import { usePikachuContract } from "utils/hooks/useContract";
 import { ethers } from "ethers";
 import { refreshPools } from "utils/apis/pikachu.api";
@@ -55,7 +55,7 @@ const TopupModal = ({ visible, setVisible, pool }: IProps) => {
           <div>
             <span>Pool size (total liquidity):</span>
             <span>
-              {formatEther(pool.depositedAmount)}
+              {beautifyDecimals(pool.depositedAmount)}
               <SvgEthereum />
             </span>
           </div>
@@ -63,7 +63,7 @@ const TopupModal = ({ visible, setVisible, pool }: IProps) => {
           <div>
             <span>Locked amount:</span>
             <span>
-              {formatEther(pool.totalLoans)}
+              {beautifyDecimals(pool.totalLoans)}
               <SvgEthereum />
             </span>
           </div>
@@ -71,7 +71,7 @@ const TopupModal = ({ visible, setVisible, pool }: IProps) => {
           <div>
             <span>Amount available:</span>
             <span>
-              {formatEther(pool.availableAmount)}
+              {beautifyDecimals(pool.availableAmount)}
               <SvgEthereum />
             </span>
           </div>

@@ -9,7 +9,7 @@
   }
 
   .dropdown {
-    @apply absolute animate-enter mt-2 bg-granite-gray rounded-[20px] flex flex-col gap-y-5 w-44 right-0 py-[18px] shadow-lg;
+    @apply absolute animate-enter mt-2 bg-granite-gray rounded-[20px] flex flex-col gap-y-2 md:gap-y-5 w-44 right-0 py-3 md:py-[18px] shadow-lg z-10;
 
     & > * {
       @apply pl-5 cursor-pointer hover:opacity-80;

@@ -1,18 +1,28 @@
 .root {
-  @apply flex flex-col bg-raisin-black w-fit relative z-[5];
+  @apply flex flex-col bg-raisin-black w-full md:w-fit relative z-[5];
   align-items: flex-start !important;
 
   .emptyWallet {
-    @apply flex items-center pl-6 h-20 w-[460px] rounded-lg border border-tangerine-yellow bg-pineapple z-10;
+    @apply flex items-center pl-6 h-20 w-full rounded-lg border border-tangerine-yellow bg-pineapple z-10;
+
+    @screen md {
+      @apply w-[460px];
+    }
   }
   .selection {
-    @apply flex items-center p-2.5 h-20 w-[460px] rounded-lg border border-tangerine-yellow bg-pineapple z-10 cursor-pointer;
+    @apply flex items-center p-1 w-full rounded-lg border border-tangerine-yellow bg-pineapple z-10 cursor-pointer;
+
+    @screen md {
+      @apply w-[460px] p-2.5;
+    }
 
     .nftImg {
-      @apply w-[60px];
+      @apply w-[60px] mr-1;
       border: 1px solid rgba(245, 245, 245, 0.5);
       border-radius: 4px;
-      margin-right: 14px;
+      @screen md {
+        @apply mr-3.5;
+      }
     }
     .item {
       @apply flex flex-col gap-y-1.5 justify-center;
@@ -22,14 +32,32 @@
 
         span {
           display: inline-block;
-          max-width: 180px;
           white-space: nowrap;
           overflow: hidden !important;
           text-overflow: ellipsis;
+
+          max-width: 80px;
+
+          @screen md {
+            max-width: 180px;
+          }
         }
 
         svg {
-          @apply ml-2;
+          @apply ml-1 md:ml-2;
+        }
+      }
+
+      span {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+
+        max-width: 80px;
+
+        @screen md {
+          max-width: 180px;
         }
       }
     }
@@ -42,7 +70,11 @@
     }
 
     button {
-      @apply bg-white/30 ml-5 hover:bg-white/40;
+      @apply bg-white/30 ml-1 hover:bg-white/40 h-6 w-6 p-1;
+
+      @screen md {
+        @apply ml-5 h-10 w-10;
+      }
     }
   }
 
@@ -51,7 +83,7 @@
     top: calc(100% - 8px);
 
     .searchBox {
-      @apply flex flex-col mt-8 px-5 pt-2 pb-3.5;
+      @apply flex flex-col mt-4 md:mt-8 px-2 md:px-5 py-1 md:pt-2 md:pb-3.5;
       background: rgba(255, 255, 255, 0.15);
 
       .count {
@@ -70,7 +102,7 @@
       @apply pb-4  overflow-y-scroll;
       max-height: 400px;
       .row {
-        @apply px-5 pt-4 flex flex-wrap items-center cursor-pointer hover:bg-white/5 duration-75;
+        @apply px-2 pt-2 md:px-5 md:pt-4 flex flex-wrap items-center cursor-pointer hover:bg-white/5 duration-75;
 
         img {
           @apply w-[60px];
@@ -82,8 +114,21 @@
         a {
           @apply flex items-center text-tangerine-yellow;
 
+          span {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden !important;
+            text-overflow: ellipsis;
+
+            max-width: 80px;
+
+            @screen md {
+              max-width: 180px;
+            }
+          }
+
           svg {
-            @apply ml-2;
+            @apply ml-1 md:ml-2;
           }
         }
 
@@ -94,7 +139,7 @@
           }
         }
         hr {
-          @apply mt-4;
+          @apply mt-2 md:mt-4;
           opacity: 0.3;
           border: 1px solid rgba(245, 245, 245, 0.5);
         }

@@ -72,9 +72,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
   );
 
   const onPayback = () => {
-    console.log(
-      (toInteger(new Date().getTime()) - toInteger(loan.timestamp)) / 1000
-    );
+    console.log(repayAmount);
     setTxDescription(`Repaying ${beautifyDecimals(repayAmount)} ETH...`);
     setTxConfirmationModalVisible(true);
 
@@ -107,12 +105,20 @@ const LoanPanel = ({ pool, loan }: Props) => {
   const loanStatus = useMemo(() => {
     const dueDate = toInteger(loan.timestamp) + toInteger(loan.duration) * 1000;
     const paybackButton = (
-      <Button variant="yellow" onClick={onPayback} sx="h-10 w-36">
+      <Button
+        variant="yellow"
+        onClick={onPayback}
+        sx="h-8 w-28 md:h-10 md:w-36"
+      >
         Pay Back
       </Button>
     );
     const claimNFTButton = (
-      <Button variant="yellow" onClick={onLiquidate} sx="h-10 w-36">
+      <Button
+        variant="yellow"
+        onClick={onLiquidate}
+        sx="h-8 w-28 md:h-10 md:w-36"
+      >
         Claim NFT
       </Button>
     );
@@ -187,6 +193,15 @@ const LoanPanel = ({ pool, loan }: Props) => {
             <SvgLink />
           </a>
           {collection?.symbol} #{toInteger(loan.tokenId)}
+          <span className="flex md:hidden items-center gap-x-2">
+            {beautifyAddress(loan.borrower, 6)}{" "}
+            <TextCopier text={loan.borrower} />
+          </span>
+          <span className="flex md:hidden items-center gap-x-2">
+            {beautifyDecimals(loan.amount)} +{" "}
+            {beautifyDecimals(repayAmount - formatEther(loan.amount))}
+            <SvgEthereum />
+          </span>
         </div>
       </div>
       <div className={cn(style.borrower)}>
@@ -199,6 +214,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
         <SvgEthereum />
       </div>
       <div>
+        <span className={style.label}>Interest Rate: </span>
         {(
           ((repayAmount - formatEther(loan.amount)) /
             formatEther(loan.amount)) *
@@ -207,6 +223,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
         %
       </div>
       <div className={cn(style.dueto, "tooltip-container")}>
+        <span className={style.label}>Fund Date: </span>
         <span className={cn(style.tooltip, "tooltip top")}>
           {new Date(toInteger(loan.timestamp)).toLocaleString()}
         </span>

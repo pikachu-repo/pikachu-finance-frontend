@@ -48,7 +48,9 @@ const CollectionSetting = () => {
         />
       </>
       <div className={cn(style.header)}>
-        <div />
+        <div>
+          <span className="md:hidden">{collections.length} Collections</span>
+        </div>
         <span>Collection</span>
         <span>Contract</span>
         <Button
@@ -77,6 +79,13 @@ const CollectionSetting = () => {
                 }}
               />
               <span>{collection.name}</span>
+              <div>
+                <span>{collection.name}</span>
+                <div className={cn(style.address)}>
+                  <span>{beautifyAddress(collection.contract, 4)}</span>
+                  <TextCopier text={collection.contract} />
+                </div>
+              </div>
             </div>
 
             <div className={cn(style.address)}>
@@ -101,12 +110,6 @@ const CollectionSetting = () => {
               >
                 <SvgTrash />
               </Button>
-              {/* <Button sx="rotate-180" disabled={index === 0}>
-                <SvgArrowDown />
-              </Button>
-              <Button disabled={index + 1 === collections.length}>
-                <SvgArrowDown />
-              </Button> */}
             </div>
           </div>
         ))}

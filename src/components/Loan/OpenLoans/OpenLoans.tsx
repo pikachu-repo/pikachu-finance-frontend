@@ -12,7 +12,10 @@ const OpenLoans = () => {
   return (
     <div className={cn(style.root)}>
       <div className={cn(style.head)}>
-        <span>NFT</span>
+        <div>
+          <span className="hidden md:flex">NFT</span>
+          <span className="md:hiden">My Open Loans</span>
+        </div>
         <span>Borrower</span>
         <span>Amount + Interest</span>
         <span>Interest</span>

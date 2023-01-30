@@ -185,11 +185,6 @@ const PoolEditDrawer = ({ pool, setVisible }: IProps) => {
             />
             <span className={cn(style.info)}>No more than pool size</span>
           </div>
-
-          <div className={cn(style.form, "mt-auto")}>
-            I agree with the above terms.
-            <Switch toggled={termAgreed} setToggled={setTermAgreed} />
-          </div>
         </div>
 
         <div>
@@ -286,6 +281,10 @@ const PoolEditDrawer = ({ pool, setVisible }: IProps) => {
         </div>
       </div>
 
+      <div className={cn(style.term)}>
+        I agree with the above terms.
+        <Switch toggled={termAgreed} setToggled={setTermAgreed} />
+      </div>
       <div className={cn(style.footer)}>
         <Button onClick={() => setVisible(false)}>Cancel</Button>
         <Button variant="yellow" onClick={onSubmit}>

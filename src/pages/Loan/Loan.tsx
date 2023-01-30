@@ -11,6 +11,7 @@ import { ClosedLoans, OpenLoans } from "components/Loan";
 import { useAccountStore } from "store";
 import { formatEther, toInteger } from "utils/helpers/string.helpers";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
+import LinkWithSearchParams from "components/LinkWithSearchParams";
 
 const LoansPages = () => {
   return (
@@ -85,7 +86,9 @@ const Loan = () => {
             <div className={cn(style.addition)}>
               <p>Loans made: </p>
               <b>{loans.length}</b>
-              <Button variant="yellow">Borrow</Button>
+              <LinkWithSearchParams to={{ pathname: "/" }}>
+                <Button variant="yellow">Borrow</Button>
+              </LinkWithSearchParams>
             </div>
           </div>
         </div>

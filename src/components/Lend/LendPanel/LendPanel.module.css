@@ -2,11 +2,15 @@
   @apply flex flex-col;
 
   .poolInfo {
-    @apply px-5 py-6 bg-raisin-black grid;
+    @apply p-2 md:px-5 md:py-6 bg-raisin-black flex flex-wrap justify-center md:grid;
     grid-template-columns: 13% 20% 15% 10% 12% 20% 10%;
 
     & > span {
-      @apply flex items-center;
+      @apply flex items-center gap-1.5 px-4 md:px-0 w-full;
+
+      .label {
+        @apply flex md:hidden mr-auto opacity-70;
+      }
 
       .avatar {
         @apply w-8 h-8 rounded-full bg-white/5 ml-0 mr-1;
@@ -25,13 +29,20 @@
       button {
         @apply w-10 h-10 hover:bg-white/40;
       }
+
+      & > *:last-child {
+        @apply mr-4;
+      }
     }
   }
   .loanlist {
     @apply flex flex-col bg-raisin-black duration-150 animate-enter;
 
+    hr {
+      @apply block md:hidden;
+    }
     .header {
-      @apply px-5 py-2.5 bg-white/10 grid;
+      @apply px-5 py-2.5 bg-white/10 hidden md:grid;
       grid-template-columns: 23% 10% 15% 10% 11% 16% 15%;
 
       div {

@@ -45,19 +45,28 @@ const ConnectButton = () => {
             onClick={() => setExpanded(!expanded)}
           >
             <SvgWallet />
-            {beautifyAddress(account.address || "")}
+            <span>{beautifyAddress(account.address || "")}</span>
           </button>
 
           {expanded && (
-            <div className={cn(style.dropdown)}>
+            <div
+              className={cn(style.dropdown)}
+              onClick={() => {
+                setExpanded(false);
+              }}
+            >
               {account.address === adminAddress && (
                 <LinkWithSearchParams to={{ pathname: "/setting/collections" }}>
                   Admin setting
                 </LinkWithSearchParams>
               )}
+
+              <LinkWithSearchParams to={{ pathname: "/setting/loans" }}>
+                My Loans
+              </LinkWithSearchParams>
+
               <span
                 onClick={() => {
-                  setExpanded(false);
                   disconnect();
                 }}
               >

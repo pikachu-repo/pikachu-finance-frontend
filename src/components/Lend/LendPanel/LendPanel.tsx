@@ -73,6 +73,7 @@ const LendPanel = ({ pool, onEditPool }: Props) => {
       </>
       <div className={cn(style.poolInfo)}>
         <span>
+          <span className={cn(style.label)}>Creator:</span>
           <div
             className={cn(style.avatar)}
             dangerouslySetInnerHTML={{
@@ -82,6 +83,7 @@ const LendPanel = ({ pool, onEditPool }: Props) => {
           {beautifyAddress(pool.owner)} <TextCopier text={pool.owner} />
         </span>
         <span>
+          <span className={cn(style.label)}>Available:</span>
           <span className="text-tangerine-yellow">
             {beautifyDecimals(pool.availableAmount)}
           </span>
@@ -95,12 +97,19 @@ const LendPanel = ({ pool, onEditPool }: Props) => {
           )}
           <SvgEthereum />
         </span>
-        <span>{toFloat(pool.loanToValue) / 100}%</span>
         <span>
+          <span className={cn(style.label)}>LTV:</span>
+          {toFloat(pool.loanToValue) / 100}%
+        </span>
+        <span>
+          <span className={cn(style.label)}>Total Interest:</span>
           {beautifyDecimals(pool.totalInterest)} <SvgEthereum />
         </span>
-        <span>{openLoans.length}</span>
-        <span className={cn(style.actions)}>
+        <span>
+          <span className={cn(style.label)}>Open Loans:</span>
+          {openLoans.length}
+        </span>
+        <div className={cn(style.actions)}>
           <div className={cn("tooltip-container")}>
             <span className={cn(style.tooltip, "tooltip top")}>
               Top up this pool
@@ -133,8 +142,8 @@ const LendPanel = ({ pool, onEditPool }: Props) => {
               <SvgEdit />
             </Button>
           </div>
-        </span>
-        <span>
+        </div>
+        <div>
           <Button
             sx={`h-10 w-10 bg-white/30 hover:bg-white/40 ml-auto ${
               expanded ? "rotate-180" : ""
@@ -143,11 +152,12 @@ const LendPanel = ({ pool, onEditPool }: Props) => {
           >
             <SvgArrowDown />
           </Button>
-        </span>
+        </div>
       </div>
 
       {expanded && (
         <div className={cn(style.loanlist)}>
+          <hr />
           <div className={cn(style.header)}>
             <span>NFT</span>
             <span>Borrower</span>

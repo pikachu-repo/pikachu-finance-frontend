@@ -13,15 +13,6 @@ body {
   color: white;
 }
 
-main {
-  min-height: calc(100vh - 157px);
-  @apply px-[7.5rem] py-10;
-
-  & > * {
-    @apply animate-enter origin-top;
-  }
-}
-
 ::-webkit-scrollbar {
   background-color: #424242;
   width: 7px;
@@ -39,11 +30,43 @@ main {
 }
 
 @layer base {
+  .main-container {
+    @apply bg-gray-1000 overflow-x-hidden;
+  }
+
+  main {
+    min-height: calc(100vh - 129px);
+
+    @screen md {
+      min-height: calc(100vh - 157px);
+    }
+    @apply py-2 px-2;
+
+    @screen sm {
+      @apply px-[2rem];
+    }
+
+    @screen xl {
+      @apply px-[5rem] py-8;
+    }
+    @screen 2xl {
+      @apply px-[7.5rem] py-10;
+    }
+
+    & > * {
+      @apply animate-enter origin-top;
+    }
+  }
+
   *:disabled {
     cursor: not-allowed;
   }
   h3 {
-    @apply text-[34px] font-bold;
+    @apply text-[24px] font-bold;
+
+    @screen md {
+      @apply text-[34px];
+    }
   }
   h4 {
     @apply text-xl font-bold;
@@ -95,8 +118,13 @@ main {
     -ms-user-select: none;
     user-select: none;
     vertical-align: middle;
-    width: 30px;
-    height: 30px;
+
+    width: 20px;
+    height: 20px;
+    @screen md {
+      width: 30px;
+      height: 30px;
+    }
   }
 
   .tooltip-container {
@@ -104,7 +132,7 @@ main {
 
     .tooltip {
       @apply hidden absolute animate-fadeIn duration-300;
-      @apply px-2 py-1 w-max bg-white rounded-md text-black z-[10];
+      @apply px-2 py-1 w-max bg-white rounded-md text-black z-[5];
     }
     .tooltip.top {
       @apply top-0 -translate-y-[calc(100%+10px)] -translate-x-1/2 left-1/2;

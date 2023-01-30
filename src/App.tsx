@@ -26,6 +26,7 @@ import {
 import Collections from "pages/Collections";
 import Borrow from "pages/Borrow";
 import { useHoldingNfts } from "utils/hooks/useHoldingNfts";
+import Navbar from "components/Navbar";
 
 function App() {
   const account = useAccount();
@@ -80,7 +81,7 @@ function App() {
     nfts,
   ]);
   return (
-    <div className="bg-gray-1000">
+    <div className="main-container">
       <>
         <TxConfirmModal />
         <TxRejectModal />
@@ -102,6 +103,8 @@ function App() {
         </Routes>
       </main>
       <Footer />
+
+      <Navbar />
     </div>
   );
 }

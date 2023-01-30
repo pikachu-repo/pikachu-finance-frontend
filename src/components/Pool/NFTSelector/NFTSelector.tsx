@@ -106,7 +106,7 @@ const NFTSelector = ({ pool, currentItem, setCurrentItem }: Props) => {
               {beautifyDecimals(currentItem?.floorPrice)} <SvgEthereum />
             </div>
 
-            <Button sx={`h-10 w-10 ${expanded ? "rotate-180" : ""}`}>
+            <Button sx={` ${expanded ? "rotate-180" : ""}`}>
               <SvgArrowDown />
             </Button>
           </div>
@@ -120,7 +120,7 @@ const NFTSelector = ({ pool, currentItem, setCurrentItem }: Props) => {
 
                 <Input
                   placeholder="Search by collection name..."
-                  sx="h-12"
+                  sx="h-8 md:h-12"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   icon={<SvgFind className="mt-2" />}
@@ -154,7 +154,7 @@ const NFTSelector = ({ pool, currentItem, setCurrentItem }: Props) => {
                         target="_blank"
                         rel="noreferrer"
                       >
-                        {nft.name}
+                        <span>{nft.name}</span>
                         <SvgLink />
                       </a>
                       <span>

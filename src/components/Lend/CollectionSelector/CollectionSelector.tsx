@@ -67,7 +67,9 @@ const CollectionSelector = ({ options, setOptions }: Props) => {
       >
         {options.length > 0 ? (
           <div>
-            <p>Select the supported collections of collateral</p>
+            <p className="hidden md:block">
+              Select the supported collections of collateral
+            </p>
             <span>
               {selectedNames}... total {options.length} collections
             </span>
@@ -79,7 +81,7 @@ const CollectionSelector = ({ options, setOptions }: Props) => {
         )}
 
         <Button
-          sx={`h-10 w-10 ${expanded ? "rotate-180" : ""}`}
+          sx={`h-8 md:h-10 w-8 md:w-10 ${expanded ? "rotate-180" : ""}`}
           onClick={() => setExpanded(!expanded)}
         >
           <SvgArrowDown />

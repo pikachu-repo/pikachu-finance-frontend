@@ -4,11 +4,11 @@
     @apply flex items-center font-bold mb-10;
 
     button {
-      @apply ml-auto h-10 w-[140px] text-xl;
+      @apply ml-auto md:h-10 md:w-[140px] md:text-xl;
     }
   }
 
   .navtab {
-    @apply text-xl mb-5;
+    @apply md:text-xl mb-5;
   }
 }
