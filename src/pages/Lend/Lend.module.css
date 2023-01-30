@@ -1,5 +1,5 @@
 .root {
-  @apply flex flex-col gap-8;
+  @apply flex flex-col gap-2 md:gap-8;
 
   .heading {
     @apply flex flex-col;
@@ -9,30 +9,34 @@
     }
 
     .help {
-      @apply flex items-center;
+      @apply flex flex-wrap items-center;
 
       a {
         @apply ml-4 text-tangerine-yellow flex items-center gap-2;
       }
 
       button {
-        @apply ml-auto w-[132px] h-11;
+        @apply ml-auto md:w-[140px] md:h-10;
       }
     }
   }
 
   .poolList {
-    @apply flex flex-col gap-[10px] bg-smoky-black px-5 pb-5 pt-7 rounded-[10px];
+    @apply bg-smoky-black rounded-[10px] p-2 md:px-5 md:pt-6 md:pb-8;
 
     .head {
-      @apply font-bold px-5 pb-6 grid;
+      @apply font-bold px-2 md:px-5 pb-2 md:pb-6 md:grid;
       grid-template-columns: 13% 20% 15% 10% 12% 20% 10%;
 
-      span {
-        @apply flex items-center gap-1.5;
+      & > *:first-child {
+        @apply flex;
       }
 
-      span:last-child {
+      & > span {
+        @apply hidden md:flex items-center gap-1.5;
+      }
+
+      & > span:last-child {
         @apply text-tangerine-yellow justify-end;
       }
     }

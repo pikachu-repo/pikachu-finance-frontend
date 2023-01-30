@@ -1,5 +1,5 @@
 .root {
-  @apply bg-smoky-black rounded-[10px] px-5 py-7 animate-enter;
+  @apply bg-smoky-black rounded-[10px] p-2 md:px-5 md:py-7 animate-enter;
 
   .fee,
   .pool {
@@ -9,14 +9,14 @@
   .fee,
   .pool,
   .block {
-    @apply flex flex-col pb-8 gap-y-8;
+    @apply flex flex-col pb-3 md:pb-8 gap-y-2 md:gap-y-8;
 
     .label {
-      @apply text-xl font-bold;
+      @apply md:text-xl font-bold;
     }
 
     .value {
-      @apply text-xl opacity-50 font-light flex items-center;
+      @apply md:text-xl opacity-50 font-light flex items-center;
 
       svg {
         @apply ml-1.5;
@@ -24,11 +24,11 @@
     }
 
     & > .row {
-      @apply grid items-center;
+      @apply md:grid items-center;
       grid-template-columns: 28% 1fr 30%;
 
       button {
-        @apply h-10 w-[140px] ml-auto;
+        @apply w-24 md:h-10 md:w-[140px] ml-auto;
       }
     }
   }

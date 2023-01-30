@@ -82,6 +82,7 @@ const PoolPanel = ({ pool, buttonVisible }: Props) => {
     <div className={cn(style.root)}>
       <div className={cn(style.poolInfo)}>
         <span>
+          <span className={cn(style.label)}>Creator:</span>
           <div
             className={cn(style.avatar)}
             dangerouslySetInnerHTML={{
@@ -91,6 +92,7 @@ const PoolPanel = ({ pool, buttonVisible }: Props) => {
           {beautifyAddress(pool.owner)} <TextCopier text={pool.owner} />
         </span>
         <span>
+          <span className={cn(style.label)}>Available:</span>
           <span className="text-tangerine-yellow">
             {beautifyDecimals(pool.availableAmount)}
           </span>
@@ -104,9 +106,16 @@ const PoolPanel = ({ pool, buttonVisible }: Props) => {
           )}
           <SvgEthereum />
         </span>
-        <span>{toFloat(pool.loanToValue) / 100}%</span>
-        <span>{pool.maxDuration.toNumber() / SECONDS_PER_DAY} Days</span>
         <span>
+          <span className={cn(style.label)}>LTV:</span>
+          {toFloat(pool.loanToValue) / 100}%
+        </span>
+        <span>
+          <span className={cn(style.label)}>Max Duration:</span>
+          {pool.maxDuration.toNumber() / SECONDS_PER_DAY} Days
+        </span>
+        <span>
+          <span className={cn(style.label)}>Interest Rate:</span>
           <span className="text-tangerine-yellow">
             {pool.interestStartRate.toNumber() / 100}
           </span>
@@ -118,32 +127,32 @@ const PoolPanel = ({ pool, buttonVisible }: Props) => {
               {pool.status === POOL_READY &&
               pool.availableAmount.gt(BigNumber.from(0)) ? (
                 pool.paused ? (
-                  <Button variant="gray" sx="h-10 w-36" disabled>
+                  <Button variant="gray" sx="h-8 w-28 md:h-10 md:w-36" disabled>
                     Paused
                   </Button>
                 ) : (
                   <LinkWithSearchParams
                     to={{ pathname: `/pool/${pool.owner}/${pool.poolId}` }}
                   >
-                    <Button variant="yellow" sx="h-10 w-36">
+                    <Button variant="yellow" sx="h-8 w-28 md:h-10 md:w-36">
                       Borrow Now
                     </Button>
                   </LinkWithSearchParams>
                 )
               ) : (
-                <Button variant="gray" sx="h-10 w-36" disabled>
+                <Button variant="gray" sx="h-8 w-28 md:h-10 md:w-36" disabled>
                   Insufficient
                 </Button>
               )}
               {pool.status === POOL_DISABLED && (
-                <Button variant="gray" sx="h-10 w-36" disabled>
+                <Button variant="gray" sx="h-8 w-28 md:h-10 md:w-36" disabled>
                   Paused
                 </Button>
               )}
             </>
           )}
           <Button
-            sx={`h-10 w-10 bg-white/30 hover:bg-white/40 ml-auto ${
+            sx={`h-8 md:h-10 w-8 md:w-10 bg-white/30 hover:bg-white/40 ml-auto ${
               expanded ? "rotate-180" : ""
             }`}
             onClick={() => setExpanded(!expanded)}
@@ -182,7 +191,7 @@ const PoolPanel = ({ pool, buttonVisible }: Props) => {
           </div>
           <div className={cn(style.loanDetails)}>
             <div className={cn(style.interestInfo)}>
-              <div>
+              <div className={cn(style.figures)}>
                 <div>
                   <span>Interest type:</span>
                   <span>{INTEREST_TYPE[pool.interestType]}</span>

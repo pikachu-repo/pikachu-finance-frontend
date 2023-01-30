@@ -17,7 +17,7 @@ const DurationPicker = (props: IProps) => {
   return (
     <div className={cn(style.picker)}>
       <Button
-        sx="h-10 w-10 bg-white/30 hover:bg-white/40 ml-auto"
+        sx="md:h-10 md:w-10 h-8 w-8 bg-white/30 hover:bg-white/40 ml-auto"
         disabled={min === value}
         onClick={() => onChange(value - 1)}
       >
@@ -33,7 +33,7 @@ const DurationPicker = (props: IProps) => {
         />
       </div>
       <Button
-        sx="h-10 w-10 bg-white/30 hover:bg-white/40 ml-auto"
+        sx="md:h-10 md:w-10 h-8 w-8 bg-white/30 hover:bg-white/40 ml-auto"
         disabled={max === value}
         onClick={() => onChange(value + 1)}
       >

@@ -1,5 +1,10 @@
 .root {
-  @apply rounded-full bg-tangerine-yellow/50 px-8 py-3 text-exs gap-10 flex font-bold;
+  @apply hidden rounded-sm md:rounded-full bg-[#927813] text-exs font-bold flex-col md:flex-row;
+  @apply px-2 py-1 w-full absolute top-1;
+
+  @screen md {
+    @apply flex px-8 py-3 gap-10 w-fit relative;
+  }
 
   div {
     @apply gap-[10px] flex;

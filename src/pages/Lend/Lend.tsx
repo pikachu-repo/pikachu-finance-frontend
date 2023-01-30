@@ -57,7 +57,10 @@ const Lend = () => {
 
           <div className={cn(style.poolList)}>
             <div className={cn(style.head)}>
-              <h4>Pools ({pools.length})</h4>
+              <h4>
+                <span className="hidden md:flex">Pools ({pools.length})</span>
+                <span className="flex md:hidden">Pool Details</span>
+              </h4>
               <span>
                 <span className="text-tangerine-yellow">
                   Available Liquidity

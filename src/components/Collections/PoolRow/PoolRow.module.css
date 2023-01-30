@@ -1,9 +1,13 @@
 .root {
-  @apply grid items-center px-7 mt-6;
+  @apply flex flex-col md:grid md:items-center px-2 md:px-7 mt-2 md:mt-6;
   grid-template-columns: 20% 25% 13% 13% 29%;
 
   & > div {
-    @apply flex items-center;
+    @apply mx-4 md:mx-0 flex items-center flex-wrap;
+
+    .label {
+      @apply md:hidden opacity-70 mr-auto;
+    }
 
     .avatar {
       @apply w-8 h-8 rounded-full bg-white/5 ml-0 mr-1;
@@ -17,7 +21,7 @@
       @apply ml-auto;
 
       & > button {
-        @apply w-[140px] h-10;
+        @apply md:w-[140px] md:h-10;
         & > svg {
           @apply ml-1.5;
         }
@@ -26,7 +30,7 @@
   }
 
   & > div:first-child {
-    @apply pl-9;
+    @apply md:pl-9;
   }
 
   hr {

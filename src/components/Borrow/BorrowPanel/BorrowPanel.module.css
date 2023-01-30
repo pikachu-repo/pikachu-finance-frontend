@@ -1,6 +1,11 @@
 .root {
-  @apply grid grid-cols-2 px-4 py-2 bg-raisin-black rounded-[10px] cursor-pointer hover:shadow-lg duration-150 hover:bg-raisin-black/60;
+  @apply px-4 py-2 bg-raisin-black rounded-[10px] cursor-pointer hover:shadow-lg duration-150 hover:bg-raisin-black/60;
   @apply animate-enter relative;
+
+  @apply flex flex-col;
+  @screen md {
+    @apply grid grid-cols-2;
+  }
 
   .visit {
     @apply absolute top-1/2 left-1/2 -translate-x-1/2 hidden duration-150 z-10;

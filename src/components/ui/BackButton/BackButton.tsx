@@ -6,7 +6,7 @@ const BackButton = () => {
   const navigate = useNavigate();
   return (
     <Button
-      sx="h-10 w-10 bg-white/30 hover:bg-white/40 rotate-90	"
+      sx="h-8 md:h-10 w-8 md:w-10 bg-white/30 hover:bg-white/40 rotate-90	"
       onClick={() => navigate(-1)}
     >
       <SvgArrowDown />

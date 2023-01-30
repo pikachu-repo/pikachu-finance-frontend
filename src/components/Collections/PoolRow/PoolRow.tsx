@@ -27,6 +27,7 @@ const PoolRow = ({ pool, floorPrice }: Props) => {
   return (
     <div className={cn(style.root)}>
       <div>
+        <span className={cn(style.label)}>Creator: </span>
         <div
           className={cn(style.avatar)}
           dangerouslySetInnerHTML={{
@@ -36,15 +37,23 @@ const PoolRow = ({ pool, floorPrice }: Props) => {
         {beautifyAddress(pool.owner)} <TextCopier text={pool.owner} />
       </div>
       <div>
+        <span className={cn(style.label)}>Avalabile/Total: </span>
         <span className="text-tangerine-yellow">
           {beautifyDecimals(formatEther(pool.availableAmount))}
         </span>{" "}
         / {beautifyDecimals(formatEther(pool.depositedAmount))}
         <SvgEthereum />
       </div>
-      <div>{toInteger(pool.loanToValue) / 100}%</div>
-      <div>{toInteger(pool.maxDuration) / SECONDS_PER_DAY} Days</div>
       <div>
+        <span className={cn(style.label)}>Loan to Value: </span>
+        {toInteger(pool.loanToValue) / 100}%
+      </div>
+      <div>
+        <span className={cn(style.label)}>Max Duration: </span>
+        {toInteger(pool.maxDuration) / SECONDS_PER_DAY} Days
+      </div>
+      <div>
+        <span className={cn(style.label)}>Daily Interest: </span>
         {toInteger(pool.interestCapRate) / 100}%
         <LinkWithSearchParams
           to={{ pathname: `/pool/${pool.owner}/${pool.poolId}` }}

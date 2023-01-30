@@ -1,21 +1,21 @@
 .root {
-  @apply flex flex-col gap-8;
+  @apply flex flex-col gap-2 md:gap-8;
 
   .heading {
     @apply flex justify-between items-start;
     p {
-      @apply mt-7;
+      @apply mt-2 md:mt-7;
     }
   }
 
   .loaninfo {
-    @apply flex gap-16;
+    @apply md:flex gap-16;
 
     .status {
-      @apply flex-1 flex bg-smoky-black rounded-[10px] p-7;
+      @apply flex-1 flex bg-smoky-black rounded-[10px] p-3 md:p-7;
 
       .currentloans {
-        @apply flex-1 border-r border-[#F5F5F580] mr-7;
+        @apply flex-1 border-r border-[#F5F5F580] mr-3 md:mr-7;
       }
 
       .nftlocked {
@@ -24,7 +24,7 @@
     }
 
     .summary {
-      @apply flex flex-col bg-smoky-black rounded-[10px] px-7 pt-7;
+      @apply flex flex-col bg-smoky-black rounded-[10px] p-3 md:px-7 md:pt-7 mt-2 md:mt-0;
     }
 
     .status > div,
@@ -53,6 +53,6 @@
   }
 
   .navtab {
-    @apply text-xl mb-5;
+    @apply md:text-xl mb-2 md:mb-5;
   }
 }

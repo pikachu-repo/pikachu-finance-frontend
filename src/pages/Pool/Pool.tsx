@@ -69,7 +69,10 @@ const Pool = () => {
 
           <div className={cn(style.poolPanel)}>
             <div className={cn(style.head)}>
-              <h4>Pool Contract</h4>
+              <h4>
+                <span className="hidden md:flex">Pool Contract</span>
+                <span className="flex md:hidden">Pool Details</span>
+              </h4>
               <span>
                 <span className="text-tangerine-yellow">
                   Available Liquidity
@@ -106,7 +109,12 @@ const Pool = () => {
           </h4>
           <div className={cn(style.loanPanel)}>
             <div className={cn(style.head)}>
-              <span>NFT</span>
+              <h4>
+                <span className="hidden md:flex">NFT</span>
+                <span className="flex md:hidden">
+                  All loans of the pool ({pool?.numberOfLoans.toNumber()})
+                </span>
+              </h4>
               <span>Borrower</span>
               <span>Amount + Interest</span>
               <span>Interest</span>
