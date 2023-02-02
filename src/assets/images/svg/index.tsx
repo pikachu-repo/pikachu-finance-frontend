@@ -28,4 +28,8 @@ export { ReactComponent as SvgPause } from "./pause.svg";
 export { ReactComponent as SvgResume } from "./resume.svg";
 export { ReactComponent as SvgEthCoin } from "./ethereum2.svg";
 export { ReactComponent as SvgUSDC } from "./usdcoin.svg";
+export { ReactComponent as SvgMoney } from "./money.svg";
 export { ReactComponent as SvgUSDT } from "./tetherusd.svg";
+export { ReactComponent as SvgDisconnect } from "./disconnect.svg";
+export { ReactComponent as SvgSetting } from "./setting.svg";
+export { ReactComponent as SvgDots } from "./dots.svg";

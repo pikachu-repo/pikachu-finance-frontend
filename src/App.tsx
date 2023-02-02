@@ -18,6 +18,8 @@ import TxRejectModal from "components/Common/TxRejectModal";
 import TxSubmitModal from "components/Common/TxSubmitModal";
 import Lend from "pages/Lend";
 import Loan from "pages/Loan";
+import Dashboard from "pages/Dashboard";
+
 import {
   useAllLoans,
   useLoansByBorrower,
@@ -47,7 +49,6 @@ function App() {
   }, [adminSetting]);
 
   useEffect(() => {
-    // console.log(nfts.length);
     if (signer.data)
       signer.data?.getBalance().then(async (balance) => {
         initializeAccount(
@@ -98,6 +99,7 @@ function App() {
           <Route path="/collections" element={<Collections />} />
           <Route path="/loan/*" element={<Loan />} />
           <Route path="/demo" element={<Demo />} />
+          <Route path="/dashboard/*" element={<Dashboard />} />
           <Route path="/pool/:owner/:poolId" element={<Pool />} />
           {/* <Route path="/pool/:owner/:poolId/borrow" element={<Borrow />} /> */}
         </Routes>

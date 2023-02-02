@@ -2,11 +2,23 @@ import { ConnectButton as RainbowConnectButton } from "@rainbow-me/rainbowkit";
 import cn from "classnames";
 import style from "./ConnectButton.module.css";
 import { useDisconnect, useAccount } from "wagmi";
-import { SvgWallet } from "assets/images/svg";
-import { beautifyAddress } from "utils/helpers/string.helpers";
+import {
+  SvgDisconnect,
+  SvgEthereum,
+  SvgMoney,
+  SvgSetting,
+  SvgWallet,
+} from "assets/images/svg";
+import {
+  beautifyAddress,
+  beautifyDecimals,
+} from "utils/helpers/string.helpers";
 import { useEffect, useRef, useState } from "react";
 import LinkWithSearchParams from "components/LinkWithSearchParams";
 import { useAdminAddress } from "utils/hooks/useAddress";
+import { identicon } from "minidenticons";
+import { Button, TextCopier } from "components/ui";
+import { useAccountStore, useSettingStore } from "store";
 
 const ConnectButton = () => {
   const account = useAccount();
@@ -14,6 +26,9 @@ const ConnectButton = () => {
   const { disconnect } = useDisconnect();
 
   const [expanded, setExpanded] = useState(false);
+
+  const { balance } = useAccountStore();
+  const { etherusd } = useSettingStore();
 
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -38,7 +53,7 @@ const ConnectButton = () => {
         />
       )}
 
-      {account.isConnected && (
+      {account.address && (
         <div ref={ref} className={cn(style.root)}>
           <button
             className={cn(style.button)}
@@ -49,29 +64,72 @@ const ConnectButton = () => {
           </button>
 
           {expanded && (
-            <div
-              className={cn(style.dropdown)}
-              onClick={() => {
-                setExpanded(false);
-              }}
-            >
-              {account.address === adminAddress && (
-                <LinkWithSearchParams to={{ pathname: "/setting/collections" }}>
-                  Admin setting
-                </LinkWithSearchParams>
-              )}
+            <div className={cn(style.dropdown)}>
+              <div className={cn(style.account)}>
+                <div>
+                  <div
+                    className={cn(style.avatar)}
+                    dangerouslySetInnerHTML={{
+                      __html: identicon(account.address),
+                    }}
+                  />
 
-              <LinkWithSearchParams to={{ pathname: "/setting/loans" }}>
-                My Loans
+                  <span className={cn(style.address)}>
+                    {beautifyAddress(account.address)}
+                  </span>
+
+                  <TextCopier text={account.address} />
+                </div>
+                <span className={cn(style.balance)}>
+                  {beautifyDecimals(balance)} <SvgEthereum />
+                </span>
+                <span className={cn(style.usd)}>
+                  {" "}
+                  ${beautifyDecimals(etherusd * balance)} USD
+                </span>
+                <Button variant="yellow">
+                  <LinkWithSearchParams
+                    to={{ pathname: "/dashboard" }}
+                    onClick={() => {
+                      setExpanded(false);
+                    }}
+                  >
+                    Dashboard
+                  </LinkWithSearchParams>
+                </Button>
+              </div>
+
+              <LinkWithSearchParams
+                to={{ pathname: "/lend" }}
+                onClick={() => {
+                  setExpanded(false);
+                }}
+              >
+                <SvgMoney />
+                My Pools
               </LinkWithSearchParams>
 
               <span
+                className={cn(style.disconnect)}
                 onClick={() => {
                   disconnect();
                 }}
               >
-                Log Out
+                <SvgDisconnect />
+                Disconnect
               </span>
+
+              {account.address === adminAddress && (
+                <LinkWithSearchParams
+                  to={{ pathname: "/setting/collections" }}
+                  onClick={() => {
+                    setExpanded(false);
+                  }}
+                >
+                  <SvgSetting />
+                  Admin setting
+                </LinkWithSearchParams>
+              )}
             </div>
           )}
         </div>

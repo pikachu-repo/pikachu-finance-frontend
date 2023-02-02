@@ -1,5 +1,5 @@
-import { toInteger } from "lodash";
 import { SECONDS_PER_DAY } from "utils/constants/number.contants";
+import { toInteger } from "./string.helpers";
 
 export const dateDifFromNow = (_date: Date | string): string => {
   let date: Date = new Date();
