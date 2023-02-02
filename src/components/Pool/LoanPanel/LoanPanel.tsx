@@ -1,17 +1,13 @@
 import cn from "classnames";
 import style from "./LoanPanel.module.css";
 
-import {
-  TLoanStruct,
-  useCalculateRepayAmount,
-} from "utils/hooks/pikachu/usePools";
+import { TLoanStruct } from "utils/hooks/pikachu/usePools";
 
 import ImageERC721 from "assets/images/template-erc721.png";
 import {
   beautifyAddress,
   beautifyDecimals,
   formatEther,
-  toFloat,
   toInteger,
 } from "utils/helpers/string.helpers";
 import { SvgEthereum, SvgLink } from "assets/images/svg";
@@ -27,6 +23,7 @@ import { useSettingStore } from "store";
 import { usePikachuContract } from "utils/hooks/useContract";
 import { ethers } from "ethers";
 import { refreshPools } from "utils/apis/pikachu.api";
+import { calculateRepayAmountFromLoan } from "utils/helpers/contract.helpers";
 
 interface Props {
   pool?: IPikachu.PoolStructOutput;
@@ -63,13 +60,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
     [collections, loan]
   );
 
-  const repayAmount = useCalculateRepayAmount(
-    toFloat(loan.amount),
-    loan?.interestType,
-    toFloat(loan?.interestStartRate) * 100,
-    toFloat(loan?.interestCapRate) * 100,
-    toInteger(new Date().getTime() - toInteger(loan.timestamp)) / 1000
-  );
+  const repayAmount = useMemo(() => calculateRepayAmountFromLoan(loan), [loan]);
 
   const onPayback = () => {
     console.log(repayAmount);
@@ -162,7 +153,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
         return {
           text: "None",
           class: cn(style.error, style.badge),
-          operation: "Closed 5 days ago",
+          operation: "---",
         };
     }
 
@@ -227,9 +218,7 @@ const LoanPanel = ({ pool, loan }: Props) => {
         <span className={cn(style.tooltip, "tooltip top")}>
           {new Date(toInteger(loan.timestamp)).toLocaleString()}
         </span>
-        {dateDifFromNow(
-          new Date(toInteger(loan.timestamp) + toInteger(loan.duration) * 1000)
-        )}
+        {dateDifFromNow(new Date(toInteger(loan.timestamp)))}
       </div>
 
       <div className={cn(style.status)}>
