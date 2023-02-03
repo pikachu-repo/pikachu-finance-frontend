@@ -41,7 +41,7 @@ const Header = () => {
         }}
         className={cn(style.logo)}
       ></LinkWithSearchParams>
-      <div className="hidden md:flex items-center ml-auto  ">
+      <div className="hidden md:flex items-center ml-auto mr-5">
         {pageLinks.map((item, index) => (
           <NavLink
             key={index}

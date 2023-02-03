@@ -13,7 +13,7 @@ const Loans = () => {
       <div className={cn(style.head)}>
         <div>
           <span className="hidden md:flex">NFT</span>
-          <span className="md:hidden">My Open Loans</span>
+          <span className="md:hidden">Loans History</span>
         </div>
         <span>Borrower</span>
         <span>Amount + Interest</span>
@@ -30,7 +30,9 @@ const Loans = () => {
       ))}
 
       {loans.length === 0 && (
-        <div className={cn(style.empty)}>You don’t have open loans.</div>
+        <div className={cn(style.empty)}>
+          No loans history available. Take a loan to see it displayed here
+        </div>
       )}
     </div>
   );

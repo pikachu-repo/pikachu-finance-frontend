@@ -8,7 +8,7 @@ import PlatformStatus from "components/Common/PlatformStatus";
 
 import { useAccountStore, useSettingStore } from "store";
 import FlexTab from "components/ui/FlexTab";
-import { Assets, Overview, Loans } from "components/Dashboard";
+import { Assets, Overview, Loans, LendingLoans } from "components/Dashboard";
 
 const DashboardPages = () => {
   return (
@@ -16,7 +16,8 @@ const DashboardPages = () => {
       <Route path="*" element={<Navigate to="" replace />} />
       <Route path="" element={<Overview />} />
       <Route path="assets" element={<Assets />} />
-      <Route path="loans" element={<Loans />} />
+      <Route path="openloans" element={<LendingLoans />} />
+      <Route path="activity" element={<Loans />} />
     </Routes>
   );
 };
@@ -62,8 +63,8 @@ const Dashboard = () => {
               ),
             },
             {
-              link: "/dashboard/loans",
-              text: <span>My loans</span>,
+              link: "/dashboard/openloans",
+              text: <span>Open loans</span>,
             },
             {
               link: "/dashboard/activity",
